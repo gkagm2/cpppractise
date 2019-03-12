@@ -1,6 +1,6 @@
 #include <iostream>
-#include <string>
 using namespace std;
+
 class Color {
 	int red, green, blue;
 public:
