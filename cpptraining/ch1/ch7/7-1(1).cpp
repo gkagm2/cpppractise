@@ -1,4 +1,4 @@
-// operator function -> member function
+// operator function +=, -= -> member function
 #include <iostream>
 #include <string>
 using namespace std;
