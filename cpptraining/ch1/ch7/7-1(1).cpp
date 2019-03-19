@@ -13,7 +13,7 @@ public:
 		this->pages = pages;
 	}
 	void show() {
-		cout << title << ' ' << price << "circle " << pages << " page" << endl;
+		cout << title << ' ' << price << "won " << pages << " page" << endl;
 	}
 	string getTitle() { return title; }
 
