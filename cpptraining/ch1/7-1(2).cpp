@@ -1,3 +1,4 @@
+// operator function -> external function 
 #include <iostream>
 #include <string>
 using namespace std;
@@ -36,7 +37,6 @@ int main() {
 	b -= 500;
 	a.show();
 	b.show();
-
 
 	return 0;
 }
