@@ -6,7 +6,8 @@ class Matrix {
 	int m[4];
 public:
 	
-	Matrix(int a = 0, int b = 0, int c = 0, int d = 0);
+	Matrix(int a , int b, int , int d);
+	void show();
 	friend void operator>>(Matrix op1, int ary[]);
 	friend void operator<<(Matrix& op1, int ary[]);
 };
@@ -27,6 +28,14 @@ Matrix::Matrix(int a = 0, int b = 0, int c = 0, int d = 0) {
 	this->m[2] = c;
 	this->m[3] = d;
 }
+void Matrix::show() {
+	cout << "Matrix = {";
+	for (int i = 0; i < 4; i++) {
+		cout << this->m[i] << ' ';
+	}
+	cout << "}" << endl;
+
+}
 int main() {
 	Matrix a(4, 3, 2, 1), b;
 	int x[4], y[4] = { 1,2,3,4 };
@@ -36,5 +45,6 @@ int main() {
 	for (int i = 0; i < 4; i++) { //print x[]
 		cout << x[i] << ' ';
 	}
+	b.show();
 	return 0;
 }
