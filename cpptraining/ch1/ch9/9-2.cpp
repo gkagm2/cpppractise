@@ -24,18 +24,18 @@ public:
 
 	}
 	double convert(double src) {
-		//TODO
+		return src / 1.609344;
 	}
 	string getSourceString() {
-		//TODO
+		return "Km";
 	}
 	string getDestString() {
-		//TODO
+		return "Mile";
 	}
 };
 
 int main() {
-	KmToMile toMile(1.609344);
+	KmToMile toMile(1.609344); // 1 mile -> 1.609344 km
 	toMile.run();
 
 	return 0;
