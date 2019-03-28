@@ -10,7 +10,17 @@ public:
 	virtual bool operation() = 0;
 };
 
+//TODO : Make ANDGate, ORGate, XORGate class 
+class ANDGate {
+public:
 
+};
+class ORGate {
+public:
+};
+class XORGate {
+public:
+};
 
 int main() {
 	ANDGate and;
