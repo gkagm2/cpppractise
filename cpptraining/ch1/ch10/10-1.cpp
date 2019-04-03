@@ -1,4 +1,4 @@
-//get array and make biggest()
+//make generic biggest() function
 #include <iostream>
 using namespace std;
 
