@@ -1,8 +1,6 @@
 #include "Tetris.h"
 #include "Controller.h"
 #include <Windows.h>
-#include "ColorDef.h"
-
 
 #define COL GetStdHandle(STD_OUTPUT_HANDLE) //Std 출력 핸들 (필수)
 #define ORIGINAL SetConsoleTextAttribute(COL, 0x0007); //콘솔 색깔 바꾸기 (0x0007 : 밝은 회색)
