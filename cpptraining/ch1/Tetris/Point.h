@@ -14,5 +14,5 @@ public:
 
 	static void GotoXY(int x, int y);
 	static void GotoXY(Point pos);
-	static Point GetScrPosFromCurPos(const Point *pos);
+	static Point GetScrPosFromCurPos(const Point &pos);
 };
