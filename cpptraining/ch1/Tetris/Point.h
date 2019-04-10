@@ -1,10 +1,9 @@
-#pragma once
+#ifndef JHHWANG_POINT_H
+#define JHHWANG_POINT_H
 
-class Point {
-private:
-	int x_;
-	int y_;
-public:
+class Point 
+{
+public :
 	Point(int x = -1, int y = -1) : x_(x), y_(y) {}
 	int GetX() const { return x_; }
 	int GetY() const { return y_; }
@@ -15,4 +14,10 @@ public:
 	static void GotoXY(int x, int y);
 	static void GotoXY(Point pos);
 	static Point GetScrPosFromCurPos(const Point &pos);
+
+private :
+	int x_;
+	int y_;
 };
+
+#endif
