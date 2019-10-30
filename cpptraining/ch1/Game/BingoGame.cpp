@@ -51,6 +51,8 @@ void ShowPuzzle(int iNumber[25]);
 void CheckLine(int iNumber[25], int &iBingoCount);
 void PrintBingoCount(const char *name, int iBingoCount);
 void InputNumberChangeToStar(int iNumber[25], int size, int iInputNumber);
+void FindBestLine(int iNumber[25], int &iLine, int &iSaveCount);
+int ChoiceBsetNumber(int iNumber[25], int iLine);
 int main() {
 
 	int iNumber[25] = {};
@@ -182,106 +184,12 @@ int main() {
 			case AM_HARD:
 				// 하드모드는 현재 숫자중 빙고줄 완성 가능성이 가장 높은 줄을 찾아서 그 줄에 있는 숫자중 하나를 *로 만들어준다.
 				int iLine = 0;
-				int iStarCount = 0;
 				int iSaveCount = 0;
 
-				// 가로 라인 중 가장 *이 많은 라인을 찾아낸다.
-				for (int i = 0; i < 5; ++i) {
-					iStarCount = 0;
-					for (int j = 0; j < 5; ++j) {
-						if (iAINumber[i * 5 + j] == INT_MAX) {
-							++iStarCount;
-						}
-					}
-					// 별이 5개 미만이여야 빙고 줄이 아니고 기존에 가장많은 라인의 별보다 커야 가장 별이 많은 라인이므로
-					// 라인을 교체해주고 저장된 별 수를 교체한다.
-					if (iStarCount < 5 && iSaveCount < iStarCount) {
-						// 가로 라인중 가장 별이 많은 라인을 체크하는 곳이다. 가로라인은 0 ~ 4 로 의미를 부여했다.
-						iLine = i;
-						iSaveCount = iStarCount;
-					}
-				}
-
-				// 저장된 라인과 세로 라인들을 비교하여 별이 가장 많은 라인을 구한다.
-				for (int i = 0; i < 5; ++i) {
-					iStarCount = 0;
-					for (int j = 0; j < 5; ++j) {
-						if (iAINumber[j * 5 + i] == INT_MAX) {
-							++iStarCount;
-						}
-					}
-
-					if (iStarCount < 5 && iSaveCount < iStarCount) {
-						iLine = 5 + i;
-						iSaveCount = iStarCount;
-					}
-				}
-
-				// 저장된 라인과 왼쪽 상단 -> 오른쪽 하단 라인을 비교하여 별이 가장 많은 라인을 구한다.
-				iStarCount = 0;
-				for (int i = 0; i < 5; ++i) {
-					
-					if (iAINumber[i * 6] == INT_MAX) {
-						++iStarCount;
-					}
-				}
-
-				if (iStarCount < 5 && iSaveCount <iStarCount ) {
-					iLine = LN_LT;
-					iSaveCount = iStarCount;
-				}
-
-				// 저장된 라인과 오른쪽 상단 -> 왼쪽 하단 라인을 비교하여 별이 가장 많은 라인을 구한다.
-				iStarCount = 0;
-				for (int i = 0; i < 5; ++i) {
-					if (iAINumber[i * 4] == INT_MAX) {
-						++iStarCount;
-					}
-				}
-				if (iStarCount < 5 && iSaveCount < iStarCount) {
-					iLine = LN_RT;
-					iSaveCount = iStarCount;
-				}
-
+				FindBestLine(iAINumber, iLine, iSaveCount); // 최적의 라인 찾기
 				// 모든 라인을 조사했으면 iLine에 가장 높은 줄 번호가 저장됨.
-
-				// 그 줄에 있는 *이 아닌 숫자중 하나를 선택하게 된다.
-				// 가로줄일 경우 iLine 0 ~ 4 사이의 값
-				if (iLine <= LN_H5) { 
-					for (int i = 0; i < 5; ++i) {
-						if (iAINumber[iLine * 5 + i] != INT_MAX) { // 현재 줄에서 *이 아닌 숫자를 찾는다.
-							iInput = iAINumber[iLine * 5 + i];
-							break;
-						}
-					}
-				}
-				// 세로줄일 경우 iLine 5 ~ 9 사이의 값
-				else if (iLine <= LN_V5) {
-					for (int i = 0; i < 5; ++i) {
-						if (iAINumber[i * 5 + (iLine - 5)] != INT_MAX) {
-							iInput = iAINumber[i * 5 + (iLine - 5)];
-							break;
-						}
-					}
-				}
-				// 왼쪽 상단 -> 오른쪽 하단 
-				else if (iLine == LN_LT) {
-					for (int i = 0; i < 5; ++i) {
-						if (iAINumber[i * 6] != INT_MAX) {
-							iInput = iAINumber[i * 6];
-							break;
-						}
-					}
-				}
-				// 오른쪽 상단 -> 왼쪽 하단
-				else if (iLine == LN_RT) {
-					for (int i = 0; i < 5; ++i) {
-						if (iAINumber[i * 4] != INT_MAX) {
-							iInput = iAINumber[i * 4];
-							break;
-						}
-					}
-				}
+				iInput = ChoiceBsetNumber(iAINumber, iLine); // 최적의 라인에서 임의의 번호 뽑기
+				
 				break;
 			}
 			break;
@@ -299,6 +207,109 @@ int main() {
 	cout << "게임 종료" << endl;
 
 	return 0;
+}
+int ChoiceBsetNumber(int iNumber[25], int iLine) {
+	int iInput;
+	// 그 줄에 있는 *이 아닌 숫자중 하나를 선택하게 된다.
+				// 가로줄일 경우 iLine 0 ~ 4 사이의 값
+	if (iLine <= LN_H5) {
+		for (int i = 0; i < 5; ++i) {
+			if (iNumber[iLine * 5 + i] != INT_MAX) { // 현재 줄에서 *이 아닌 숫자를 찾는다.
+				iInput = iNumber[iLine * 5 + i];
+				break;
+			}
+		}
+	}
+	// 세로줄일 경우 iLine 5 ~ 9 사이의 값
+	else if (iLine <= LN_V5) {
+		for (int i = 0; i < 5; ++i) {
+			if (iNumber[i * 5 + (iLine - 5)] != INT_MAX) {
+				iInput = iNumber[i * 5 + (iLine - 5)];
+				break;
+			}
+		}
+	}
+	// 왼쪽 상단 -> 오른쪽 하단 
+	else if (iLine == LN_LT) {
+		for (int i = 0; i < 5; ++i) {
+			if (iNumber[i * 6] != INT_MAX) {
+				iInput = iNumber[i * 6];
+				break;
+			}
+		}
+	}
+	// 오른쪽 상단 -> 왼쪽 하단
+	else if (iLine == LN_RT) {
+		for (int i = 0; i < 5; ++i) {
+			if (iNumber[i * 4] != INT_MAX) {
+				iInput = iNumber[i * 4];
+				break;
+			}
+		}
+	}
+
+	return iInput;
+}
+
+void FindBestLine(int iNumber[25], int &iLine, int &iSaveCount) {
+	int iStarCount = 0;
+	// 가로 라인 중 가장 *이 많은 라인을 찾아낸다.
+	for (int i = 0; i < 5; ++i) {
+		iStarCount = 0;
+		for (int j = 0; j < 5; ++j) {
+			if (iNumber[i * 5 + j] == INT_MAX) {
+				++iStarCount;
+			}
+		}
+		// 별이 5개 미만이여야 빙고 줄이 아니고 기존에 가장많은 라인의 별보다 커야 가장 별이 많은 라인이므로
+		// 라인을 교체해주고 저장된 별 수를 교체한다.
+		if (iStarCount < 5 && iSaveCount < iStarCount) {
+			// 가로 라인중 가장 별이 많은 라인을 체크하는 곳이다. 가로라인은 0 ~ 4 로 의미를 부여했다.
+			iLine = i;
+			iSaveCount = iStarCount;
+		}
+	}
+
+	// 저장된 라인과 세로 라인들을 비교하여 별이 가장 많은 라인을 구한다.
+	for (int i = 0; i < 5; ++i) {
+		iStarCount = 0;
+		for (int j = 0; j < 5; ++j) {
+			if (iNumber[j * 5 + i] == INT_MAX) {
+				++iStarCount;
+			}
+		}
+
+		if (iStarCount < 5 && iSaveCount < iStarCount) {
+			iLine = 5 + i;
+			iSaveCount = iStarCount;
+		}
+	}
+
+	// 저장된 라인과 왼쪽 상단 -> 오른쪽 하단 라인을 비교하여 별이 가장 많은 라인을 구한다.
+	iStarCount = 0;
+	for (int i = 0; i < 5; ++i) {
+
+		if (iNumber[i * 6] == INT_MAX) {
+			++iStarCount;
+		}
+	}
+
+	if (iStarCount < 5 && iSaveCount < iStarCount) {
+		iLine = LN_LT;
+		iSaveCount = iStarCount;
+	}
+
+	// 저장된 라인과 오른쪽 상단 -> 왼쪽 하단 라인을 비교하여 별이 가장 많은 라인을 구한다.
+	iStarCount = 0;
+	for (int i = 0; i < 5; ++i) {
+		if (iNumber[i * 4] == INT_MAX) {
+			++iStarCount;
+		}
+	}
+	if (iStarCount < 5 && iSaveCount < iStarCount) {
+		iLine = LN_RT;
+		iSaveCount = iStarCount;
+	}
 }
 
 void InputNumberChangeToStar(int iNumber[25], int iSize, int iInputNumber) {
