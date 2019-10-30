@@ -33,14 +33,15 @@ int main() {
 		idx1 = rand() % 24;
 		idx2 = rand() % 24;
 		
-		iTemp = iNumber[idx1];
-		iNumber[idx1] = iNumber[idx2];
-		iNumber[idx2] = iTemp;
+		//iTemp = iNumber[idx1];
+		//iNumber[idx1] = iNumber[idx2];
+		//iNumber[idx2] = iTemp;
 	}
 
 	bool bGame = true;
 
 	while (bGame) {
+
 		cout << endl;
 		// Show
 		for (int i = 0; i < 5; ++i) {
@@ -56,7 +57,9 @@ int main() {
 			}
 			cout << endl;
 		}
+
 		cout << endl;
+		
 
 		cout << "w : 위, s : 아래, a : 왼쪽, d : 오른쪽, q : 종료";
 
@@ -117,20 +120,18 @@ int main() {
 		for (int i = 0; i < 24; ++i) {
 			if (iNumber[i] != i + 1) {
 				bWin = false;
-				cout << " bWin : false : " << iNumber[i] << ", " << i << endl;
 				break;
 			}
+		}
+		if (!bGame) { // 게임 종료
+			break;
 		}
 
 		if (bWin) {
 			cout << "숫자를 모두 맞췄습니다." << endl;
 			break;
 		}
-
-		if (!bGame) { // 게임 종료
-			break;
-		}
-		//system("cls");
+		system("cls");
 	}
 	cout << "게임을 종료합니다." << endl;
 
