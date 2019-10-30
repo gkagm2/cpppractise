@@ -57,10 +57,10 @@ int main() {
 	}
 
 	// Print iBallNumList
-	for (int i = 0; i < MAX_HIT_NUMBER; i++)
-	{
-		cout << iBallNumList[i] << ", ";
-	}
+	//for (int i = 0; i < MAX_HIT_NUMBER; i++)
+	//{
+	//	cout << iBallNumList[i] << ", ";
+	//}
 
 	// Ball init
 	for (int i = 0; i < MAX_INPUT_NUMBER; ++i) {
@@ -120,7 +120,6 @@ int main() {
 
 		system("cls");
 
-		// print
 		cout << iStrike << "strike, " << iBall <<"ball" << endl;
 		
 		if (iStrike == MAX_INPUT_NUMBER) {
