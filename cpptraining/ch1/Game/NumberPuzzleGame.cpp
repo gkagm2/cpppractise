@@ -33,9 +33,9 @@ int main() {
 		idx1 = rand() % 24;
 		idx2 = rand() % 24;
 		
-		//iTemp = iNumber[idx1];
-		//iNumber[idx1] = iNumber[idx2];
-		//iNumber[idx2] = iTemp;
+		iTemp = iNumber[idx1];
+		iNumber[idx1] = iNumber[idx2];
+		iNumber[idx2] = iTemp;
 	}
 
 	bool bGame = true;
@@ -122,16 +122,17 @@ int main() {
 				bWin = false;
 				break;
 			}
-		}
-		if (!bGame) { // 게임 종료
-			break;
-		}
 
 		if (bWin) {
 			cout << "숫자를 모두 맞췄습니다." << endl;
 			break;
 		}
 		system("cls");
+
+		}
+		if (!bGame) { // 게임 종료
+			break;
+		}
 	}
 	cout << "게임을 종료합니다." << endl;
 
