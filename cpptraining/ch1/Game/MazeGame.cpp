@@ -1,6 +1,6 @@
 // PROGRAME : Maze Game
 // DEVELOP : Sagacity Jang
-// DATE : 20191104 ~ 201911
+// DATE : 20191104 ~ 20191107
 #include <iostream>
 #include <conio.h>
 #include <time.h>
@@ -16,7 +16,6 @@ using namespace std;
 5 : 파워 아이템
 6 : 벽밀기 아이템
 7 : 투명 아이템
-8 : 웜홀
 */
 
 struct _tagPoint {
