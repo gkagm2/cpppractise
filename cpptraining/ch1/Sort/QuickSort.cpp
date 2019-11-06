@@ -44,7 +44,7 @@ void QuickSort(int elements[], int left, int right) {
 }
 
 // 배열 요소값들을 섞어준다.
-void Shuttle(int elements[], int maxSize) {
+void Shuffle(int elements[], int maxSize) {
 	
 	for (int i = 0; i < maxSize * 10; ++i) {
 		int iTempA = rand() % maxSize;
@@ -77,7 +77,7 @@ int main() {
 	}
 
 	// 값들을 섞는다.
-	Shuttle(elements, maxSize);
+	Shuffle(elements, maxSize);
 
 	cout << "정렬하기 전 값들" << endl;
 	PrintValue(elements, maxSize);
