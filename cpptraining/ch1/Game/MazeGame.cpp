@@ -1,6 +1,6 @@
 // PROGRAME : Maze Game
 // DEVELOP : Sagacity Jang
-// DATE : 20191104
+// DATE : 20191104 ~ 201911
 #include <iostream>
 #include <conio.h>
 #include <time.h>
