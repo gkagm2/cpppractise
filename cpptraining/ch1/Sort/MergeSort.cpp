@@ -6,7 +6,7 @@ using namespace std;
 
 #define MAXSIZE 50
 
-int a[MAXSIZE];
+int sorted[MAXSIZE];
 
 void Shuffle(int elements[], int maxSize) {
 	int iTempA, iTempB, iTemp;
@@ -26,95 +26,68 @@ void PrintValue(int elements[], int maxSize) {
 	}
 }
 
-
-void Merge(int low, int mid, int high) {
-	int h, i, j, b[50], k;
-	h = low;
-	i = low;
+void Merge(int elements[], int left, int mid, int right) {
+	int i, j, k, l;
+	i = left;
 	j = mid + 1;
-	
-	while ((h <= mid) && (j <= high)) {
-		if (a[h] <= a[j]) {
-			b[i] = a[h];
-			++h;
+	k = left;
+
+	// 합병
+	while (i <= mid && j <= right) {
+		if (elements[i] <= elements[j]) {
+			sorted[k++] = elements[i++];
 		}
 		else {
-			b[i] = a[j];
-			++j;
+			sorted[k++] = elements[j++];
 		}
-		++i;
 	}
-	if (h > mid) {
-		for (k = j; j <= high; ++k) {
-			b[i] = a[k];
-			++i;
+
+	if (i > mid) {
+		for (l = j; l <= right; ++l) {
+			sorted[k++] = elements[l];
 		}
 	}
 	else {
-		for (k = h; k <= mid; ++k) {
-			b[i] = a[k];
-			++i;
+		for (l = i; l <= mid; ++l) {
+			sorted[k++] = elements[l];
 		}
 	}
 
-	for (k = low; k <= high; ++k) {
-		a[k] = b[k];
+	for (l = left; l <= right; ++l) {
+		elements[l] = sorted[l];
 	}
 }
 
-void MergeSort(int low, int high) {
+void MergeSort(int elements[], int left, int right) {
 	int mid;
-	if (low < high) {
-		mid = (low + high) / 2;
-		MergeSort(low, mid);
-		MergeSort(mid + 1, high);
-		Merge(low, mid, high);
+
+	if (left < right) {
+		mid = (left + right) / 2;
+		MergeSort(elements, left, mid);
+		MergeSort(elements, mid + 1, right);
+		Merge(elements, left, mid, right);
 	}
 }
 
 int main() {
+	srand((unsigned int)time(0));
 
-	int num, i;
-
-	cout << "Please Enter the number of elemetns : ";
-	cin >> num;
-	cout << endl;
-	cout << "Enter the elements : \n";
-	for (i = 1; i <= num; ++i) {
-		cin >> a[i];
+	int maxSize = MAXSIZE;
+	int elements[MAXSIZE];
+	// 값 초기화
+	for (int i = 0; i < MAXSIZE; ++i) {
+		elements[i] = i + 1;
 	}
 
-	MergeSort(1, num);
+	// 값들을 섞는다.
+	Shuffle(elements, MAXSIZE);
+	PrintValue(elements, maxSize);
 
 	cout << endl;
-	cout << "Sorted list : " << endl;
-	cout << endl << endl;
-	
-	for (i = 1; i <= num; ++i) {
-		cout << a[i] << " ";
-	}
-	cout << endl << endl << endl;
-
-
-	//srand((unsigned int)time(0));
-
-	//int maxSize = MAXSIZE;
-
-	//// 값 초기화d
-	//for (int i = 0; i < MAXSIZE; ++i) {
-	//	a[i] = i + 1;
-	//}
-
-	//// 값들을 섞는다.
-	//Shuffle(a, MAXSIZE);
-
-	//cout << "정렬하기 전 값들" << endl;
-	//PrintValue(a, maxSize);
-
-	////MergeSort 정렬
-	//MergeSort(1, maxSize);
-	//cout << endl << "정렬 한 후의 값들" << endl;
-	//PrintValue(a, maxSize);
+	cout << endl;
+	//MergeSort 정렬	
+	MergeSort(elements, 0, MAXSIZE -1);
+	PrintValue(elements, maxSize);
 
 	return 0;
 }
