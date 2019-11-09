@@ -27,34 +27,35 @@ void PrintValue(int elements[], int maxSize) {
 }
 
 void Merge(int elements[], int left, int mid, int right) {
-	int i, j, k, l;
-	i = left;
-	j = mid + 1;
-	k = left;
+	int l, m, k;
+	l = k = left;
+	m = mid + 1;
 
 	// 합병
-	while (i <= mid && j <= right) {
-		if (elements[i] <= elements[j]) {
-			sorted[k++] = elements[i++];
+	while (l <= mid && m <= right) {
+		if (elements[l] <= elements[m]) {
+			sorted[k++] = elements[l++];
 		}
 		else {
-			sorted[k++] = elements[j++];
+			sorted[k++] = elements[m++];
 		}
 	}
 
-	if (i > mid) {
-		for (l = j; l <= right; ++l) {
-			sorted[k++] = elements[l];
+	// 나머지 처리
+	if (l > mid) {
+		for (int i = m; i <= right; ++i) {
+			sorted[k++] = elements[i];
 		}
 	}
 	else {
-		for (l = i; l <= mid; ++l) {
-			sorted[k++] = elements[l];
+		for (int i = l; i <= mid; ++i) {
+			sorted[k++] = elements[i];
 		}
 	}
 
-	for (l = left; l <= right; ++l) {
-		elements[l] = sorted[l];
+	// 복사
+	for (int i = left; i <= right; ++i) {
+		elements[i] = sorted[i];
 	}
 }
 
@@ -86,7 +87,7 @@ int main() {
 	cout << endl;
 	cout << endl;
 	//MergeSort 정렬	
-	MergeSort(elements, 0, MAXSIZE -1);
+	MergeSort(elements, 0, MAXSIZE - 1);
 	PrintValue(elements, maxSize);
 
 	return 0;
