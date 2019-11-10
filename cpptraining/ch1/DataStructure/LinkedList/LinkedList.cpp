@@ -12,7 +12,6 @@ enum MAIN_MENU {
 };
 
 #define NAME_SIZE 32
-#define STUDENT_MAX 10
 
 typedef struct _tagStudent {
 	char strName[NAME_SIZE];
@@ -58,8 +57,9 @@ int InputInt() {
 }
 
 void InputString(char* pString, int iSize) {
-	cin.getline(pString, iSize); // 제일 마지막 1바이트는 null로 들어가 한다. 그래야 문자열인것을 알 수 있다.
-	cin.getline(pString, iSize); // 제일 마지막 1바이트는 null로 들어가 한다. 그래야 문자열인것을 알 수 있다.
+	cin.clear();
+	cin.ignore(1024, '\n');
+	cin.getline(pString, iSize - 1); // 제일 마지막 1바이트는 null로 들어가 한다. 그래야 문자열인것을 알 수 있다.
 }
 
 int OutputMenu() {
