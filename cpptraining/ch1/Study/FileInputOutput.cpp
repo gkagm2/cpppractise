@@ -38,19 +38,16 @@ void WriteFile(FILE *pFile) {
 		// 4번인자는 저장할 파일의 스트림을 넣어준다.
 		fwrite(pText, 1, 4, pFile);
 
-
 		fclose(pFile);
 	}
 }
 
 int main() {
-
 	FILE* pFile = NULL;
 
 	// C 형태
 	WriteFile(pFile);
 	ReadFile(pFile);
-
 
 	return 0;
 }
