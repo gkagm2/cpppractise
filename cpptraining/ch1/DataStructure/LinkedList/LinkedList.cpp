@@ -86,6 +86,10 @@ void Insert(LIST* pList) {
 
 	cout << "이름 : ";
 	InputString(tStudent.strName, NAME_SIZE);
+
+	cout << "학번 : ";
+	tStudent.iNumber = InputInt();
+
 	cout << "국어 : ";
 	tStudent.iKor = InputInt();
 
