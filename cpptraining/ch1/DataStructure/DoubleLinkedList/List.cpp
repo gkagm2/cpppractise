@@ -29,6 +29,10 @@ void Push_Back(LIST* pList)
 
 	cout << "이름 : ";
 	InputString(tStudent.strName, NAME_SIZE);
+
+	cout << "학번 : ";
+	tStudent.iNumber = InputInt();
+
 	cout << "국어 : ";
 	tStudent.iKor = InputInt();
 
@@ -160,4 +164,74 @@ void OutputStudent(const STUDENT* pStudent)
 	cout.precision(2); // 2개만 출력하게 한다
 	cout << "총점 : " << pStudent->iTotal << "\t평균 : " << pStudent->fAvg << endl;
 	cout << endl;
+}
+
+void Sort(LIST* pList) {
+	system("cls");
+	cout << "========================== 학생정렬 ========================" << endl;
+	cout << "1. 학번기준" << endl;
+	cout << "2. 평균기준" << endl;
+	cout << "메뉴를 선택하세요 : ";
+	int iInput = InputInt();
+	
+	if (iInput <= ST_NONE || iInput >= ST_BACK) {
+		cout << "잘못 선택하였습니다." << endl;
+		system("pause");
+		return;
+	}
+
+	NODE* pFirst = pList->pBegin->pNext;
+	NODE* pSecond = pFirst->pNext;
+	STUDENT tTempStudent;
+
+	//Bubble sort
+	for (int i = 1; i < pList->iSize; ++i) {
+		for (int j = pList->iSize - 1; j > 0; --j) {
+			bool bSwap = false;
+			switch (iInput) {
+			case ST_NUMBER:
+				if (pFirst->tStudent.iTotal > pSecond->tStudent.iTotal) {
+					bSwap = true;
+				}
+				break;
+			case ST_AVG:
+				if (pFirst->tStudent.fAvg > pSecond->tStudent.fAvg) {
+					bSwap = true;
+				}
+				break;
+			}
+
+			if (bSwap) {
+				NODE* pFirstPrev = pFirst->pPrev;
+				NODE* pFirstNext = pFirst->pNext;
+
+				NODE* pSecondPrev = pSecond->pPrev;
+				NODE* pSecondNext = pSecond->pNext;
+
+				// 두 노드를 바꿈
+				NODE* pTemp = pFirst;
+				pFirst = pSecond;
+				pSecond = pTemp;
+
+
+				// 노드의 연결을 바꿔준다.
+				pFirstPrev->pNext = pFirst;
+				pFirst->pPrev = pFirstPrev;
+
+				pFirst->pNext = pSecond;
+				pSecond->pPrev = pFirst;
+
+				pSecond->pNext = pSecondNext;
+				pSecondNext->pPrev = pSecond;
+			}
+			
+			pFirst = pFirst->pNext;
+			pSecond = pSecond->pNext;
+		}
+		pFirst = pList->pBegin->pNext;
+		pSecond = pFirst->pNext;
+	}
+
+	cout << "정렬을 완료하였습니다." << endl;
+	system("pause");
 }

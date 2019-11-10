@@ -9,6 +9,13 @@ enum OUTPUT_TYPE {
 	OT_INVERSE // ¿ª¹æÇâ
 };
 
+enum SORT_TYPE {
+	ST_NONE,
+	ST_NUMBER,
+	ST_AVG,
+	ST_BACK
+};
+
 #define NAME_SIZE 32
 
 typedef struct _tagStudent {
@@ -41,6 +48,7 @@ void Push_Back(LIST* pList);
 void Push_Front(LIST* pList);
 void Search(LIST* pList);
 void Delete(LIST *pList);
+void Sort(LIST* pList);
 
 void Output(LIST* pList);
 void OutputStudent(const STUDENT* pStudent);
