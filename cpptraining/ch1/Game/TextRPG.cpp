@@ -7,6 +7,12 @@
 
 using namespace std;
 
+enum GAME_MODE {
+	GM_NONE,
+	GM_NEW,
+	GM_LOAD,
+	GM_END
+};
 
 enum MAIN_MENU {
 	MM_NONE,
@@ -116,6 +122,160 @@ struct _tagMonster {
 	int iGoldMax;
 };
 
+int InputInt() {
+	int iInput;
+	cin >> iInput;
+
+	if (cin.fail()) {
+		cin.clear(0);
+		cin.ignore(1024, '\n');
+		return INT_MAX;
+	}
+	return iInput;
+}
+
+void InputString(char* pString, int iSize) {
+	cin.clear();
+	cin.ignore(1024, '\n');
+	cin.getline(pString, iSize - 1);
+}
+
+_tagMonster CreateMonster(_tagMonster monster) {
+
+}
+
+void SetPlayer(_tagPlayer* pPlayer) {
+	// 플레이어 이름을 입력받는다.
+	cout << "이름 : ";
+	cin.getline(pPlayer->strName, NAME_SIZE - 1);
+
+	int iJob = JOB_NONE;
+	while (iJob == JOB_NONE) {
+		system("cls");
+		cout << "========================= 로비 ===========================" << endl;
+		cout << "1. 기사" << endl;
+		cout << "2. 궁수" << endl;
+		cout << "3. 마법사" << endl;
+		cout << "직업을 선택하세요 : ";
+		iJob = InputInt();
+		cin >> iJob;
+		if (iJob == INT_MAX) {
+			continue;
+		}
+		else if (iJob <= JOB_NONE || iJob >= JOB_END) {
+			iJob = JOB_NONE;
+		}
+	}
+
+	// 플레이어의 정보를 정의하기
+	pPlayer->iLevel = 1;
+	pPlayer->iExp = 0;
+	pPlayer->eJob = (JOB)iJob;
+	pPlayer->tInventory.iGold = 10000;
+
+	switch (pPlayer->eJob) {
+	case JOB_KNIGHT:
+		strcpy_s(pPlayer->strJobName, "기사");
+		/*tPlayer.iAttackMin = 5;
+		pPlayer->iAttackMax = 10;*/
+		pPlayer->iAttackMin = 999;
+		pPlayer->iAttackMax = 999;
+		pPlayer->iArmorMin = 15;
+		pPlayer->iArmorMax = 20;
+		pPlayer->iHPMax = 500;
+		pPlayer->iHP = 500;
+		pPlayer->iMP = 100;
+		pPlayer->iMPMax = 100;
+		break;
+	case JOB_ARCHER:
+		strcpy_s(pPlayer->strJobName, "궁수");
+		pPlayer->iAttackMin = 10;
+		pPlayer->iAttackMax = 15;
+		pPlayer->iArmorMin = 10;
+		pPlayer->iArmorMax = 15;
+		pPlayer->iHPMax = 400;
+		pPlayer->iHP = 400;
+		pPlayer->iMP = 200;
+		pPlayer->iMPMax = 200;
+		break;
+	case JOB_WIZARD:
+		strcpy_s(pPlayer->strJobName, "마법사");
+		pPlayer->iAttackMin = 15;
+		pPlayer->iAttackMax = 20;
+		pPlayer->iArmorMin = 5;
+		pPlayer->iArmorMax = 10;
+		pPlayer->iHPMax = 300;
+		pPlayer->iHP = 300;
+		pPlayer->iMP = 300;
+		pPlayer->iMPMax = 300;
+		break;
+	}
+}
+
+bool LoadPlayer(_tagPlayer* pPlayer) {
+	FILE* pFile = NULL;
+
+	fopen_s(&pFile, "Player.ply", "rb");
+
+	if (pFile) {
+
+		// 플레이어 이름을 불러온다.
+		fread(pPlayer->strName, sizeof(char), NAME_SIZE, pFile);
+		// 직업 정보를 읽어온다.
+		fread(&pPlayer->eJob, sizeof(JOB), 1, pFile); // 열거체는 무조건 4byte로 처리된다. 배열이 아니므로 1개
+		fread(pPlayer->strJobName, 1, NAME_SIZE, pFile);
+
+		// 공격력을 읽어온다.
+		fread(&pPlayer->iAttackMin, sizeof(int), 1, pFile);
+		fread(&pPlayer->iAttackMax, sizeof(int), 1, pFile);
+
+		// 방어력을 읽어온다.
+		fread(&pPlayer->iArmorMin, sizeof(int), 1, pFile);
+		fread(&pPlayer->iArmorMax, sizeof(int), 1, pFile);
+
+		// 체력을 읽어온다.
+		fread(&pPlayer->iHP, sizeof(int), 1, pFile);
+		fread(&pPlayer->iHPMax, sizeof(int), 1, pFile);
+		
+		// 마나를 읽어온다.
+		fread(&pPlayer->iMP, sizeof(int), 1, pFile);
+		fread(&pPlayer->iMPMax, sizeof(int), 1, pFile);
+		
+		// 레벨과 경험치를 읽어온다.
+		fread(&pPlayer->iLevel, sizeof(int), 1, pFile);
+		fread(&pPlayer->iExp, sizeof(int), 1, pFile);
+		
+
+		// 무기 아이템 착용여부를 읽어온다.
+		fread(&pPlayer->bEquip[EQ_WEAPON], 1, 1, pFile);
+		
+		// 만약 저정할때 무기를 차고 있었다면 해당 무기정보도 같이 저장이 되었다.
+		// 그러므로 여기서 차고 있을 경우 읽어야 한다.
+		if (pPlayer->bEquip[EQ_WEAPON]) {
+			fread(&pPlayer->tEquip[EQ_WEAPON], sizeof(_tagItem), 1, pFile);
+		}
+		// 방어구 아이템 착용여부를 읽어온다.
+		if (pPlayer->bEquip[EQ_ARMOR]) {
+			fread(&pPlayer->tEquip[EQ_ARMOR], sizeof(_tagItem), 1, pFile);
+		}
+
+		/*
+		int iGoldMin;
+		int iGoldMax;*/
+
+		// 골드를 읽어온다.
+		fread(&pPlayer->tInventory.iGold, sizeof(int), 1, pFile);
+
+		// 인벤토리 아이템 수를 읽어온다.
+		fread(&pPlayer->tInventory.iItemCount, sizeof(int), 1, pFile);
+
+		// 읽어온 아이템 수만큼 인벤토리에 아이템정보를 읽어온다.
+		fread(&pPlayer->tInventory.tItem, sizeof(_tagItem), pPlayer->tInventory.iItemCount, pFile);
+		fclose(pFile);
+		return true;
+	}
+	return false;
+}
 int main() {
 
 	srand((unsigned int)time(0));
@@ -126,72 +286,32 @@ int main() {
 	// 게임을 시작할때 플레이어 정보를 설정하게 한다.
 	_tagPlayer tPlayer = {};
 
-	// 플레이어 이름을 입력받는다.
-	cout << "이름 : ";
-	cin.getline(tPlayer.strName, NAME_SIZE - 1);
 
-	int iJob = JOB_NONE;
-	while (iJob == JOB_NONE) {
+	int iGameMode = 0;
+	while (iGameMode <= GM_NONE || iGameMode > GM_LOAD) {
 		system("cls");
-		cout << "========================= 로비 ===========================" << endl;
-		cout << "1. 기사" << endl;
-		cout << "2. 궁수" << endl;
-		cout << "3. 마법사" << endl;
-		cout << "직업을 선택하세요 : ";
-		cin >> iJob;
-
-		if (cin.fail()) {
-			cin.clear();
-			cin.ignore(1024, '\n');
-			continue;
+		cout << "1. 새로하기" << endl;
+		cout << "2. 이어하기" << endl;
+		cout << "3. 종료" << endl;
+		cout << "게임모드를 선택하세요 : ";
+		iGameMode = InputInt();
+	}
+	
+	if (iGameMode == GM_END) {
+		return 0;
+	}
+	switch (iGameMode) {
+	case GM_NEW:
+		SetPlayer(&tPlayer);
+		break;
+	case GM_LOAD:
+		if (!LoadPlayer(&tPlayer)) {
+			cout << "플레이어 파일 오류!!" << endl;
+			return 0;
 		}
-		else if (iJob <= JOB_NONE || iJob >= JOB_END) {
-			iJob = JOB_NONE;
-		}
+		break;
 	}
 
-	tPlayer.iLevel = 1;
-	tPlayer.iExp = 0;
-	tPlayer.eJob = (JOB)iJob;
-	tPlayer.tInventory.iGold = 10000;
-
-	switch (tPlayer.eJob) {
-	case JOB_KNIGHT:
-		strcpy_s(tPlayer.strJobName, "기사");
-		/*tPlayer.iAttackMin = 5;
-		tPlayer.iAttackMax = 10;*/
-		tPlayer.iAttackMin = 999;
-		tPlayer.iAttackMax = 999;	
-		tPlayer.iArmorMin = 15;
-		tPlayer.iArmorMax = 20;
-		tPlayer.iHPMax = 500;
-		tPlayer.iHP = 500;
-		tPlayer.iMP = 100;
-		tPlayer.iMPMax = 100;
-		break;
-	case JOB_ARCHER:
-		strcpy_s(tPlayer.strJobName, "궁수");
-		tPlayer.iAttackMin = 10;
-		tPlayer.iAttackMax = 15;
-		tPlayer.iArmorMin = 10;
-		tPlayer.iArmorMax = 15;
-		tPlayer.iHPMax = 400;
-		tPlayer.iHP = 400;
-		tPlayer.iMP = 200;
-		tPlayer.iMPMax = 200;
-		break;
-	case JOB_WIZARD:
-		strcpy_s(tPlayer.strJobName, "마법사");
-		tPlayer.iAttackMin = 15;
-		tPlayer.iAttackMax = 20;
-		tPlayer.iArmorMin = 5;
-		tPlayer.iArmorMax = 10;
-		tPlayer.iHPMax = 300;
-		tPlayer.iHP = 300;
-		tPlayer.iMP = 300;
-		tPlayer.iMPMax = 300;
-		break;
-	}
 
 	// 몬스터를 생성한다.
 	_tagMonster tMonsterArr[MT_BACK - 1] = {};
@@ -289,7 +409,7 @@ int main() {
 	tStoreArmor[0].iMax = 5;
 	tStoreArmor[0].iPrice = 1000;
 	tStoreArmor[0].iSell = 500;
-	
+
 	strcpy_s(tStoreArmor[1].strName, "가죽갑옷");
 	strcpy_s(tStoreArmor[1].strTypeName, "방어구");
 	strcpy_s(tStoreArmor[1].strDesc, "동물 가죽으로 만든 질긴 갑옷");
@@ -319,6 +439,7 @@ int main() {
 		cout << "메뉴를 선택하세요 : ";
 
 		int iMenu;
+		
 		cin >> iMenu;
 
 		if (cin.fail()) {
@@ -340,7 +461,6 @@ int main() {
 				cout << "2. 보통" << endl;
 				cout << "3. 어려움" << endl;
 				cout << "4. 뒤로가기" << endl;
-				cin >> iMenu;
 
 				if (cin.fail()) {
 					cin.clear();
@@ -715,7 +835,7 @@ int main() {
 				else {
 					// 장착되어있지 않을 경우 인벤토리 아이템을 장착창으로 옮기고 인벤토리는 1칸 비워지게 된다.
 					tPlayer.tEquip[equip] = tPlayer.tInventory.tItem[idx];
-					
+
 					for (int i = idx; i < tPlayer.tInventory.iItemCount - 1; ++i) {
 						tPlayer.tInventory.tItem[i] = tPlayer.tInventory.tItem[i + 1];
 					}
