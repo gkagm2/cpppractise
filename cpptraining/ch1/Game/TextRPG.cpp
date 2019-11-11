@@ -140,14 +140,80 @@ void InputString(char* pString, int iSize) {
 	cin.getline(pString, iSize - 1);
 }
 
-_tagMonster CreateMonster(_tagMonster monster) {
+// bool을 이용해서파일이 제대로 만들어졌는지 판단한다.
+bool SavePlayer(_tagPlayer* pPlayer) {
+	FILE* pFile = NULL;
+	fopen_s(&pFile, "Player.ply", "wb");
 
+	if (pFile) {
+		// 플레이어 이름을 저장한다.
+		fwrite(pPlayer->strName, sizeof(char), NAME_SIZE, pFile);
+		// 직업 정보를 저장한다.
+		fwrite(&pPlayer->eJob, sizeof(JOB), 1, pFile); // 열거체는 무조건 4byte로 처리된다. 배열이 아니므로 1개
+		fwrite(pPlayer->strJobName, 1, NAME_SIZE, pFile);
+
+		// 공격력을 저장한다.
+		fwrite(&pPlayer->iAttackMin, sizeof(int), 1, pFile);
+		fwrite(&pPlayer->iAttackMax, sizeof(int), 1, pFile);
+
+		// 방어력을 저장한다.
+		fwrite(&pPlayer->iArmorMin, sizeof(int), 1, pFile);
+		fwrite(&pPlayer->iArmorMax, sizeof(int), 1, pFile);
+
+		// 체력을 저장한다.
+		fwrite(&pPlayer->iHP, sizeof(int), 1, pFile);
+		fwrite(&pPlayer->iHPMax, sizeof(int), 1, pFile);
+
+		// 마나를 저장한다.
+		fwrite(&pPlayer->iMP, sizeof(int), 1, pFile);
+		fwrite(&pPlayer->iMPMax, sizeof(int), 1, pFile);
+
+		// 레벨과 경험치를 저장한다.
+		fwrite(&pPlayer->iLevel, sizeof(int), 1, pFile);
+		fwrite(&pPlayer->iExp, sizeof(int), 1, pFile);
+
+
+		// 무기 아이템 착용여부를 저장한다.
+		fwrite(&pPlayer->bEquip[EQ_WEAPON], 1, 1, pFile);
+
+		// 만약 저정할때 무기를 차고 있었다면 해당 무기정보도 같이 저장이 되었다.
+		// 그러므로 여기서 차고 있을 경우 읽어야 한다.
+		if (pPlayer->bEquip[EQ_WEAPON]) {
+			fwrite(&pPlayer->tEquip[EQ_WEAPON], sizeof(_tagItem), 1, pFile);
+		}
+		// 방어구 아이템 착용여부를 저장한다.
+		if (pPlayer->bEquip[EQ_ARMOR]) {
+			fwrite(&pPlayer->tEquip[EQ_ARMOR], sizeof(_tagItem), 1, pFile);
+		}
+
+		/*
+		int iGoldMin;
+		int iGoldMax;*/
+
+		// 골드를 저장한다.
+		fwrite(&pPlayer->tInventory.iGold, sizeof(int), 1, pFile);
+
+		// 인벤토리 아이템 수를 저장한다.
+		fwrite(&pPlayer->tInventory.iItemCount, sizeof(int), 1, pFile);
+
+		// 아이템 수만큼 인벤토리에 아이템정보를 저장한다.
+		fwrite(pPlayer->tInventory.tItem, sizeof(_tagItem), pPlayer->tInventory.iItemCount, pFile);
+
+		fclose(pFile);
+		return true;
+	}
+	return false;
 }
 
+//_tagMonster CreateMonster(_tagMonster monster) {
+//
+//}
+
 void SetPlayer(_tagPlayer* pPlayer) {
+	system("cls");
 	// 플레이어 이름을 입력받는다.
 	cout << "이름 : ";
-	cin.getline(pPlayer->strName, NAME_SIZE - 1);
+	InputString(pPlayer->strName, NAME_SIZE - 1);
 
 	int iJob = JOB_NONE;
 	while (iJob == JOB_NONE) {
@@ -158,7 +224,6 @@ void SetPlayer(_tagPlayer* pPlayer) {
 		cout << "3. 마법사" << endl;
 		cout << "직업을 선택하세요 : ";
 		iJob = InputInt();
-		cin >> iJob;
 		if (iJob == INT_MAX) {
 			continue;
 		}
@@ -171,15 +236,13 @@ void SetPlayer(_tagPlayer* pPlayer) {
 	pPlayer->iLevel = 1;
 	pPlayer->iExp = 0;
 	pPlayer->eJob = (JOB)iJob;
-	pPlayer->tInventory.iGold = 10000;
+	pPlayer->tInventory.iGold = 100000;
 
 	switch (pPlayer->eJob) {
 	case JOB_KNIGHT:
 		strcpy_s(pPlayer->strJobName, "기사");
-		/*tPlayer.iAttackMin = 5;
-		pPlayer->iAttackMax = 10;*/
-		pPlayer->iAttackMin = 999;
-		pPlayer->iAttackMax = 999;
+		pPlayer->iAttackMin = 5;
+		pPlayer->iAttackMax = 10;
 		pPlayer->iArmorMin = 15;
 		pPlayer->iArmorMax = 20;
 		pPlayer->iHPMax = 500;
@@ -270,7 +333,8 @@ bool LoadPlayer(_tagPlayer* pPlayer) {
 		fread(&pPlayer->tInventory.iItemCount, sizeof(int), 1, pFile);
 
 		// 읽어온 아이템 수만큼 인벤토리에 아이템정보를 읽어온다.
-		fread(&pPlayer->tInventory.tItem, sizeof(_tagItem), pPlayer->tInventory.iItemCount, pFile);
+		fread(pPlayer->tInventory.tItem, sizeof(_tagItem), pPlayer->tInventory.iItemCount, pFile);
+
 		fclose(pFile);
 		return true;
 	}
@@ -462,9 +526,8 @@ int main() {
 				cout << "3. 어려움" << endl;
 				cout << "4. 뒤로가기" << endl;
 
-				if (cin.fail()) {
-					cin.clear();
-					cin.ignore(1024, '\n');
+				iMenu = InputInt();
+				if (iMenu == INT_MAX) {
 					continue;
 				}
 
@@ -514,11 +577,8 @@ int main() {
 					cout << "1. 공격" << endl;
 					cout << "2. 도망가기" << endl;
 					cout << "메뉴를 선택하세요 : ";
-					cin >> iMenu;
-
-					if (cin.fail()) {
-						cin.clear();
-						cin.ignore(1024, '\n');
+					iMenu = InputInt();
+					if (iMenu == INT_MAX) {
 						continue;
 					}
 					else if (iMenu == BATTLE_BACK) {
@@ -849,5 +909,8 @@ int main() {
 			break;
 		}
 	}
+
+	SavePlayer(&tPlayer);
+
 	return 0;
 }
