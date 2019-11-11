@@ -213,7 +213,8 @@ void SetPlayer(_tagPlayer* pPlayer) {
 	system("cls");
 	// 플레이어 이름을 입력받는다.
 	cout << "이름 : ";
-	InputString(pPlayer->strName, NAME_SIZE - 1);
+	InputString(pPlayer->strName, NAME_SIZE);
+	cout << pPlayer->strName << "을 입력하였습니다." << endl;
 
 	int iJob = JOB_NONE;
 	while (iJob == JOB_NONE) {
@@ -340,6 +341,75 @@ bool LoadPlayer(_tagPlayer* pPlayer) {
 	}
 	return false;
 }
+
+// 몬스터 정보를 출력한다.
+void OutputMonster(_tagMonster* pMonster) {
+	cout << "=========================== Monster ===================" << endl;
+	cout << "이름 : " << pMonster->strName << "\t레벨 : " << pMonster->iLevel << endl;
+	cout << "공격력 : " << pMonster->iAttackMin << " - " << pMonster->iAttackMax <<
+		"\t방어력 : " << pMonster->iArmorMin << " - " << pMonster->iArmorMax << endl;
+	cout << "체력 : " << pMonster->iHP << " / " << pMonster->iHPMax <<
+		"\t마나 : " << pMonster->iMP << " / /" << pMonster->iMPMax << endl;
+	cout << "획득경험치 : " << pMonster->iExp << "\t획득골드" << pMonster->iGoldMin << " - " << pMonster->iGoldMax << endl;
+}
+
+// 플레이어 정보를 출력한다.
+void OutputPlayer(_tagPlayer* pPlayer) {
+	cout << "=========================== Player ===================" << endl;
+	cout << "이름 : " << pPlayer->strName << "\t직업 : " << pPlayer->strJobName << endl;
+	cout << "레벨 : " << pPlayer->iLevel << "\t경험치 : " << pPlayer->iExp << endl;
+	cout << "공격력 : " << pPlayer->iAttackMin << " - " << pPlayer->iAttackMax <<
+		"\t방어력 : " << pPlayer->iArmorMin << " - " << pPlayer->iArmorMax << endl;
+	cout << "체력 : " << pPlayer->iHP << " / " << pPlayer->iHPMax <<
+		"\t마나 : " << pPlayer->iMP << " / /" << pPlayer->iMPMax << endl;
+	cout << "보유골드 : " << pPlayer->tInventory.iGold << " 골드" << endl;
+}
+
+_tagMonster CreateMonster(const char *strName, int iAttackMin, int iAttackMax, int iArmorMin,
+	int iArmorMax, int iHP, int iMP, int iLevel, int iExp, int iGoldMin,int iGoldMax) {
+	_tagMonster tMonster;
+	strcpy_s(tMonster.strName, strName);
+	tMonster.iAttackMin = iAttackMin;
+	tMonster.iAttackMax = iAttackMax;
+	tMonster.iArmorMin = iArmorMin;
+	tMonster.iArmorMax = iArmorMax;
+	tMonster.iHP = tMonster.iHPMax = iHP;
+	tMonster.iMP = tMonster.iMPMax = iMP;
+	tMonster.iLevel = iLevel;
+	tMonster.iExp = iExp;
+	tMonster.iGoldMin = iGoldMin;
+	tMonster.iGoldMax = iGoldMax;
+
+	return tMonster;
+}
+
+void SetMonster(_tagMonster* pMonsterArr) {
+	
+	FILE* pFile = NULL;
+
+	fopen_s(&pFile, "Monster.mst", "rb");
+
+	if (pFile) {
+		fread(pMonsterArr, sizeof(_tagMonster), MT_BACK-1, pFile);
+		fclose(pFile);
+	}
+
+	/*pMonsterArr[0] = CreateMonster("고블린", 20, 30, 2, 5, 100, 10, 1, 1000, 500, 1500);
+	pMonsterArr[1] = CreateMonster("트롤", 80, 130, 60, 90, 2000, 100, 5, 7000, 6000, 8000);
+	pMonsterArr[2] = CreateMonster("드래곤", 250, 500, 200, 400, 30000, 20000, 10, 30000, 20000, 50000);*/
+}
+
+// TODO (Sagacity Jang) : 아이템 생성 리펙토링하기
+//_tagItem CreateItem(const char* strName) {
+//	return;
+//}
+//
+//void SetItem(_tagItem* pItemArr) {
+//	pItemArr[0] = CreateItem();
+//	pItemArr[0] = CreateItem();
+//	pItemArr[0] = CreateItem();
+//}
+
 int main() {
 
 	srand((unsigned int)time(0));
@@ -380,56 +450,18 @@ int main() {
 	// 몬스터를 생성한다.
 	_tagMonster tMonsterArr[MT_BACK - 1] = {};
 
-	// 고블린 생성
-	strcpy_s(tMonsterArr[0].strName, "고블린");
-	tMonsterArr[0].iAttackMin = 20;
-	tMonsterArr[0].iAttackMax = 30;
-	tMonsterArr[0].iArmorMin = 2;
-	tMonsterArr[0].iArmorMax = 5;
-	tMonsterArr[0].iHP = 100;
-	tMonsterArr[0].iHPMax = 100;
-	tMonsterArr[0].iMP = 10;
-	tMonsterArr[0].iMP = 10;
-	tMonsterArr[0].iLevel = 1;
-	tMonsterArr[0].iExp = 1000;
-	tMonsterArr[0].iGoldMin = 500;
-	tMonsterArr[0].iGoldMax = 1500;
-
-	// 트롤 생성
-	strcpy_s(tMonsterArr[1].strName, "트롤");
-	tMonsterArr[1].iAttackMin = 80;
-	tMonsterArr[1].iAttackMax = 130;
-	tMonsterArr[1].iArmorMin = 60;
-	tMonsterArr[1].iArmorMax = 90;
-	tMonsterArr[1].iHP = 2000;
-	tMonsterArr[1].iHPMax = 2000;
-	tMonsterArr[1].iMP = 100;
-	tMonsterArr[1].iMP = 100;
-	tMonsterArr[1].iLevel = 5;
-	tMonsterArr[1].iExp = 7000;
-	tMonsterArr[1].iGoldMin = 6000;
-	tMonsterArr[1].iGoldMax = 8000;
-
-	// 드래곤 생성
-	strcpy_s(tMonsterArr[2].strName, "드래곤");
-	tMonsterArr[2].iAttackMin = 250;
-	tMonsterArr[2].iAttackMax = 500;
-	tMonsterArr[2].iArmorMin = 200;
-	tMonsterArr[2].iArmorMax = 400;
-	tMonsterArr[2].iHP = 30000;
-	tMonsterArr[2].iHPMax = 30000;
-	tMonsterArr[2].iMP = 20000;
-	tMonsterArr[2].iMP = 20000;
-	tMonsterArr[2].iLevel = 10;
-	tMonsterArr[2].iExp = 30000;
-	tMonsterArr[2].iGoldMin = 20000;
-	tMonsterArr[2].iGoldMax = 50000;
+	for (int i = 0; i < 3; i++) {
+		SetMonster(&tMonsterArr[i]); // 몬스터 초기화
+	}
+	
 
 
 	// 상점에서 판매할 아이템 목록을 생성한다.
 	_tagItem tStoreWeapon[STORE_WEAPON_MAX] = {};
 	_tagItem tStoreArmor[STORE_ARMOR_MAX] = {};
 
+
+	// TODO (Sagacity Jang) : 아이템 리펙토링 하기
 	// 각 아이템 정보들을 설정해준다.
 
 	// 무기 아이템 정보 설정
@@ -554,25 +586,9 @@ int main() {
 						break;
 					}
 
-					// 플레이어 정보를 출력한다.
-					cout << "=========================== Player ===================" << endl;
-					cout << "이름 : " << tPlayer.strName << "\t직업 : " << tPlayer.strJobName << endl;
-					cout << "레벨 : " << tPlayer.iLevel << "\t경험치 : " << tPlayer.iExp << endl;
-					cout << "공격력 : " << tPlayer.iAttackMin << " - " << tPlayer.iAttackMax <<
-						"\t방어력 : " << tPlayer.iArmorMin << " - " << tPlayer.iArmorMax << endl;
-					cout << "체력 : " << tPlayer.iHP << " / " << tPlayer.iHPMax <<
-						"\t마나 : " << tPlayer.iMP << " / /" << tPlayer.iMPMax << endl;
-					cout << "보유골드 : " << tPlayer.tInventory.iGold << " 골드" << endl;
-
-
-					// 몬스터 정보를 출력한다.
-					cout << "=========================== Monster ===================" << endl;
-					cout << "이름 : " << tMonster.strName << "\t레벨 : " << tMonster.iLevel << endl;
-					cout << "공격력 : " << tMonster.iAttackMin << " - " << tMonster.iAttackMax <<
-						"\t방어력 : " << tMonster.iArmorMin << " - " << tMonster.iArmorMax << endl;
-					cout << "체력 : " << tMonster.iHP << " / " << tMonster.iHPMax <<
-						"\t마나 : " << tMonster.iMP << " / /" << tMonster.iMPMax << endl;
-					cout << "획득경험치 : " << tMonster.iExp << "\t획득골드" << tMonster.iGoldMin << " - " << tMonster.iGoldMax << endl;
+					OutputPlayer(&tPlayer);   // 플레이어 정보 출력
+					cout << "!!! " << tPlayer.strJobName << endl;
+					OutputMonster(&tMonster); //몬스터 정보 출력
 
 					cout << "1. 공격" << endl;
 					cout << "2. 도망가기" << endl;
