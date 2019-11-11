@@ -37,6 +37,83 @@ typedef _tagPoint* PPOINT;
 
 void SetMaze(char Maze[21][21], PPLAYER pPlayer, PPOINT pStartPos, PPOINT pEndPos) {
 
+	// MazeList.txt 파일을 읽어와서 미로 목록을 만든다.
+	FILE* pFile = NULL;
+
+	fopen_s(&pFile, "MazeList.txt", "rt");
+
+	char** pMazeList = NULL;
+	if (pFile) { // 파일이 있을 경우
+		char cCount;
+		fread(&cCount, 1, 1, pFile);
+		int iMazeCount = atoi(&cCount); // 정수로 변환
+		fread(&cCount, 1, 1, pFile);
+		pMazeList = new char*[iMazeCount]; // char* 배열을 미로 개수만큼 할당한다.
+
+		for (int i =  0; i < iMazeCount; ++i) {
+			int iNameCount = 0;
+
+			// 현재 미로의 파일 이름을 저장할 배열를 256개로 할당해둔다. 미리 넉넉하게 할당.
+			pMazeList[i] = new char[256];
+			while (true) {
+				fread(&cCount, 1, 1, pFile);
+				if (cCount != '\n') {
+					pMazeList[i][iNameCount] = cCount;
+					++iNameCount;
+				}
+				else {
+					break;
+				}
+			}
+			// 파일 이름을 모두 읽었다면 문자열의 마지막에 0을 넣어서 이 문자열의 끝을 알린다.
+			pMazeList[i][iNameCount] = 0;
+			cout << pMazeList[i] << endl;
+		}
+
+		fclose(pFile);
+
+		// 읽을 파일 목록이 만들어졌으므로 각 파일중 하나를 선택해서 미로를 읽어와서 설정한다.
+		for (int i = 0; i < iMazeCount; ++i) {
+			cout << i+1<<". " << pMazeList[i] << endl;
+		}
+		cout << "미로를 선택하세요 : ";
+		int iSelect;
+		cin >> iSelect;
+
+		cout << pMazeList[iSelect - 1] << endl;
+
+		// 선택한 미로 파일을 읽는다.
+		fopen_s(&pFile, pMazeList[iSelect - 1], "rt");
+
+		if (pFile) {
+			// 미로의 세로 줄 수만큼 반복하여 각 줄 별로 읽어온다.
+			for (int i = 0; i < 20; ++i) {
+				fread(Maze[i], 1, 20, pFile);
+				
+				// 현재 줄의 미로를 검사하여 시작점, 혹은 도착점이 있는지를 판단한다.
+				for (int j = 0; j < 20; ++j) {
+					// 시작점일 경우
+					if (Maze[i][j] == '2') {
+						pStartPos->x = j;
+						pStartPos->y = i;
+
+						pPlayer->tPos = *pStartPos;
+					}
+					// 도착점일 경우
+					else if (Maze[i][j] == '3') {
+						pEndPos->x = j;
+						pEndPos->y = i;
+					}
+				}
+
+				// 개행문자를 읽어온다.
+				fread(&cCount, 1, 1, pFile);
+			}
+			fclose(pFile);
+		}
+	}
+
+	/*
 	pStartPos->x = 0;
 	pStartPos->y = 0;
 
@@ -65,6 +142,7 @@ void SetMaze(char Maze[21][21], PPLAYER pPlayer, PPOINT pStartPos, PPOINT pEndPo
 	strcpy_s(Maze[17], "10100111100011101011");
 	strcpy_s(Maze[18], "10001010001110001100");
 	strcpy_s(Maze[19], "11111011100011110113");
+	*/
 }
 
  void OutputMaze(char Maze[21][21], PPLAYER pPlayer) {
