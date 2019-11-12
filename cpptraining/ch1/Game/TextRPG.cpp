@@ -342,6 +342,21 @@ bool LoadPlayer(_tagPlayer* pPlayer) {
 	return false;
 }
 
+bool LoadStore(_tagItem* pWeapon, _tagItem* pArmor) {
+	FILE* pFile = NULL;
+
+	fopen_s(&pFile, "Store.str", "rb");
+
+	if (pFile) {
+		fread(pWeapon, sizeof(_tagItem), STORE_WEAPON_MAX, pFile);
+		fread(pArmor, sizeof(_tagItem), STORE_ARMOR_MAX, pFile);
+		fclose(pFile);
+		return true;
+	}
+	return false;
+}
+
+
 // 몬스터 정보를 출력한다.
 void OutputMonster(_tagMonster* pMonster) {
 	cout << "=========================== Monster ===================" << endl;
@@ -426,13 +441,13 @@ int OutputStoreItemList(_tagInventory* pInventory, _tagItem* pStore, int iItemCo
 		cout << "판매가격 : " << pStore[i].iPrice << "\t구매가격 : " << pStore[i].iSell << endl;
 		cout << "설명 : " << pStore[i].strDesc << endl;
 		cout << endl;
-
-		cout << endl;
-		cout << iItemCount + 1 << ". 뒤로가기" << endl;
-		cout << "보유금액 : " << pInventory->iGold << " Gold" << endl;
-		cout << "남은공간 : " << INVENTORY_MAX - pInventory->iItemCount << endl;
-		cout << "구입할 아이템을 선택하세요 : ";
 	}
+
+	cout << endl;
+	cout << iItemCount + 1 << ". 뒤로가기" << endl;
+	cout << "보유금액 : " << pInventory->iGold << " Gold" << endl;
+	cout << "남은공간 : " << INVENTORY_MAX - pInventory->iItemCount << endl;
+	cout << "구입할 아이템을 선택하세요 : ";
 
 	int iMenu = InputInt();
 	if (iMenu < 1 || iMenu > iItemCount + 1) {
@@ -493,15 +508,16 @@ int main() {
 	_tagItem tStoreArmor[STORE_ARMOR_MAX] = {};
 
 
-	// 무기 아이템 정보 설정
-	tStoreWeapon[0] = CreateItem("목검", IT_WEAPON, 5, 10, 1000, 500, "나무로 만든 칼");
-	tStoreWeapon[1] = CreateItem("장궁", IT_WEAPON, 20, 40, 7000, 3500, "짱짱한 활");
-	tStoreWeapon[2] = CreateItem("지팡이", IT_WEAPON, 90, 150, 30000, 15000, "나무로 만든 지팡이");
+	LoadStore(tStoreWeapon, tStoreArmor); // 외부 파일에서 불러오기
+	//// 무기 아이템 정보 설정
+	//tStoreWeapon[0] = CreateItem("목검", IT_WEAPON, 5, 10, 1000, 500, "나무로 만든 칼");
+	//tStoreWeapon[1] = CreateItem("장궁", IT_WEAPON, 20, 40, 7000, 3500, "짱짱한 활");
+	//tStoreWeapon[2] = CreateItem("지팡이", IT_WEAPON, 90, 150, 30000, 15000, "나무로 만든 지팡이");
 
-	// 방어구 아이템 정보 설정
-	tStoreArmor[0] = CreateItem("천갑옷", IT_ARMOR, 2, 5, 1000, 500, "천으로 만든 허접한 갑옷");
-	tStoreArmor[1] = CreateItem("가죽갑옷", IT_ARMOR, 10, 20, 7000, 3500, "동물 가죽으로 만든 질긴 갑옷");
-	tStoreArmor[2] = CreateItem("풀플레이트아머", IT_ARMOR, 70, 90, 30000, 15000, "강철로 만든 판금갑옷");
+	//// 방어구 아이템 정보 설정
+	//tStoreArmor[0] = CreateItem("천갑옷", IT_ARMOR, 2, 5, 1000, 500, "천으로 만든 허접한 갑옷");
+	//tStoreArmor[1] = CreateItem("가죽갑옷", IT_ARMOR, 10, 20, 7000, 3500, "동물 가죽으로 만든 질긴 갑옷");
+	//tStoreArmor[2] = CreateItem("풀플레이트아머", IT_ARMOR, 70, 90, 30000, 15000, "강철로 만든 판금갑옷");
 
 	while (true) {
 		system("cls");
