@@ -13,8 +13,9 @@ private:
 	bool m_bOpen;
 
 public:
-	bool Open(char* pFileName, char*pMode);
+	bool Open(const char* pFileName, const char*pMode);
 	bool Close();
 	void Read(void* pData, int iSize);
+	void ReadLine(void* pData, int& iSize);
 	void Write(void* pData, int iSize);
 };

@@ -1,4 +1,5 @@
 #include "Stage.h"
+#include "FileStream.h"
 
 CStage::CStage()
 {
@@ -15,5 +16,22 @@ bool CStage::Init()
 
 bool CStage::Init(const char * pFileName)
 {
+	CFileStream file;
+
+	if (!file.Open(pFileName, "rt"))
+		return false;
+
+	for (int i = 0; i < 10; ++i) { // 10มู
+		int iSize = 0;
+		file.ReadLine(m_cStage[i], iSize);
+
+		for (int j = 0; j < 50; ++j) {
+			cout << m_cStage[i][j];
+		}
+		cout << endl;
+	}
+
+	cout << endl << endl;
+	file.Close();
 	return true;
 }

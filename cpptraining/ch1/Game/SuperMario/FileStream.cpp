@@ -1,7 +1,6 @@
 #include "FileStream.h"
 
 
-
 CFileStream::CFileStream() :
 	m_pFile(NULL),
 	m_iFileSize(0),
@@ -10,12 +9,12 @@ CFileStream::CFileStream() :
 	
 }
 
-
 CFileStream::~CFileStream()
 {
+	Close();
 }
 
-bool CFileStream::Open(char * pFileName, char * pMode)
+bool CFileStream::Open(const char * pFileName,const char * pMode)
 {
 	// 파일이 이미 열려서 사용하고 있다면 다시 열지 못하게 한다..
 	if (m_bOpen) {
@@ -61,11 +60,38 @@ bool CFileStream::Close()
 
 void CFileStream::Read(void * pData, int iSize)
 {
-	if (!m_bOpen) {
+	if (!m_bOpen)
 		return;
+
+	fread(pData, iSize, 1, m_pFile);
+}
+
+void CFileStream::ReadLine(void * pData, int & iSize)
+{
+	if (!m_bOpen)
+		return;
+
+	char cData;
+	char* pChangeData = (char*)pData;
+	iSize = 0;
+	
+	// feof 함수는 파일 커서가 파일의 끝에 도달했는지를 체크한다.
+	// 파일의 끝에 도달하지 않았을 경우 0을 리턴하고 끝일 경우 0이 아닌 수를 리턴한다.
+	while (feof(m_pFile) == 0) {
+		fread(&cData, 1, 1, m_pFile);
+
+		if (cData == '\n')
+			break;
+
+		pChangeData[iSize] = cData;
+		++iSize;
 	}
 }
 
 void CFileStream::Write(void * pData, int iSize)
 {
+	if (!m_bOpen)
+		return;
+
+	fwrite(pData, iSize, 1, m_pFile);
 }

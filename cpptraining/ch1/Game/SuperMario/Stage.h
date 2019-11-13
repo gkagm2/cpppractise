@@ -8,7 +8,7 @@ public:
 	CStage();
 	~CStage();
 private:
-	char cStage[10][50];
+	char m_cStage[10][50] = {};
 public:
 	// 이 함수는 그냥 초기화할 목적의 함수이다.
 	bool Init();

@@ -23,7 +23,7 @@ public:
 	static void DestroyInst();
 
 private:
-	CStage*		m_pStage[STAGE_MAX_COUNT];
+	CStage* m_pStage[STAGE_MAX_COUNT];
 
 public:
 	bool Init();
