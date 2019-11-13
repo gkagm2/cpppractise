@@ -7,27 +7,16 @@ CMapManager::CMapManager()
 {
 	for (int i = 0; i < STAGE_MAX_COUNT; ++i)
 	{
-		cout << " m_pStage 초기화" << endl;
 		m_pStage[i] = NULL;
 	}
 }
 
 CMapManager::~CMapManager()
 {
-	// 스테이지 메모리 해제
-	for (int i = 0; i < STAGE_MAX_COUNT; ++i)
-	{
-		if (m_pStage[i]) {
-			cout << "메모리가 있음";
-		}
-	}
 
 	// 스테이지 메모리 해제
 	for (int i = 0; i < STAGE_MAX_COUNT; ++i)
 	{
-		if (m_pStage[i]) {
-			cout << "메모리가 있음";
-		}
 		//_CrtDumpMemoryLeaks();
 		SAFE_DELETE(m_pStage[i]);
 	}
