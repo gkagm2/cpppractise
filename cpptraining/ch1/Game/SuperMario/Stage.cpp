@@ -83,8 +83,8 @@ void CStage::Render()
 			}
 			else if (m_cStage[i][j] == SBT_START) {
 				cout << "◐"; // 2byte 
-				/*m_tStart.x = j;
-				m_tStart.y = i;*/
+				m_tStart.x = j;
+				m_tStart.y = i;
 			}
 			else if (m_cStage[i][j] == SBT_END) {
 				cout << "◑"; // 2byte
