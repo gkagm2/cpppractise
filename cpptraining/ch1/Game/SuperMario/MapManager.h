@@ -24,10 +24,16 @@ public:
 
 private:
 	CStage* m_pStage[STAGE_MAX_COUNT];
+	int m_iEnableStage;
+
+public:
+	CStage* GetStage() {
+		return m_pStage[m_iEnableStage]; // 활성화된 스테이지를 리턴
+	}
 
 public:
 	bool Init();
-	void Run();
+	void Run(int iStage);
 	void Render();
 };
 

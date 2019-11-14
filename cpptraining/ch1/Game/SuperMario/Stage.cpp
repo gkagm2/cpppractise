@@ -3,14 +3,6 @@
 #include "Player.h"
 #include "ObjectManager.h"
 
-enum STAGE_BLOCK_TYPE {
-	SBT_WALL = '0', //ASCII CODE : 48
-	SBT_ROAD = '1', //ASCII CODE : 49
-	SBT_START = '2', //ASCII CODE : 50
-	SBT_END = '3', //ASCII CODE : 51
-	SBT_COIN = '4' //ASCII CODE : 52
-};
-
 CStage::CStage()
 {
 }
@@ -31,9 +23,20 @@ bool CStage::Init(const char * pFileName)
 	if (!file.Open(pFileName, "rt"))
 		return false;
 
-	for (int i = 0; i < 10; ++i) { // 10줄
+	for (int i = 0; i < BLOCK_Y; ++i) { // 10줄
 		int iSize = 0;
 		file.ReadLine(m_cStage[i], iSize);
+
+		for (int j = 0; j < BLOCK_X; ++j) {
+			if (m_cStage[i][j] == SBT_START) {
+				m_tStart.x = j;
+				m_tStart.y = i;
+			}
+			else if (m_cStage[i][j] == SBT_END) {
+				m_tEnd.x = j;
+				m_tEnd.y = i;
+			}
+		}
 
 		// 출력 확인
 		//for (int j = 0; j < 50; ++j) {
@@ -80,9 +83,11 @@ void CStage::Render()
 			}
 			else if (m_cStage[i][j] == SBT_START) {
 				cout << "◐"; // 2byte 
+				/*m_tStart.x = j;
+				m_tStart.y = i;*/
 			}
 			else if (m_cStage[i][j] == SBT_END) {
-				cout << "◑"; // 2byte 
+				cout << "◑"; // 2byte
 			}
 			else if (m_cStage[i][j] == SBT_COIN) {
 				cout << "＠"; // 2byte 

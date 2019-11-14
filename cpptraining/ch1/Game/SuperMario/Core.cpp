@@ -45,13 +45,33 @@ bool CCore::Init()
 void CCore::Run()
 {
 	//CMapManager::GetInst()->Render();
-	CPlayer* pPlayer = CObjectManager::GetInst()->GetPlayer();
 
 	while (true) {
-		system("cls");
+		int iStage = OutputMenu();
 
-		pPlayer->Update();
-		CMapManager::GetInst()->Render();
-		Sleep(100); // 500ms
+		if (iStage == STAGE_MAX_COUNT + 1)
+			break;
+		else if (iStage == 0)
+			continue;
+
+		CMapManager::GetInst()->Run(iStage - 1);
 	}
+}
+
+int CCore::OutputMenu()
+{
+	system("cls");
+	int i;
+	for (i = 0; i < STAGE_MAX_COUNT; ++i) {
+		cout << i + 1 << ". Stage" << i + 1 << endl;
+
+	}
+	cout << i + 1 << ". Exit" << endl;
+
+	int iInput = InputInt();
+	if (iInput < 1 || iInput > STAGE_MAX_COUNT + 1) {
+		return 0;
+	}
+
+	return iInput;
 }
