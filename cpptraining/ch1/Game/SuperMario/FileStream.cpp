@@ -6,7 +6,7 @@ CFileStream::CFileStream() :
 	m_iFileSize(0),
 	m_bOpen(false)
 {
-	
+
 }
 
 CFileStream::~CFileStream()
@@ -14,7 +14,7 @@ CFileStream::~CFileStream()
 	Close();
 }
 
-bool CFileStream::Open(const char * pFileName,const char * pMode)
+bool CFileStream::Open(const char * pFileName, const char * pMode)
 {
 	// 파일이 이미 열려서 사용하고 있다면 다시 열지 못하게 한다..
 	if (m_bOpen) {
@@ -74,7 +74,7 @@ void CFileStream::ReadLine(void * pData, int & iSize)
 	char cData;
 	char* pChangeData = (char*)pData;
 	iSize = 0;
-	
+
 	// feof 함수는 파일 커서가 파일의 끝에 도달했는지를 체크한다.
 	// 파일의 끝에 도달하지 않았을 경우 0을 리턴하고 끝일 경우 0이 아닌 수를 리턴한다.
 	while (feof(m_pFile) == 0) {
@@ -95,3 +95,19 @@ void CFileStream::Write(void * pData, int iSize)
 
 	fwrite(pData, iSize, 1, m_pFile);
 }
+
+void CFileStream::WriteLine(void * pData, int iSize)
+{
+	if (!m_bOpen)
+		return;
+
+	char* pBuffer = new char[iSize + 1];
+
+	*(pBuffer + iSize) = '\n'; // 한 라인에 개행문자를 추가하여 넣는다.
+	//pBuffer[iSize] = '\n'; 코드와 같음.
+
+	fwrite(pData, iSize + 1, 1, m_pFile);
+
+	delete[] pBuffer;
+}
+

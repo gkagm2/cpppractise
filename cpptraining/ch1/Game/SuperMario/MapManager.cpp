@@ -48,3 +48,12 @@ bool CMapManager::Init()
 
 	return true;
 }
+
+void CMapManager::Run()
+{
+}
+
+void CMapManager::Render()
+{
+	m_pStage[0]->Render();
+}

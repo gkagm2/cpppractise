@@ -18,4 +18,5 @@ public:
 	void Read(void* pData, int iSize);
 	void ReadLine(void* pData, int& iSize);
 	void Write(void* pData, int iSize);
+	void WriteLine(void* pData, int iSize);
 };
