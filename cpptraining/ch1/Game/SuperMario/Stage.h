@@ -16,7 +16,8 @@ public:
 	CStage();
 	~CStage();
 private:
-	char m_cStage[BLOCK_Y][BLOCK_X] = {};
+	char m_cOriginStage[BLOCK_Y][BLOCK_X];
+	char m_cStage[BLOCK_Y][BLOCK_X];
 	POINT m_tStart;
 	POINT m_tEnd;
 
@@ -33,6 +34,9 @@ public:
 		return m_cStage[y][x];
 	}
 
+	void ChangeBlock(int x, int y, STAGE_BLOCK_TYPE eBlock) {
+		m_cStage[y][x] = eBlock;
+	}
 public:
 	// 이 함수는 그냥 초기화할 목적의 함수이다.
 	bool Init();
@@ -40,5 +44,9 @@ public:
 	// 이 함수는 파일에서 정보를 읽어와서 설정할 목적의 함수이다.
 	bool Init(const char* pFileName);
 	void Render();
+	void ResetStage();
+
+public :
+	bool m_bDebugViewMode;
 };
 

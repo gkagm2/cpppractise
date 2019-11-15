@@ -15,9 +15,11 @@ bool CPlayer::Init()
 {
 	m_tPos.x = 0;
 	m_tPos.y = 8;
+
 	m_bJump = false;
 	m_iJumpDir = JD_STOP;
 	m_iJumpState = 0;
+	m_iScore = 0;
 
 	return true;
 }
@@ -52,7 +54,13 @@ void CPlayer::Update()
 		m_iJumpState = 0;
 	}
 
+	if (GetAsyncKeyState('V') & 0x8000) {
+		
+	}
+
 	if (m_bJump) { // 점프 상태면
+		CStage* pStage = CMapManager::GetInst()->GetStage();
+
 		switch (m_iJumpDir) {
 		case JD_UP:
 			++m_iJumpState;
@@ -69,21 +77,40 @@ void CPlayer::Update()
 				--m_tPos.y;
 			}
 			break;
-		case JD_DOWN:
-			if (m_tPos.y >= BLOCK_Y) {
+		case JD_DOWN: 
+			/*if (m_tPos.y >= BLOCK_Y) {
 				cout << "플레이어 사망" << endl;
-				system("pause");
 				m_tPos.y = BLOCK_Y - 1;
-			}
-
-			if (pStage->GetBlock(m_tPos.x, m_tPos.y + 1) == SBT_WALL) { // 바로 머리 위에가 벽이면
+				system("pause");
+			} else*/ 
+			if (pStage->GetBlock(m_tPos.x, m_tPos.y + 1) == SBT_WALL) { // 밑에가 벽이면
 				m_iJumpDir = JD_STOP;
 				m_bJump = false;
 			}
-			else { // 덜 올라갔으면
+			else {
 				++m_tPos.y;
 			}
 			break;
 		}
+	}
+
+	// 중력?
+	if (pStage->GetBlock(m_tPos.x, m_tPos.y + 1) != SBT_WALL && !m_bJump) { // 발 밑이 벽이 아니고 점프상태가 아니라면
+ 		++m_tPos.y;
+	}
+
+	// 플레이어가 있는 위치가 코인이면
+	if (pStage->GetBlock(m_tPos.x, m_tPos.y) == SBT_COIN) {
+		pStage->ChangeBlock(m_tPos.x, m_tPos.y, SBT_ROAD);
+		m_iScore += 1000;
+	}
+	cout << "current m_tPos.x : " << m_tPos.x << ", m_tPos.y : " << m_tPos.y << endl;
+	
+	if (m_tPos.y >= BLOCK_Y) {
+		cout << "플레이어 사망" << endl;
+		m_tPos = pStage->GetStart();
+		m_iScore = 0;
+		pStage->ResetStage();
+		system("pause");
 	}
 }

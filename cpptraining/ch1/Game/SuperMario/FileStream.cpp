@@ -84,6 +84,7 @@ void CFileStream::ReadLine(void * pData, int & iSize)
 			break;
 
 		pChangeData[iSize] = cData;
+		cout << "[" << iSize << "]-(" << pChangeData[iSize] << ")";
 		++iSize;
 	}
 }

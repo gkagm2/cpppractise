@@ -13,11 +13,14 @@ CStage::~CStage()
 
 bool CStage::Init()
 {
+	m_bDebugViewMode = false;
 	return true;
 }
 
 bool CStage::Init(const char * pFileName)
 {
+	Init();
+
 	CFileStream file;
 
 	if (!file.Open(pFileName, "rt"))
@@ -25,28 +28,30 @@ bool CStage::Init(const char * pFileName)
 
 	for (int i = 0; i < BLOCK_Y; ++i) { // 10줄
 		int iSize = 0;
-		file.ReadLine(m_cStage[i], iSize);
+		file.ReadLine(m_cOriginStage[i], iSize);
 
 		for (int j = 0; j < BLOCK_X; ++j) {
-			if (m_cStage[i][j] == SBT_START) {
+			m_cStage[i][j] = m_cOriginStage[i][j];
+
+			if (m_cOriginStage[i][j] == SBT_START) {
 				m_tStart.x = j;
 				m_tStart.y = i;
 			}
-			else if (m_cStage[i][j] == SBT_END) {
+			else if (m_cOriginStage[i][j] == SBT_END) {
 				m_tEnd.x = j;
 				m_tEnd.y = i;
 			}
 		}
 
-		// 출력 확인
+		//// 출력 확인
 		//for (int j = 0; j < 50; ++j) {
 		//	cout << m_cStage[i][j];
 		//}
-		//cout << endl;
+		cout << endl;
 	}
 
 	cout << endl << endl;
-	file.Close();
+	//file.Close();
 	return true;
 }
 
@@ -66,33 +71,84 @@ void CStage::Render()
 	int iX = pPlayer->GetX();
 	int iY = pPlayer->GetY();
 	
-	// 플레이어의 좌표를 중심으로 맵을 보여준다.
-	// 세로는 플레이어 2칸 위부터 한칸 아래까지 출력한다.
-	// 총 4줄이 출력되는 것이다.
-	// 가로는 플레이어 위치부터 오른쪽 10칸까지 출력한다.
-	for (int i = iY - 2; i <= iY + 1; ++i) {
-		for (int j = iX; j < iX + 10; ++j) {
-			if (i == iY && j == iX) {
-				cout << "§";
-			}
-			else if (m_cStage[i][j] == SBT_WALL) {
-				cout << "■";
-			}
-			else if (m_cStage[i][j] == SBT_ROAD) {
-				cout << "  "; // 2byte 
-			}
-			else if (m_cStage[i][j] == SBT_START) {
-				cout << "◐"; // 2byte 
-				m_tStart.x = j;
-				m_tStart.y = i;
-			}
-			else if (m_cStage[i][j] == SBT_END) {
-				cout << "◑"; // 2byte
-			}
-			else if (m_cStage[i][j] == SBT_COIN) {
-				cout << "＠"; // 2byte 
-			}
+
+
+	if (GetAsyncKeyState('V') && 0x8000) {
+		if (m_bDebugViewMode) {
+			m_bDebugViewMode = false;
+			
 		}
-		cout << endl;
+		else {
+			m_bDebugViewMode = true;
+		}
+	}
+
+	cout << "V : View 바꾸기" << endl;
+	if (m_bDebugViewMode) {
+		for (int i = 0; i < BLOCK_Y; ++i) {
+			for (int j = 0; j < BLOCK_X; ++j) {
+				if (i == iY && j == iX) {
+					cout << "§";
+				}
+				else if (m_cStage[i][j] == SBT_WALL) {
+					cout << "■";
+				}
+				else if (m_cStage[i][j] == SBT_ROAD) {
+					cout << "  "; // 2byte 
+				}
+				else if (m_cStage[i][j] == SBT_START) {
+					cout << "☆"; // 2byte 
+					//m_tStart.x = j;
+					//m_tStart.y = i;
+				}
+				else if (m_cStage[i][j] == SBT_END) {
+					cout << "◑"; // 2byte
+				}
+				else if (m_cStage[i][j] == SBT_COIN) {
+					cout << "＠"; // 2byte 
+				}
+			}
+			cout << endl;
+		}
+	}
+	else {
+		// 플레이어의 좌표를 중심으로 맵을 보여준다.
+		// 세로는 플레이어 2칸 위부터 한칸 아래까지 출력한다.
+		// 총 4줄이 출력되는 것이다.
+		// 가로는 플레이어 위치부터 오른쪽 10칸까지 출력한다.
+		for (int i = iY - 2; i <= iY + 1; ++i) {
+			for (int j = iX; j < iX + 10; ++j) {
+				if (i == iY && j == iX) {
+					cout << "§";
+				}
+				else if (m_cStage[i][j] == SBT_WALL) {
+					cout << "■";
+				}
+				else if (m_cStage[i][j] == SBT_ROAD) {
+					cout << "  "; // 2byte 
+				}
+				else if (m_cStage[i][j] == SBT_START) {
+					cout << "☆"; // 2byte 
+					//m_tStart.x = j;
+					//m_tStart.y = i;
+				}
+				else if (m_cStage[i][j] == SBT_END) {
+					cout << "◑"; // 2byte
+				}
+				else if (m_cStage[i][j] == SBT_COIN) {
+					cout << "＠"; // 2byte 
+				}
+			}
+			cout << endl;
+		}
+	}
+}
+
+void CStage::ResetStage()
+{
+	for (int i = 0; i < BLOCK_Y; ++i) {
+		for (int j = 0; j < BLOCK_X; ++j) {
+			m_cStage[i][j] = m_cOriginStage[i][j];
+		}
 	}
 }

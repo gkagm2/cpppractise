@@ -21,6 +21,7 @@ private:
 	bool m_bJump;
 	int m_iJumpDir;
 	int m_iJumpState;
+	int m_iScore;
 
 public:
 	void SetPos(int x, int y) {
@@ -34,6 +35,10 @@ public:
 	}
 	int GetY(){
 		return m_tPos.y;
+	}
+
+	int GetScore() {
+		return m_iScore;
 	}
 
 public:
