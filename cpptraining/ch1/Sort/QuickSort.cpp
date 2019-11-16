@@ -40,7 +40,6 @@ void QuickSort(int elements[], int left, int right) {
 	if( right > pivot){
 		QuickSort(elements, pivot + 1, right);
 	}
-
 }
 
 // 배열 요소값들을 섞어준다.

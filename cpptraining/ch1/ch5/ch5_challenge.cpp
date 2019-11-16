@@ -8,7 +8,7 @@ class Morse {
 	string slash, question, comma, period, plus, equal;
 public:
 	Morse();
-	void text2Morse(string text, string& morse);
+	void text2Morse(string text, string& morse);                           
 	bool morse2Text(string morse, string& text);	
 };
 Morse::Morse() {

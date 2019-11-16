@@ -22,7 +22,6 @@ void PrintValue(int elements[], int maxSize) {
 	}
 }
 
-
 void InsertSort(int elements[], int maxSize) {
 	int i, j, key;
 

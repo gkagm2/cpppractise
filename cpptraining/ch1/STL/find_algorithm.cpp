@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-
+		
 	vector<int> v;
 	
 	v.push_back(11);
@@ -25,7 +25,6 @@ int main() {
 		cout << "33이 없습니다." << endl;
 	else
 		cout << *iter << endl;
-
 
 	iter = find(v.begin(), v.end(), 66); // [begin, end] 에서 66을 찾기
 	if (iter == v.end()) 

@@ -70,13 +70,13 @@ void CStage::Render()
 	// 현재 플레이어의 x, y 좌표를 얻어온다.
 	int iX = pPlayer->GetX();
 	int iY = pPlayer->GetY();
-	
+
 
 
 	if (GetAsyncKeyState('V') && 0x8000) {
 		if (m_bDebugViewMode) {
 			m_bDebugViewMode = false;
-			
+
 		}
 		else {
 			m_bDebugViewMode = true;
@@ -98,8 +98,6 @@ void CStage::Render()
 				}
 				else if (m_cStage[i][j] == SBT_START) {
 					cout << "☆"; // 2byte 
-					//m_tStart.x = j;
-					//m_tStart.y = i;
 				}
 				else if (m_cStage[i][j] == SBT_END) {
 					cout << "◑"; // 2byte
@@ -115,32 +113,63 @@ void CStage::Render()
 		// 플레이어의 좌표를 중심으로 맵을 보여준다.
 		// 세로는 플레이어 2칸 위부터 한칸 아래까지 출력한다.
 		// 총 4줄이 출력되는 것이다.
-		// 가로는 플레이어 위치부터 오른쪽 10칸까지 출력한다.
-		for (int i = iY - 2; i <= iY + 1; ++i) {
-			for (int j = iX; j < iX + 10; ++j) {
-				if (i == iY && j == iX) {
+		// 가로는 플레이어 위치부터 오른쪽 10칸까지 출력한다
+		int iYTop = iY - 3;
+		if (iYTop <= 0) {
+			iYTop = 0;
+		}
+
+		int iXLeft= iX;
+		if (iXLeft >= BLOCK_X - RENDER_BLOCK_X) {
+			iXLeft = BLOCK_X - RENDER_BLOCK_X - 1;
+		}
+
+		for (int y = iYTop; y <= iYTop + RENDER_BLOCK_Y; ++y) {
+			for(int x = iXLeft; x <= iXLeft + RENDER_BLOCK_X ; ++x) {
+				if (y == iY && x == iX) {
 					cout << "§";
 				}
-				else if (m_cStage[i][j] == SBT_WALL) {
+				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";
 				}
-				else if (m_cStage[i][j] == SBT_ROAD) {
+				else if (m_cStage[y][x] == SBT_ROAD) {
 					cout << "  "; // 2byte 
 				}
-				else if (m_cStage[i][j] == SBT_START) {
+				else if (m_cStage[y][x] == SBT_START) {
 					cout << "☆"; // 2byte 
-					//m_tStart.x = j;
-					//m_tStart.y = i;
 				}
-				else if (m_cStage[i][j] == SBT_END) {
+				else if (m_cStage[y][x] == SBT_END) {
 					cout << "◑"; // 2byte
 				}
-				else if (m_cStage[i][j] == SBT_COIN) {
+				else if (m_cStage[y][x] == SBT_COIN) {
 					cout << "＠"; // 2byte 
 				}
 			}
 			cout << endl;
 		}
+		//for (int i = iYCount - (RENDER_BLOCK_Y - 1); i <= iYCount; ++i) {
+		//	for (int j = iX; j < iXCount; ++j) {
+		//		if (i == iY && j == iX) {
+		//			cout << "§";
+		//		}
+		//		else if (m_cStage[i][j] == SBT_WALL) {
+		//			cout << "■";
+		//		}
+		//		else if (m_cStage[i][j] == SBT_ROAD) {
+		//			cout << "  "; // 2byte 
+		//		}
+		//		else if (m_cStage[i][j] == SBT_START) {
+		//			cout << "☆"; // 2byte 
+		//		}
+		//		else if (m_cStage[i][j] == SBT_END) {
+		//			cout << "◑"; // 2byte
+		//		}
+		//		else if (m_cStage[i][j] == SBT_COIN) {
+		//			cout << "＠"; // 2byte 
+		//		}
+		//	}
+		//	cout << endl;
+		//}
 	}
 }
 

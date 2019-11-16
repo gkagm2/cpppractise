@@ -16,15 +16,28 @@ void Shuffle(int elements[], int maxSize) {
 	}
 }
 
+//void BubbleSort(int elements[], int maxSize) {
+//	int i, j, temp;
+//
+//	for (i = maxSize - 1; i > 0; --i) {
+//		for (j = 0; j < i; ++j) {
+//			if (elements[j] > elements[j + 1]) {
+//				temp = elements[j];
+//				elements[j] = elements[j + 1];
+//				elements[j + 1] = temp;
+//			}
+//		}
+//	}
+//}
 void BubbleSort(int elements[], int maxSize) {
 	int i, j, temp;
-
 	for (i = maxSize - 1; i > 0; --i) {
 		for (j = 0; j < i; ++j) {
-			if (elements[j] > elements[j + 1]) {
-				temp = elements[j];
-				elements[j] = elements[j + 1];
-				elements[j + 1] = temp;
+			if (elements[j] > elements[j+1]) {
+				temp = elements[j + 1];
+				elements[j + 1] = elements[j];
+				elements[j] = temp;
+
 			}
 		}
 	}
@@ -49,6 +62,7 @@ int main() {
 	PrintValue(elements, 20);
 
 	cout << endl;
+	//BubbleSort(elements, 20);
 	BubbleSort(elements, 20);
 	PrintValue(elements, 20);
 

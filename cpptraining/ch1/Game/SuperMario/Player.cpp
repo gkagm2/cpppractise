@@ -43,7 +43,7 @@ void CPlayer::Update()
 	if (GetAsyncKeyState('D') & 0x8000) { // 우
 		if (pStage->GetBlock(m_tPos.x + 1, m_tPos.y) != SBT_WALL) {
 			++m_tPos.x;
-			if (m_tPos.x >= 50) { // 오른쪽 범위 제한
+			if (m_tPos.x >= BLOCK_X) { // 오른쪽 범위 제한
 				m_tPos.x = 49;
 			}
 		}

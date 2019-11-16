@@ -1,5 +1,5 @@
+//use in cin.get() function and print how many of the 'a' spell in the words
 #include <iostream>
-
 using namespace std;
 
 class AbstractGate { // abstract class
