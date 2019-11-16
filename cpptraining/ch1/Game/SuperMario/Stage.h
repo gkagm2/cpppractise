@@ -9,7 +9,8 @@ enum STAGE_BLOCK_TYPE {
 	SBT_END = '3', //ASCII CODE : 51
 	SBT_COIN = '4', //ASCII CODE : 52
 	SBT_ITEM_BULLET = '5', //ASCII CODE : 53
-	SBT_ITEM_BIG = '6' //ASCII CODE : 54
+	SBT_ITEM_BIG = '6', //ASCII CODE : 54
+	SBT_MONSTER = '7' //ASCII CODE : 55
 };
 
 class CStage
@@ -22,6 +23,8 @@ private:
 	char m_cStage[BLOCK_Y][BLOCK_X];
 	POINT m_tStart;
 	POINT m_tEnd;
+	// 동적할당한 몬스터 주소를 담아놓기 위해서 포인터 동적배열을 만들기 위해서 선언.
+	class CMonster** m_pMonsterArray;
 
 public:
 	POINT GetStart() {

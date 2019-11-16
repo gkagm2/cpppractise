@@ -2,8 +2,9 @@
 #include "FileStream.h"
 #include "Player.h"
 #include "ObjectManager.h"
+#include "Monster.h"
 
-CStage::CStage()
+CStage::CStage() : m_pMonsterArray(NULL)
 {
 }
 
@@ -62,7 +63,6 @@ void CStage::Render()
 	 이동한 위치로부터 맵을 출력해주어야 한다. 출력 크기는 세로4칸
 	 가로 10칸으로 해준다. 지금은 플레이어가 처음에 있다 라고 가정하고
 	 처음 4 x 10 출력을 해준다.
-	 0 : 벽, 1 :길, 2 : 시작점, 3 : 도착점, 4 : 코인
 	 */
 
 	CPlayer* pPlayer = CObjectManager::GetInst()->GetPlayer();
@@ -171,6 +171,9 @@ void CStage::Render()
 				}
 				else if (m_cStage[y][x] == SBT_ITEM_BIG) {
 					cout << "↕"; // 2byte 
+				}
+				else if (m_cStage[y][x] == SBT_MONSTER) {
+					cout << "▼";
 				}
 			}
 			cout << endl;
