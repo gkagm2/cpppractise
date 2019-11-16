@@ -72,6 +72,7 @@ void CPlayer::Update()
 			}
 			else if (pStage->GetBlock(m_tPos.x, m_tPos.y - 1) == SBT_WALL) { // 바로 머리 위에가 벽이면
 				--m_iJumpState;
+				pStage->ChangeBlock(m_tPos.x,  m_tPos.y - 1, SBT_ROAD); // 블록을 길로 바꾼다. 
 				m_iJumpDir = JD_DOWN;
 			}
 			else { // 덜 올라갔으면

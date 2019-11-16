@@ -71,6 +71,8 @@ void CMapManager::Run(int iStage)
 
 		if (pPlayer->GetComplete()) {
 			cout << "µµÂø" << endl;
+			pPlayer->Reset();
+			system("pause");
 			break;
 		}
 

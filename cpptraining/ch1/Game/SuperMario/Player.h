@@ -47,6 +47,11 @@ public:
 	}
 
 public:
+	void Reset() {
+		m_bComplete = false;
+		m_iScore = 0;
+	}
+public:
 	bool Init();
 	void Update();
 };
