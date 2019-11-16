@@ -153,29 +153,6 @@ void CStage::Render()
 			}
 			cout << endl;
 		}
-		//for (int i = iYCount - (RENDER_BLOCK_Y - 1); i <= iYCount; ++i) {
-		//	for (int j = iX; j < iXCount; ++j) {
-		//		if (i == iY && j == iX) {
-		//			cout << "§";
-		//		}
-		//		else if (m_cStage[i][j] == SBT_WALL) {
-		//			cout << "■";
-		//		}
-		//		else if (m_cStage[i][j] == SBT_ROAD) {
-		//			cout << "  "; // 2byte 
-		//		}
-		//		else if (m_cStage[i][j] == SBT_START) {
-		//			cout << "☆"; // 2byte 
-		//		}
-		//		else if (m_cStage[i][j] == SBT_END) {
-		//			cout << "◑"; // 2byte
-		//		}
-		//		else if (m_cStage[i][j] == SBT_COIN) {
-		//			cout << "＠"; // 2byte 
-		//		}
-		//	}
-		//	cout << endl;
-		//}
 	}
 }
 
