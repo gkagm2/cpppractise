@@ -35,6 +35,8 @@ public:
 
 public:
 	bool Init();
-	bool CreateBullet();
+	void Update();
+	bool CreateBullet(POINT tPos);
+	bool CheckBullet(int x, int y);
 };
 

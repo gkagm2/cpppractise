@@ -91,6 +91,10 @@ void CStage::Render()
 				if (y == iY && x == iX) {
 					cout << "§";
 				}
+				// 현재 위치에 총알이 있을 경우 총알로 출력
+				else if (CObjectManager::GetInst()->CheckBullet(x, y)) {
+					cout << "→";
+				}
 				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";
 				}
@@ -142,6 +146,10 @@ void CStage::Render()
 
 				if (y == iY && x == iX) {
 					cout << "§";
+				}
+				// 현재 위치에 총알이 있을 경우 총알로 출력
+				else if (CObjectManager::GetInst()->CheckBullet(x, y)) {
+					cout << "→";
 				}
 				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";

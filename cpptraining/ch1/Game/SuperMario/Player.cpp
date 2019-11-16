@@ -77,11 +77,10 @@ void CPlayer::Update()
 				--m_iJumpState;
 				// 벽을 깼을 때 아이템을 랜덤하게 둘 중 하나로 나오게한다.
 				int iRand = rand() % 100;
-				cout << "iRand : " << iRand << endl;
-				system("pause");
 				STAGE_BLOCK_TYPE eBlockType;
+
 				char cItem;
-				if (iRand < 90)
+				if (iRand < 50) // 확률 반반씩
 					eBlockType = SBT_ITEM_BULLET;
 				else
 					eBlockType = SBT_ITEM_BIG;
@@ -139,8 +138,11 @@ void CPlayer::Update()
 		return;
 	}
 
-	// 마우스 왼쪽 버튼을 눌렀을 때 총알 생성
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && m_bBulletFire) {
-		CObjectManager::GetInst()->CreateBullet();
+	if (GetAsyncKeyState('L') & 0x8000 && m_bBulletFire) {
+	//// 마우스 왼쪽 버튼을 눌렀을 때 총알 생성
+	//if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && m_bBulletFire) {
+		POINT tPos = m_tPos;
+		++tPos.x; // 한칸 오른쪽에 생성하게 한다.
+		CObjectManager::GetInst()->CreateBullet(tPos);
 	}
 }
