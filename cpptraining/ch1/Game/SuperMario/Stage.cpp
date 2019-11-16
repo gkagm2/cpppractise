@@ -144,7 +144,7 @@ void CStage::Render()
 		for (int y = iYTop; y <= iYTop + RENDER_BLOCK_Y; ++y) {
 			for(int x = iXLeft; x <= iXLeft + RENDER_BLOCK_X ; ++x) {
 
-				if (y == iY && x == iX) {
+				if ((y == iY || (y == iY - 1 && pPlayer->GetBigItemEnable())) && x == iX) {
 					cout << "§";
 				}
 				// 현재 위치에 총알이 있을 경우 총알로 출력
