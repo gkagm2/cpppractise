@@ -111,14 +111,20 @@ void CStage::Render()
 	}
 	else {
 		// 플레이어의 좌표를 중심으로 맵을 보여준다.
-		// 세로는 플레이어 2칸 위부터 한칸 아래까지 출력한다.
-		// 총 4줄이 출력되는 것이다.
+		// 세로는 플레이어 세칸 위부터 한칸 아래까지 출력한다.
+		// 총 5줄이 출력되는 것이다.
 		// 가로는 플레이어 위치부터 오른쪽 10칸까지 출력한다
-		int iYTop = iY - 3;
+
+		// 렌더링 할 Y의 시작점을 계산한다. (맵 밖의 구역은 렝더링하지 않게 정해줌)
+		int iYTop = iY - (RENDER_BLOCK_Y - 2);
 		if (iYTop <= 0) {
 			iYTop = 0;
 		}
-
+		else if (iYTop >= BLOCK_Y - RENDER_BLOCK_Y) {
+			iYTop = BLOCK_Y - RENDER_BLOCK_Y - 1;
+		}
+		
+		// 렌더링 할 X의 시작점을 계산한다. (맵 밖의 구역은 렝더링하지 않게 정해줌)
 		int iXLeft= iX;
 		if (iXLeft >= BLOCK_X - RENDER_BLOCK_X) {
 			iXLeft = BLOCK_X - RENDER_BLOCK_X - 1;

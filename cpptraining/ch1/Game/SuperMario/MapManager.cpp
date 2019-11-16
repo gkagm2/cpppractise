@@ -68,6 +68,12 @@ void CMapManager::Run(int iStage)
 		pPlayer->Update();
 		m_pStage[iStage]->Render();
 		cout << "Score : " << pPlayer->GetScore() << endl;
+
+		if (pPlayer->GetComplete()) {
+			cout << "µµÂø" << endl;
+			break;
+		}
+
 		Sleep(100);
 	}
 }

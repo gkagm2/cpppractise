@@ -17,6 +17,7 @@ bool CPlayer::Init()
 	m_tPos.y = 8;
 
 	m_bJump = false;
+	m_bComplete = false;
 	m_iJumpDir = JD_STOP;
 	m_iJumpState = 0;
 	m_iScore = 0;
@@ -78,11 +79,6 @@ void CPlayer::Update()
 			}
 			break;
 		case JD_DOWN: 
-			/*if (m_tPos.y >= BLOCK_Y) {
-				cout << "플레이어 사망" << endl;
-				m_tPos.y = BLOCK_Y - 1;
-				system("pause");
-			} else*/ 
 			if (pStage->GetBlock(m_tPos.x, m_tPos.y + 1) == SBT_WALL) { // 밑에가 벽이면
 				m_iJumpDir = JD_STOP;
 				m_bJump = false;
@@ -104,6 +100,11 @@ void CPlayer::Update()
 		pStage->ChangeBlock(m_tPos.x, m_tPos.y, SBT_ROAD);
 		m_iScore += 1000;
 	}
+	// 플레이어가 있는 위치가 목적지이면
+	else if (pStage->GetBlock(m_tPos.x, m_tPos.y) == SBT_END) {
+		m_bComplete = true;
+	}
+
 	cout << "current m_tPos.x : " << m_tPos.x << ", m_tPos.y : " << m_tPos.y << endl;
 	
 	if (m_tPos.y >= BLOCK_Y) {

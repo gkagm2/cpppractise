@@ -22,6 +22,7 @@ private:
 	int m_iJumpDir;
 	int m_iJumpState;
 	int m_iScore;
+	bool m_bComplete;
 
 public:
 	void SetPos(int x, int y) {
@@ -39,6 +40,10 @@ public:
 
 	int GetScore() {
 		return m_iScore;
+	}
+
+	bool GetComplete() {
+		return m_bComplete;
 	}
 
 public:

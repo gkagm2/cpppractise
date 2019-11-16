@@ -21,8 +21,8 @@ using namespace std;
 #define BLOCK_Y 10
 
 // Render Block Count
-#define RENDER_BLOCK_X 10
-#define RENDER_BLOCK_Y 5
+#define RENDER_BLOCK_X 20
+#define RENDER_BLOCK_Y 7
 static int InputInt() {
 	int iInput;
 	cin >> iInput;
