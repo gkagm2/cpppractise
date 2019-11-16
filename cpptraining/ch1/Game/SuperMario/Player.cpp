@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "MapManager.h"
 #include "Stage.h"
+#include "ObjectManager.h"
 
 CPlayer::CPlayer()
 {
@@ -138,9 +139,8 @@ void CPlayer::Update()
 		return;
 	}
 
-	// 마우스 왼쪽 버튼을 눌렀을 때
+	// 마우스 왼쪽 버튼을 눌렀을 때 총알 생성
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && m_bBulletFire) {
-		
+		CObjectManager::GetInst()->CreateBullet();
 	}
-
 }

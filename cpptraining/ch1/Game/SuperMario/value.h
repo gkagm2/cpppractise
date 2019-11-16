@@ -23,6 +23,9 @@ using namespace std;
 // Render Block Count
 #define RENDER_BLOCK_X 20
 #define RENDER_BLOCK_Y 7
+
+// Bullet Count Max
+#define BULLET_COUNT_MAX 10 
 static int InputInt() {
 	int iInput;
 	cin >> iInput;
