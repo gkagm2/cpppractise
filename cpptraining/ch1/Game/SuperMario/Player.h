@@ -23,6 +23,7 @@ private:
 	int m_iJumpState;
 	int m_iScore;
 	bool m_bComplete;
+	bool m_bBulletFire;
 
 public:
 	void SetPos(int x, int y) {
@@ -49,6 +50,7 @@ public:
 public:
 	void Reset() {
 		m_bComplete = false;
+		m_bBulletFire = false;
 		m_iScore = 0;
 	}
 public:

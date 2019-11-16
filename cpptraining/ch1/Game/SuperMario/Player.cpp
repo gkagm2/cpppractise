@@ -22,6 +22,8 @@ bool CPlayer::Init()
 	m_iJumpState = 0;
 	m_iScore = 0;
 
+	m_bBulletFire = false;
+
 	return true;
 }
 
@@ -72,7 +74,18 @@ void CPlayer::Update()
 			}
 			else if (pStage->GetBlock(m_tPos.x, m_tPos.y - 1) == SBT_WALL) { // 바로 머리 위에가 벽이면
 				--m_iJumpState;
-				pStage->ChangeBlock(m_tPos.x,  m_tPos.y - 1, SBT_ROAD); // 블록을 길로 바꾼다. 
+				// 벽을 깼을 때 아이템을 랜덤하게 둘 중 하나로 나오게한다.
+				int iRand = rand() % 100;
+				cout << "iRand : " << iRand << endl;
+				system("pause");
+				STAGE_BLOCK_TYPE eBlockType;
+				char cItem;
+				if (iRand < 90)
+					eBlockType = SBT_ITEM_BULLET;
+				else
+					eBlockType = SBT_ITEM_BIG;
+
+				pStage->ChangeBlock(m_tPos.x,  m_tPos.y - 1, eBlockType); // 블록을 길로 바꾼다. 
 				m_iJumpDir = JD_DOWN;
 			}
 			else { // 덜 올라갔으면
@@ -96,13 +109,21 @@ void CPlayer::Update()
  		++m_tPos.y;
 	}
 
+	STAGE_BLOCK_TYPE eCurBlockType = (STAGE_BLOCK_TYPE)pStage->GetBlock(m_tPos.x, m_tPos.y);
+
 	// 플레이어가 있는 위치가 코인이면
-	if (pStage->GetBlock(m_tPos.x, m_tPos.y) == SBT_COIN) {
+	if (eCurBlockType == SBT_COIN) {
 		pStage->ChangeBlock(m_tPos.x, m_tPos.y, SBT_ROAD);
 		m_iScore += 1000;
 	}
+	// 총알 발사
+	else if (eCurBlockType == SBT_ITEM_BULLET) {
+		m_bBulletFire = true;
+		pStage->ChangeBlock(m_tPos.x, m_tPos.y, SBT_ROAD);
+	}
+
 	// 플레이어가 있는 위치가 목적지이면
-	else if (pStage->GetBlock(m_tPos.x, m_tPos.y) == SBT_END) {
+	else if (eCurBlockType == SBT_END) {
 		m_bComplete = true;
 	}
 
@@ -114,5 +135,12 @@ void CPlayer::Update()
 		m_iScore = 0;
 		pStage->ResetStage();
 		system("pause");
+		return;
 	}
+
+	// 마우스 왼쪽 버튼을 눌렀을 때
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && m_bBulletFire) {
+		
+	}
+
 }

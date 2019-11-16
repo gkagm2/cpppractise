@@ -85,25 +85,32 @@ void CStage::Render()
 
 	cout << "V : View 바꾸기" << endl;
 	if (m_bDebugViewMode) {
-		for (int i = 0; i < BLOCK_Y; ++i) {
-			for (int j = 0; j < BLOCK_X; ++j) {
-				if (i == iY && j == iX) {
+		for (int y = 0; y < BLOCK_Y; ++y) {
+			for (int x = 0; x < BLOCK_X; ++x) {
+
+				if (y == iY && x == iX) {
 					cout << "§";
 				}
-				else if (m_cStage[i][j] == SBT_WALL) {
+				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";
 				}
-				else if (m_cStage[i][j] == SBT_ROAD) {
+				else if (m_cStage[y][x] == SBT_ROAD) {
 					cout << "  "; // 2byte 
 				}
-				else if (m_cStage[i][j] == SBT_START) {
+				else if (m_cStage[y][x] == SBT_START) {
 					cout << "☆"; // 2byte 
 				}
-				else if (m_cStage[i][j] == SBT_END) {
+				else if (m_cStage[y][x] == SBT_END) {
 					cout << "◑"; // 2byte
 				}
-				else if (m_cStage[i][j] == SBT_COIN) {
+				else if (m_cStage[y][x] == SBT_COIN) {
 					cout << "＠"; // 2byte 
+				}
+				else if (m_cStage[y][x] == SBT_ITEM_BULLET) {
+					cout << "⊙"; // 2byte 
+				}
+				else if (m_cStage[y][x] == SBT_ITEM_BIG) {
+					cout << "↕"; // 2byte 
 				}
 			}
 			cout << endl;
@@ -132,6 +139,7 @@ void CStage::Render()
 
 		for (int y = iYTop; y <= iYTop + RENDER_BLOCK_Y; ++y) {
 			for(int x = iXLeft; x <= iXLeft + RENDER_BLOCK_X ; ++x) {
+
 				if (y == iY && x == iX) {
 					cout << "§";
 				}
@@ -149,6 +157,12 @@ void CStage::Render()
 				}
 				else if (m_cStage[y][x] == SBT_COIN) {
 					cout << "＠"; // 2byte 
+				} 
+				else if (m_cStage[y][x] == SBT_ITEM_BULLET) {
+					cout << "⊙"; // 2byte 
+				}
+				else if (m_cStage[y][x] == SBT_ITEM_BIG) {
+					cout << "↕"; // 2byte 
 				}
 			}
 			cout << endl;
