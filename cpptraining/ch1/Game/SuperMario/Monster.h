@@ -2,6 +2,11 @@
 
 #include "value.h"
 
+enum DIRECTION {
+	DIR_LEFT = -1,
+	DIR_RIGHT = 1
+};
+
 class CMonster
 {
 public:
@@ -10,6 +15,7 @@ public:
 
 private:
 	POINT m_tPos;
+	int m_iDir; // 움직일 방향
 
 public:
 	void SetPos(int x, int y) {
@@ -24,4 +30,5 @@ public:
 	
 public:
 	bool Init();
+	void Update();
 };

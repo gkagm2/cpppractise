@@ -4,12 +4,19 @@
 #include "ObjectManager.h"
 #include "Monster.h"
 
-CStage::CStage() : m_pMonsterArray(NULL)
+CStage::CStage() : 
+	m_pMonsterArray(NULL),
+	m_iMonsterCount(0),
+	m_iMonsterArrayCount(0)
 {
 }
 
 CStage::~CStage()
 {
+	for (int i = 0; i < m_iMonsterCount; ++i) {
+		SAFE_DELETE(m_pMonsterArray[i]);
+	}
+	delete[] m_pMonsterArray;
 }
 
 bool CStage::Init()
@@ -42,18 +49,21 @@ bool CStage::Init(const char * pFileName)
 				m_tEnd.x = j;
 				m_tEnd.y = i;
 			}
+			else if (m_cOriginStage[i][j] == SBT_MONSTER) {
+				CreateMonster(j, i);
+				// 몬스터인지 체크하여 몬스터만 생성하고 ROAD로 실제 맵을 바꿔준다.
+				m_cStage[i][j] = SBT_ROAD;
+			}
 		}
-
-		//// 출력 확인
-		//for (int j = 0; j < 50; ++j) {
-		//	cout << m_cStage[i][j];
-		//}
-		cout << endl;
 	}
-
-	cout << endl << endl;
-	//file.Close();
 	return true;
+}
+
+void CStage::Update()
+{
+	for (int i = 0; i < m_iMonsterCount; ++i) {
+		m_pMonsterArray[i]->Update();
+	}
 }
 
 void CStage::Render()
@@ -87,13 +97,16 @@ void CStage::Render()
 	if (m_bDebugViewMode) {
 		for (int y = 0; y < BLOCK_Y; ++y) {
 			for (int x = 0; x < BLOCK_X; ++x) {
-
-				if (y == iY && x == iX) {
+				if ((y == iY || (y == iY - 1 && pPlayer->GetBigItemEnable())) && x == iX) {
 					cout << "§";
 				}
 				// 현재 위치에 총알이 있을 경우 총알로 출력
 				else if (CObjectManager::GetInst()->CheckBullet(x, y)) {
 					cout << "→";
+				}
+				// 몬스터가 현재 위치에 있다면 몬스터로 출력한다.
+				else if (CheckMonster(y, x)) {
+					cout << "▼";
 				}
 				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";
@@ -143,13 +156,16 @@ void CStage::Render()
 
 		for (int y = iYTop; y <= iYTop + RENDER_BLOCK_Y; ++y) {
 			for(int x = iXLeft; x <= iXLeft + RENDER_BLOCK_X ; ++x) {
-
 				if ((y == iY || (y == iY - 1 && pPlayer->GetBigItemEnable())) && x == iX) {
 					cout << "§";
 				}
 				// 현재 위치에 총알이 있을 경우 총알로 출력
 				else if (CObjectManager::GetInst()->CheckBullet(x, y)) {
 					cout << "→";
+				}
+				// 몬스터가 현재 위치에 있다면 몬스터로 출력한다.
+				else if (CheckMonster(y, x)) {
+					cout << "▼";
 				}
 				else if (m_cStage[y][x] == SBT_WALL) {
 					cout << "■";
@@ -165,15 +181,12 @@ void CStage::Render()
 				}
 				else if (m_cStage[y][x] == SBT_COIN) {
 					cout << "＠"; // 2byte 
-				} 
+				}
 				else if (m_cStage[y][x] == SBT_ITEM_BULLET) {
 					cout << "⊙"; // 2byte 
 				}
 				else if (m_cStage[y][x] == SBT_ITEM_BIG) {
 					cout << "↕"; // 2byte 
-				}
-				else if (m_cStage[y][x] == SBT_MONSTER) {
-					cout << "▼";
 				}
 			}
 			cout << endl;
@@ -188,4 +201,68 @@ void CStage::ResetStage()
 			m_cStage[i][j] = m_cOriginStage[i][j];
 		}
 	}
+}
+
+CMonster * CStage::CreateMonster(int x, int y)
+{
+	// 배열이 동적할당 되지 않았을 경우에 동적할당 해준다.
+	if (!m_pMonsterArray) {
+		m_iMonsterArrayCount = 2;
+		m_pMonsterArray = new CMonster*[m_iMonsterArrayCount];
+	}
+	// 만약 몬스터가 꽉 차있을 경우 배열을 늘려준다.
+	if (m_iMonsterCount == m_iMonsterArrayCount) {
+		// 공간을 늘려서 할당해준다. 2배만큼 공간을 늘려준다.
+		m_iMonsterArrayCount *= 2;
+		CMonster**  ppArray = new CMonster*[m_iMonsterArrayCount];
+
+		// 기존에 있는 주소 정보를 이 배열로 옮겨준다.
+		/*
+		 memcpy : 메모리 복사 함수이다. :
+
+		 memcpy(목적지포인터, 원본포인터, 크기);
+		 void *memcpy(void *_Dst, void const *_Src, size_t _Size);
+		 목적지 포인터를 반환
+
+		 1번 인자에 들어간 메모리 주소에 2번 인자에 들어간 메모리 주소로부터
+		 3번 인자에 들어간 바이트 수만큼 메모리를 복사한다.
+		 몬스터가 꽉 찼다면 기존 배열은 이미 가득 차있다.
+		 그래서 위에서 공간을 2배만큼 동적배열로 할당해주고
+		 아래에서 새로 할당한 공간이 ex) 20개라면 기존 공간은 10개이다.
+		 기존 공간의(2번인자) 동적할당된 메모리 주소들을 새로 할당된 공간으로
+		 10개만큼 복사해주는 것이다.
+		*/
+
+		// ppArray에 있던 메모리를 sizeof(CMonster*) * m_iMonsterCount만큼의 크기로 m_pMonsterArray로 복사한다.
+		memcpy(ppArray, m_pMonsterArray, sizeof(CMonster*) * m_iMonsterCount);
+		delete[] m_pMonsterArray;
+		m_pMonsterArray = ppArray;
+	}
+
+	// 실제 몬스터 객체를 할당한다.
+	CMonster* pMonster = new CMonster;
+
+	if (!pMonster->Init()) {
+		SAFE_DELETE(pMonster);
+		return NULL;
+	}
+
+	// 몬스터 위치정보를 설정한다.
+	pMonster->SetPos(x, y);
+
+	// 몬스터 배열에 넣어준다.
+	m_pMonsterArray[m_iMonsterCount] = pMonster;
+	++m_iMonsterCount;
+
+	return pMonster;
+}
+
+bool CStage::CheckMonster(int x, int y)
+{
+	for (int i = 0; i < m_iMonsterCount; ++i) {
+		if (m_pMonsterArray[i]->GetPos().x == x && m_pMonsterArray[i]->GetPos().y == y) {
+			return true;
+		}
+	}
+	return false;
 }

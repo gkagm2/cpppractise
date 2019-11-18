@@ -20,7 +20,7 @@ CMapManager::~CMapManager()
 	// 스테이지 메모리 해제
 	for (int i = 0; i < STAGE_MAX_COUNT; ++i)
 	{
-		//_CrtDumpMemoryLeaks();
+		//_CrtDumpMemoryLeaks();        
 		SAFE_DELETE(m_pStage[i]);
 	}
 }
@@ -49,12 +49,12 @@ bool CMapManager::Init()
 			return false;
 	}
 
-	return true;
+	return true; 
 }
 
 void CMapManager::Run(int iStage)
 {
-	CPlayer* pPlayer = CObjectManager::GetInst()->GetPlayer();
+	CPlayer* pPlayer = CObjectManager::GetInst()->GetPlayer();                                                                                                                     
 	m_iEnableStage = iStage;
 
 	pPlayer->SetPos(m_pStage[iStage]->GetStart().x, m_pStage[iStage]->GetStart().y);
@@ -67,6 +67,7 @@ void CMapManager::Run(int iStage)
 
 		CObjectManager::GetInst()->Update();
 		//pPlayer->Update();
+		m_pStage[iStage]->Update();
 		m_pStage[iStage]->Render();
 		cout << "Score : " << pPlayer->GetScore() << endl;
 

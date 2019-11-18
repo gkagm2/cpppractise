@@ -25,6 +25,8 @@ private:
 	POINT m_tEnd;
 	// 동적할당한 몬스터 주소를 담아놓기 위해서 포인터 동적배열을 만들기 위해서 선언.
 	class CMonster** m_pMonsterArray;
+	int m_iMonsterCount;	   // 몬스터가 몇마리 생성되었는지 체크
+	int m_iMonsterArrayCount; //  몬스터 배열 크기
 
 public:
 	POINT GetStart() {
@@ -42,15 +44,19 @@ public:
 	void ChangeBlock(int x, int y, STAGE_BLOCK_TYPE eBlock) {
 		m_cStage[y][x] = eBlock;
 	}
+
 public:
 	// 이 함수는 그냥 초기화할 목적의 함수이다.
 	bool Init();
 
 	// 이 함수는 파일에서 정보를 읽어와서 설정할 목적의 함수이다.
 	bool Init(const char* pFileName);
+	void Update();
 	void Render();
 	void ResetStage();
-
+	class CMonster* CreateMonster(int x, int y);
+	bool CheckMonster(int x, int y);
+	
 public :
 	bool m_bDebugViewMode;
 };
