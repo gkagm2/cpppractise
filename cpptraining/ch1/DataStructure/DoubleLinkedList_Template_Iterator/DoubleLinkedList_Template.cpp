@@ -8,8 +8,8 @@ class CListNode {
 	// 생성자와 소멸자를 private으로 하게 되면 외부에서 객체를 생성하고 객체를 해제할 수 없다.
 	// 생성자는 객체를 생성할 때 자동으로 호출이 되는 함수인데 private으로 되며ㅛㄴ 객체를 생성하면서 호출 시 접근이 불가능하다.
 private:
-	CListNode() : 
-		m_pNext(NULL), 
+	CListNode() :
+		m_pNext(NULL),
 		m_pPrev(NULL) {
 	}
 	~CListNode() {
@@ -18,27 +18,88 @@ private:
 private:
 	// friend로 지정해준 클래스에서 이 클래스의 private이나 protected에 접근이 가능해진다.
 	// 일반 클래스는 friend 라인만 적으면 되지만 template 클래스의 경우 아래처럼 template을 지정해 주어야 한다.
-	template<typename T> 
+	template<typename T>
 	friend class CLinkedList;
 	template<typename T>
 	friend class CListIterator;
+	template<typename T>
+	friend class CListReverseIterator;
 	
+
 private:
 	T m_Data;
 	CListNode<T>* m_pNext;
 	CListNode<T>* m_pPrev;
 };
 
+template <typename T>
+class CListReverseIterator {
+public:
+	CListReverseIterator() {
+	}
+	~CListReverseIterator() {
+	}
+
+private:
+	template <typename T>
+	friend class CLinkedList;
+
+private:
+	typedef CListNode<T> NODE;
+	typedef CListNode<T>* PNODE;
+
+public:
+	PNODE m_pNode;
+
+public:
+	bool operator ==(const CListReverseIterator<T>& iter) {
+		return m_pNode == iter.m_pNode;
+	}
+
+	bool operator !=(const CListReverseIterator<T>& iter) {
+		return m_pNode != iter.m_pNode;
+	}
+
+	// 전위
+	CListReverseIterator operator ++() {
+		m_pNode->m_pPrev;
+		return *this;
+	}
+
+	// 전위
+	CListReverseIterator operator --() {
+		m_pNode->m_pNext;
+		return *this;
+	}
+
+	// 후위
+	CListReverseIterator operator ++(T iter) {
+		CListReverseIterator<T> tempIter = *this;
+		m_pNode = m_pNode->m_pPrev;
+		return tempIter;
+	}
+
+	// 후위
+	CListReverseIterator operator --(T iter) {
+		CListReverseIterator<T> tempIter = *this;
+		m_pNode = m_pNode->m_pNext;
+		return tempIter;
+	}
+
+	// 역참조
+	T operator *() {
+		return m_pNode->m_Data;
+	}
+};
+
 
 template <typename T>
 class CListIterator {
 public:
-CListIterator() {
-
-}
-~CListIterator() {
-
-}
+	CListIterator() {
+	}
+	~CListIterator() {
+	}
 
 private:
 	template <typename T>
@@ -51,8 +112,6 @@ private:
 	PNODE m_pNode;
 
 public:
-
-
 	bool operator ==(const CListIterator<T>& iter) {
 		return m_pNode == iter.m_pNode;
 	}
@@ -60,13 +119,30 @@ public:
 	bool operator !=(const CListIterator<T>& iter) {
 		return m_pNode != iter.m_pNode;
 	}
-
-	void operator ++() {
+	// 전위
+	CListIterator<T> operator ++() {
 		m_pNode = m_pNode->m_pNext;
+		return *this;
 	}
 
-	void operator --() {
+	// 전위
+	CListIterator<T> operator --() {
 		m_pNode = m_pNode->m_pPrev;
+		return *this;
+	}
+
+	// 후위
+	CListIterator<T> operator ++(T iter) {
+		CListIterator<T> tempIter = *this;
+		m_pNode = m_pNode->m_pNext;
+		return tempIter;
+	}
+	// 후위
+	CListIterator<T> operator --(T iter) {
+
+		CListIterator<T> tempIter = *this;
+		m_pNode = m_pNode->m_pPrev;
+		return tempIter;
 	}
 
 	// 역참조
@@ -100,6 +176,7 @@ private:
 
 public:
 	typedef CListIterator<T> iterator;
+	typedef CListReverseIterator<T> reverseIterator;
 
 private:
 	PNODE m_pBegin;
@@ -176,6 +253,19 @@ public:
 		iter.m_pNode = m_pEnd;
 		return iter;
 	}
+
+	reverseIterator reverse_end() {
+		reverseIterator iter;
+		iter.m_pNode = m_pBegin;
+		return iter;
+	}
+
+	reverseIterator reverse_begin() {
+		reverseIterator iter;
+		iter.m_pNode = m_pEnd->m_pPrev;
+		return iter;
+	}
+	
 };
 
 
@@ -195,5 +285,11 @@ int main() {
 		cout << *iter << endl;
 	}
 
-	return 0; 
+	CLinkedList<int>::reverseIterator reverseIter;
+
+	for (reverseIter = listInt.reverse_begin(); reverseIter != listInt.reverse_end(); reverseIter++) {
+		cout << *reverseIter << endl;
+	}
+
+	return 0;
 }
