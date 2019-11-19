@@ -155,6 +155,11 @@ void CPlayer::Update()
 	else if (eCurBlockType == SBT_END || (eUpBlockType == SBT_END && m_bBigItem)) {
 		m_bComplete = true;
 	}
+	// 플레이어의 위치가 몬스터가 있는 위치이면
+	else if (pStage->CheckMonster(m_tPos.x, m_tPos.y)) {
+		m_tPos = pStage->GetStart();
+		system("pause");
+	}
 
 	cout << "current m_tPos.x : " << m_tPos.x << ", m_tPos.y : " << m_tPos.y << endl;
 
