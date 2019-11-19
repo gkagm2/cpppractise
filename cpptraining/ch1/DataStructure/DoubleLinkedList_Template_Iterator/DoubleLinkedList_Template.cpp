@@ -19,7 +19,7 @@ private:
 	// friend로 지정해준 클래스에서 이 클래스의 private이나 protected에 접근이 가능해진다.
 	// 일반 클래스는 friend 라인만 적으면 되지만 template 클래스의 경우 아래처럼 template을 지정해 주어야 한다.
 	template<typename T>
-	friend class CLinkedList;
+	friend class CDoubleLinkedList;
 	template<typename T>
 	friend class CListIterator;
 	template<typename T>
@@ -42,7 +42,7 @@ public:
 
 private:
 	template <typename T>
-	friend class CLinkedList;
+	friend class CDoubleLinkedList;
 
 private:
 	typedef CListNode<T> NODE;
@@ -103,7 +103,7 @@ public:
 
 private:
 	template <typename T>
-	friend class CLinkedList;
+	friend class CDoubleLinkedList;
 private:
 	typedef CListNode<T> NODE;
 	typedef CListNode<T>* PNODE;
@@ -153,9 +153,9 @@ public:
 
 
 template <typename T>
-class CLinkedList {
+class CDoubleLinkedList {
 public:
-	CLinkedList() {
+	CDoubleLinkedList() {
 		m_pBegin = new NODE;
 		m_pEnd = new NODE;
 
@@ -164,7 +164,7 @@ public:
 
 		m_iSize = 0;
 	}
-	~CLinkedList() {
+	~CDoubleLinkedList() {
 		clear();
 		delete m_pBegin;
 		delete m_pEnd;
@@ -270,8 +270,8 @@ public:
 
 
 int main() {
-	CLinkedList<int> listInt;
-	CLinkedList<float> listFloat;
+	CDoubleLinkedList<int> listInt;
+	CDoubleLinkedList<float> listFloat;
 
 	for (int i = 0; i < 100; ++i) {
 		listInt.push_back(i + 1);
@@ -279,13 +279,13 @@ int main() {
 
 	cout << listInt.size() << endl;
 
-	CLinkedList<int>::iterator iter;
+	CDoubleLinkedList<int>::iterator iter;
 
 	for (iter = listInt.begin(); iter != listInt.end(); ++iter) {
 		cout << *iter << endl;
 	}
 
-	CLinkedList<int>::reverseIterator reverseIter;
+	CDoubleLinkedList<int>::reverseIterator reverseIter;
 
 	for (reverseIter = listInt.reverse_begin(); reverseIter != listInt.reverse_end(); reverseIter++) {
 		cout << *reverseIter << endl;
