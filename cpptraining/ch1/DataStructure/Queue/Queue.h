@@ -60,9 +60,8 @@ public:
 	}
 
 	T pop() {
-		if (is_empty()) {
+		if (is_empty())
 			return 0;
-		}
 
 		PNODE pNode = m_pBegin->m_pNext;
 		T data = pNode->m_Data;
