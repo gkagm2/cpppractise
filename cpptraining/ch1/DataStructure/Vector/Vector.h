@@ -20,7 +20,6 @@ private:
 	template <typename T>
 	friend class CVector;
 };
- 
 
 template <typename T> 
 class CVector
