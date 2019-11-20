@@ -65,6 +65,13 @@ public:
 		
 	}
 
+	void clear() {
+		delete[] m_pArray;
+		m_iSize = 0;
+		m_iCapasity = 2;
+		m_pArray = new NODE[m_iCapasity + 2];
+	}
+
 	bool is_full() const {
 		return m_iSize == m_iCapasity;
 	}
