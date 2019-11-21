@@ -2,6 +2,7 @@
 
 CMonster::CMonster()
 {
+	m_eType = OT_MONSTER;
 }
 
 CMonster::~CMonster()

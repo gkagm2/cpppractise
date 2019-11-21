@@ -43,3 +43,14 @@ CObj * CObjectManager::CreateObject(const string& strKey, OBJECT_TYPE eType)
 
 	return pObj;
 }
+
+CObj * CObjectManager::FindObject(const string & strKey)
+{
+	unordered_map<string, CObj*>::iterator iter = m_mapObj.find(strKey);
+
+	// end()일 경우는 찾지 못함.
+	if (iter == m_mapObj.end()) {
+		return NULL;
+	}
+	return iter->second;
+}
