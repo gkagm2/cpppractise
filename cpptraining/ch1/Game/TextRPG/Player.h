@@ -2,6 +2,14 @@
 
 #include "Character.h"
 
+enum JOB {
+	JOB_NONE,
+	JOB_KNIGHT,
+	JOB_ARCHER,
+	JOB_WIZARD,
+	JOB_END
+};
+
 class CPlayer : public CCharacter {
 private:
 	CPlayer();
@@ -18,10 +26,3 @@ public:
 	virtual bool Init();
 };
 
-enum JOB {
-	JOB_NONE,
-	JOB_KNIGHT,
-	JOB_ARCHER,
-	JOB_WIZARD,
-	JOB_END
-};

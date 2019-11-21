@@ -40,7 +40,8 @@ bool CPlayer::Init()
 	switch (m_eJob) {
 	case JOB_KNIGHT:
 		m_strJobName = "±â»ç";
-		SetCharacterInfo();
+		// TODO (Sagacity Jang) : Set character information
+		//SetCharacterInfo();
 		break;
 	case JOB_ARCHER:
 		m_strJobName = "±Ã¼ö";
