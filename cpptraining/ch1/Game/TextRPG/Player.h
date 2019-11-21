@@ -13,16 +13,19 @@ enum JOB {
 class CPlayer : public CCharacter {
 private:
 	CPlayer();
+	CPlayer(const CPlayer& player);
 	~CPlayer();
 
 private:
 	friend class CObjectManager;
 
 public:
-	string m_strJobName;
 	JOB m_eJob;
+	string m_strJobName;
+	int m_iGold;
 
 public:
 	virtual bool Init();
+	virtual void Render();
+	virtual CPlayer* Clone();
 };
-

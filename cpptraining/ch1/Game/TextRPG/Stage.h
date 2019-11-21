@@ -1,6 +1,8 @@
 #pragma once
 
 #include "value.h"
+#include "ObjectManager.h"
+#include "Obj.h"
 
 class CStage {
 public:
