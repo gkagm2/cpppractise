@@ -1,6 +1,7 @@
 #pragma once
 
 #include "value.h"
+#include "StageManager.h"
 
 class CCore {
 public:

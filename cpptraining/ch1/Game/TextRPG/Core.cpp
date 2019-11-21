@@ -1,5 +1,6 @@
 #include "Core.h"
 
+
 DEFINITION_SINGLE(CCore)
 
 enum MAIN_MENU {
@@ -14,11 +15,16 @@ CCore::CCore() {
 }
 
 CCore::~CCore() {
-
+	DESTROY_SINGLE(CStageManager);
 }
 
 bool CCore::Init()
 {
+	// Stage를 초기화한다.
+	if (!GET_SINGLE(CStageManager)->Init())
+		return false;
+
+
 	return true;
 }
 
@@ -26,9 +32,8 @@ void CCore::Run()
 {
 	while (true) {
 		switch (OutputMenu()) {
-		case MM_NONE:
-			break;
 		case MM_STAGE:
+			GET_SINGLE(CStageManager)->Run();
 			break;
 		case MM_STORE:
 			break;
