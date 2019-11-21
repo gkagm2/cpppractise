@@ -1,5 +1,5 @@
 #include "Core.h"
-
+#include "ObjectManager.h"
 
 DEFINITION_SINGLE(CCore)
 
@@ -15,15 +15,19 @@ CCore::CCore() {
 }
 
 CCore::~CCore() {
+	DESTROY_SINGLE(CObjectManager);
 	DESTROY_SINGLE(CStageManager);
 }
 
 bool CCore::Init()
 {
+	// 오브젝트 관리자 초기화.
+	if (!GET_SINGLE(CObjectManager)->Init())
+		return false;
+
 	// Stage를 초기화한다.
 	if (!GET_SINGLE(CStageManager)->Init())
 		return false;
-
 
 	return true;
 }
