@@ -5,11 +5,14 @@
 //#include <map> // red blakc binary tree를 사용함. 느려서 unordered_map을 사용함
 #include <unordered_map>
 #include <string>
-using namespace std;
+#include <time.h>
 
 // 사용자 정의 헤더
 #include "Defines.h"
 #include "Flags.h"
+
+using namespace std;
+
 
 template <typename T>
 T Input() {

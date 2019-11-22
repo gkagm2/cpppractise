@@ -24,10 +24,31 @@ void CStageEasy::Run()
 	// 몬스터를 복사한다.
 	CMonster* pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject("Goblin");
 
-	pPlayer->Render();
-	pMonster->Render();
+	while (true) {
+		system("cls");
+		OutputStageName("Easy");
 
-	SAFE_DELETE(pMonster);
+		pPlayer->Render();
+		cout << endl;
+		pMonster->Render();
+		cout << endl;
 
-	system("pause");
+		OutputMenu();
+		switch (OutputMenu()) {
+		case MENU_ATTACK:
+			switch (BattleAttack(pPlayer, pMonster)) {
+			case BF_PLAYER_DIE:
+				break;
+			case BF_MONSTER_DIE:
+				break;
+			}
+
+			break;
+		case MENU_BACK:
+			// 뒤로가기를 하기 전에 생성한 몬스터를 더이상 사용하지 않으므로 지워준다.
+			// 매번 맵에 들어올때마다 새로 생성해주고 있다.
+			SAFE_DELETE(pMonster);
+			return;
+		}
+	}
 }
