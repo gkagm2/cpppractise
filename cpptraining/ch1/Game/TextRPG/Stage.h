@@ -15,7 +15,6 @@ protected:
 		MENU_ATTACK,
 		MENU_BACK
 	};
-
 	enum BATTLE_FLAG {
 		BF_NONE,
 		BF_PLAYER_DIE,
@@ -29,7 +28,5 @@ public:
 protected:
 	void OutputStageName(const char *pName);
 	int OutputMenu();
-	BATTLE_FLAG BattleAttack(class CPlayer* pPlayer, class CMonster* pMonster) {
-		return BF_NONE;
-	}
-};
+	BATTLE_FLAG BattleAttack(class CPlayer* pPlayer, class CMonster* pMonster);
+};	

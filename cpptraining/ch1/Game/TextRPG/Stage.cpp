@@ -1,4 +1,7 @@
 #include "Stage.h"
+#include "Player.h"
+#include "Monster.h"
+
 
 CStage::CStage()
 {
@@ -25,4 +28,13 @@ int CStage::OutputMenu()
 	}
 
 	return iMenu;
+}
+
+CStage::BATTLE_FLAG CStage::BattleAttack(CPlayer * pPlayer, CMonster * pMonster)
+{
+	// 플레이어의 데이미를 구해온다.
+	int iDamage = pPlayer->GetDamage() - pMonster->GetArmor();
+	iDamage = iDamage < 1 ? 1 : iDamage;
+	
+	return BF_NONE;
 }

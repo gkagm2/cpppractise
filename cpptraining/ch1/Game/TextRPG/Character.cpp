@@ -15,6 +15,13 @@ CCharacter::~CCharacter()
 {
 }
 
+bool CCharacter::Damage(int iDamage)
+{
+	m_tInfo.iHp -= iDamage;
+	
+	return m_tInfo.iHp <= 0; // Á×À¸¸é true ¸®ÅÏ
+}
+
 bool CCharacter::Init()
 {
 	return true;

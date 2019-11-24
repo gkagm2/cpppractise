@@ -37,9 +37,9 @@ void CStageEasy::Run()
 		switch (OutputMenu()) {
 		case MENU_ATTACK:
 			switch (BattleAttack(pPlayer, pMonster)) {
-			case BF_PLAYER_DIE:
+			case BF_PLAYER_DIE: // 플레이어가 죽었을 때
 				break;
-			case BF_MONSTER_DIE:
+			case BF_MONSTER_DIE: // 몬스터가 죽었을 때
 				break;
 			}
 
