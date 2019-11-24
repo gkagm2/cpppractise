@@ -36,5 +36,14 @@ CStage::BATTLE_FLAG CStage::BattleAttack(CPlayer * pPlayer, CMonster * pMonster)
 	int iDamage = pPlayer->GetDamage() - pMonster->GetArmor();
 	iDamage = iDamage < 1 ? 1 : iDamage;
 	
+
+	cout << pMonster->GetName
+
+	// 반환이 true라면 몬스터가 죽은것이다.
+	if (pMonster->Damage(iDamage)) {
+		return BF_MONSTER_DIE;
+	}
+
+
 	return BF_NONE;
 }
