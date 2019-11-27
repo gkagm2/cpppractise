@@ -30,6 +30,10 @@ public:
 		return m_iGoldMax;
 	}
 
+	int GetDropGold() const {
+		return rand() % (m_iGoldMax - m_iGoldMin + 1) + m_tInfo.iArmorMin;
+	}
+
 public:
 	virtual bool Init();
 	virtual void Render();
