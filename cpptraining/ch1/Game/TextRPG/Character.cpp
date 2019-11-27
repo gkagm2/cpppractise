@@ -22,6 +22,19 @@ bool CCharacter::Damage(int iDamage)
 	return m_tInfo.iHp <= 0; // 죽으면 true 리턴
 }
 
+bool CCharacter::AddExp(int iExp)
+{
+	m_tInfo.iExp += iExp;
+	
+	// false 리턴 시에는 레벨업이 아니다.
+	return false;
+}
+
+bool CCharacter::CheckLevelUp()
+{
+	return false;
+}
+
 bool CCharacter::Init()
 {
 	return true;

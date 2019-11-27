@@ -30,6 +30,8 @@ public:
 	}
 
 	bool Damage(int iDamage);
+	bool AddExp(int iExp);
+	bool CheckLevelUp();
 
 public:
 	virtual bool Init();
