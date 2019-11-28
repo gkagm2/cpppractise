@@ -25,6 +25,9 @@ public:
 	int m_iGold;
 
 public:
+	void AddGold(int iGold);
+
+public:
 	virtual bool Init();
 	virtual void Render();
 	virtual CPlayer* Clone();

@@ -22,16 +22,9 @@ public:
 	}
 
 public:
-	int GetGoldMin() const {
-		return m_iGoldMin;
-	}
-
-	int GetGoldMax() const {
-		return m_iGoldMax;
-	}
 
 	int GetDropGold() const {
-		return rand() % (m_iGoldMax - m_iGoldMin + 1) + m_tInfo.iArmorMin;
+		return rand() % (m_iGoldMax - m_iGoldMin + 1) + m_iGoldMin;
 	}
 
 public:
