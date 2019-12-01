@@ -35,6 +35,17 @@ bool CCharacter::CheckLevelUp()
 	return false;
 }
 
+void CCharacter::DropExp()
+{
+	m_tInfo.iExp *= 0.9f; // 10% drop
+}
+
+void CCharacter::FullHPMP()
+{
+	m_tInfo.iMp = m_tInfo.iMpMax;
+	m_tInfo.iHp = m_tInfo.iHpMax;
+}
+
 bool CCharacter::Init()
 {
 	return true;

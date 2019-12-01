@@ -33,11 +33,14 @@ void CStageEasy::Run()
 		pMonster->Render();
 		cout << endl;
 
-		OutputMenu();
 		switch (OutputMenu()) {
 		case MENU_ATTACK:
 			switch (BattleAttack(pPlayer, pMonster)) {
 			case BF_PLAYER_DIE: // 플레이어가 죽었을 때
+				pPlayer->DropExp();
+				pPlayer->DropGold();
+
+				pPlayer->FullHPMP();
 				break;
 			case BF_MONSTER_DIE: // 몬스터가 죽었을 때
 				
@@ -68,5 +71,6 @@ void CStageEasy::Run()
 			SAFE_DELETE(pMonster);
 			return;
 		}
+		system("pause");
 	}
 }

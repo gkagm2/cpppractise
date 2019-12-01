@@ -32,6 +32,8 @@ public:
 	bool Damage(int iDamage);
 	bool AddExp(int iExp);
 	bool CheckLevelUp();
+	void DropExp();
+	void FullHPMP();
 
 public:
 	virtual bool Init();

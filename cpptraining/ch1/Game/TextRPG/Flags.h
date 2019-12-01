@@ -1,20 +1,16 @@
 #pragma once
 
-typedef struct tag_CharacterInfo {
-	int iAttackMin;
-	int iAttackMax;
-	int iArmorMin;
-	int iArmorMax;
-	int iHp;
-	int iHpMax;
-	int iMp;
-	int iMpMax;
-	int iLevel;
-	int iExp;
-}CHARACTERINFO, *PCHARACTERINFO;
-
 // Object Type
 enum OBJECT_TYPE {
 	OT_PLAYER,
-	OT_MONSTER
+	OT_MONSTER,
+	OT_ITEM_WEAPON,
+	OT_ITEM_ARMOR
+};
+
+// Item Type
+enum ITEM_TYPE {
+	IT_WEAPON,
+	IT_ARMOR,
+	IT_MAX
 };

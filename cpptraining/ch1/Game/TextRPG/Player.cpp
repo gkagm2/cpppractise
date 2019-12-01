@@ -22,6 +22,11 @@ void CPlayer::AddGold(int iGold)
 	m_iGold += iGold;
 }
 
+void CPlayer::DropGold()
+{
+	m_iGold *= 0.9f; // 10% drop
+}
+
 bool CPlayer::Init()
 {
 	cout << "이름을 입력하세요 : ";

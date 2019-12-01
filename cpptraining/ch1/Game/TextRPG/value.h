@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 template <typename T>
 T Input() {
 	T data;
@@ -49,3 +48,25 @@ void Safe_Delete_Map(T& p) {
 	}
 	p.clear();
 }
+
+typedef struct tag_CharacterInfo {
+	int iAttackMin;
+	int iAttackMax;
+	int iArmorMin;
+	int iArmorMax;
+	int iHp;
+	int iHpMax;
+	int iMp;
+	int iMpMax;
+	int iLevel;
+	int iExp;
+}CHARACTERINFO, *PCHARACTERINFO;
+
+// Item info
+typedef struct _tagItemInfo {
+	ITEM_TYPE eType;
+	string strTypeName;
+	int iPrice;
+	int iSell;
+	string strDesc;
+}ITEMINFO, *PITEMINFO;

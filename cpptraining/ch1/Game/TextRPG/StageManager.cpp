@@ -29,7 +29,17 @@ bool CStageManager::Init()
 
 void CStageManager::Run()
 {
-	m_vecStage[0]->Run();
+	while (true) {
+		int iMenu = OutputMenu();
+
+		if (iMenu == MENU_NONE) {
+			continue;
+		}
+		else if (iMenu == MENU_BACK) {
+			return;
+		}
+		m_vecStage[iMenu - 1]->Run();
+	}
 }
 
 bool CStageManager::CreateStage(STAGE_TYPE eType)
@@ -55,4 +65,19 @@ bool CStageManager::CreateStage(STAGE_TYPE eType)
 	m_vecStage.push_back(pStage);
 
 	return true;
+}
+
+int CStageManager::OutputMenu()
+{
+	system("cls");
+	cout << "1. 쉬움" << endl;
+	cout << "2. 보통" << endl;
+	cout << "3. 어려움" << endl;
+	cout << "4. 뒤로가기" << endl;
+	cout << "난이도를 선택하세요 : ";
+	int iMenu = Input<int>();
+	if (iMenu <= MENU_NONE || iMenu > MENU_BACK) {
+		return MENU_NONE;
+	}
+	return iMenu;
 }

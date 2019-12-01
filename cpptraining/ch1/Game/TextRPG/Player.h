@@ -26,6 +26,7 @@ public:
 
 public:
 	void AddGold(int iGold);
+	void DropGold();
 
 public:
 	virtual bool Init();
