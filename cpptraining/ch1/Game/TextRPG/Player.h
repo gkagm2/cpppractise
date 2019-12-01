@@ -19,7 +19,7 @@ private:
 private:
 	friend class CObjectManager;
 
-public:
+private:
 	JOB m_eJob;
 	string m_strJobName;
 	int m_iGold;
@@ -27,6 +27,12 @@ public:
 public:
 	void AddGold(int iGold);
 	void DropGold();
+
+public:
+	int GetGold() const {
+		return m_iGold;
+	}
+
 
 public:
 	virtual bool Init();

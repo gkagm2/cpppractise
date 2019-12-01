@@ -5,13 +5,15 @@ class CItem : public CObj
 protected:
 	CItem();
 	CItem(const CItem& item);
+
+public:
 	virtual ~CItem();
 
 protected:
 	ITEMINFO m_tInfo;
 
 public:
-	void SetItemInfo(ITEM_TYPE eType, int iPrice, int iSell, char* pDesc);
+	void SetItemInfo(ITEM_TYPE eType, int iPrice, int iSell,const char* pDesc);
 public:
 	ITEMINFO GetItemInfo() const {
 		return m_tInfo;
@@ -22,4 +24,3 @@ public:
 	virtual void Render();
 	virtual CItem* Clone() = 0;
 };
-

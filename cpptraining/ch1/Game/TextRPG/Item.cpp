@@ -15,7 +15,7 @@ CItem::~CItem()
 {
 }
 
-void CItem::SetItemInfo(ITEM_TYPE eType, int iPrice, int iSell, char * pDesc)
+void CItem::SetItemInfo(ITEM_TYPE eType, int iPrice, int iSell,const  char* pDesc)
 {
 	m_tInfo.eType = eType;
 	switch (eType) {

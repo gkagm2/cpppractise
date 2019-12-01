@@ -9,10 +9,16 @@ protected:
 	virtual ~CItemWeapon();
 
 private:
+	friend class CStoreWeapon;
+	friend class CStore;
+
+private:
 	int m_iAttackMin;
 	int m_iAttackMax;
 	float m_fCritical;
 
+public:
+	void SetWeaponInfo(int iMin, int iMax, float fCritical);
 
 public:
 	virtual bool Init();
