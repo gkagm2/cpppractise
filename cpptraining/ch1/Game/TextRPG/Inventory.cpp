@@ -31,7 +31,7 @@ void CInventory::Run()
 {
 	for (size_t i = 0; i < m_vecItem.size(); ++i) {
 		cout << i + 1 << ". ";
-		//m_vecItem[i]->Render();
+		//m_vecItem[i].Render();
 		cout << endl;
 	}
 
