@@ -63,6 +63,6 @@ void CStoreWeapon::Run()
 
 		GET_SINGLE(CInventory)->AddItem(pItem);
 
-		pPlayer->AddGold(pItem->GetItemInfo().iPrice);
+		pPlayer->UseGold(pItem->GetItemInfo().iPrice);
 	}
 }
