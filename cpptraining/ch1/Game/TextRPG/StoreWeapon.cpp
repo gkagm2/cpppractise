@@ -41,7 +41,6 @@ void CStoreWeapon::Run()
 
 		int iInput = Input<int>();
 
-
 		if (iInput < 1 || iInput > m_vecItem.size() + 1) {
 				continue;
 		}

@@ -18,10 +18,11 @@ CCore::CCore() {
 }
 
 CCore::~CCore() {
+	DESTROY_SINGLE(CInventory);
 	DESTROY_SINGLE(CStoreManager);
 	DESTROY_SINGLE(CObjectManager);
 	DESTROY_SINGLE(CStageManager);
-	DESTROY_SINGLE(CInventory);
+	
 }
 
 bool CCore::Init()
@@ -58,6 +59,7 @@ void CCore::Run()
 			GET_SINGLE(CStoreManager)->Run();
 			break;
 		case MM_INVENTORY:
+			GET_SINGLE(CInventory)->Run();
 			break;
 		case MM_STATUS:
 			break;

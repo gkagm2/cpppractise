@@ -9,8 +9,8 @@ protected:
 	virtual ~CItemWeapon();
 
 private:
-	friend class CStoreWeapon;
 	friend class CStore;
+	friend class CStoreWeapon;
 
 private:
 	int m_iAttackMin;

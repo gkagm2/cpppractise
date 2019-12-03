@@ -4,7 +4,7 @@
 class CInventory
 {
 private:
-	vector<class CItem> m_vecItem;
+	vector<class CItem*> m_vecItem;
 	int m_iInvenMax;
 
 public:

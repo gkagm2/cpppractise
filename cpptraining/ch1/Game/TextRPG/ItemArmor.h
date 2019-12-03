@@ -8,8 +8,8 @@ protected:
 	virtual ~CItemArmor();
 
 private:
-	friend class CStoreArmor;
 	friend class CStore;
+	friend class CStoreArmor;
 
 private:
 	int m_iArmorMin;

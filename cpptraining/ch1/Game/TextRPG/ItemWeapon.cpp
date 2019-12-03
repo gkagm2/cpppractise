@@ -12,7 +12,6 @@ CItemWeapon::CItemWeapon(const CItemWeapon & item) : CItem(item)
 	m_fCritical = item.m_fCritical;
 }
 
-
 CItemWeapon::~CItemWeapon()
 {
 }
