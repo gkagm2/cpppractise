@@ -25,8 +25,17 @@ CCore::~CCore() {
 	
 }
 
+LEVELUPINFO CCore::GetLevelUpInfo(JOB eJob)
+{
+
+	return m_tLevelUpInfo[eJob - 1];
+}
+
 bool CCore::Init()
 {
+	// 레벨업에 필요한 정보 상승 구조체를 만들어준다.
+	SetLevelUpInfo();
+
 	// 오브젝트 관리자 초기화.
 	if (!GET_SINGLE(CObjectManager)->Init())
 		return false;
@@ -85,4 +94,26 @@ int CCore::OutputMenu()
 	}
 
 	return iMenu;
+}
+
+void CCore::SetLevelUpInfo()
+{
+	// 레벨업에 필요한 정보 상승 구조체를 만들어준다.
+	m_tLevelUpInfo[JOB_KNIGHT - 1] = CreateLevelUpInfo(5, 10, 15, 20, 100, 10);
+	m_tLevelUpInfo[JOB_ARCHER - 1] = CreateLevelUpInfo(10, 15, 10, 15, 80, 30);
+	m_tLevelUpInfo[JOB_WIZARD - 1] = CreateLevelUpInfo(15, 20, 5, 10, 50, 50);
+}
+
+LEVELUPINFO CCore::CreateLevelUpInfo(int iAttackMin, int iAttackMax, int iArmorMin, int iArmorMax, int iHp, int iMp)
+{
+	LEVELUPINFO tInfo = {};
+	// 레벨업에 필요한 정보 상승 구조체를 만들어준다.
+	tInfo.iAttackMin = 5;
+	tInfo.iAttackMax = 10;
+	tInfo.iArmorMin = 15;
+	tInfo.iArmorMax = 20;
+	tInfo.iHp = 100;
+	tInfo.iMp = 10;
+
+	return LEVELUPINFO();
 }

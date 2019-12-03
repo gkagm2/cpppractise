@@ -32,6 +32,10 @@ bool CCharacter::AddExp(int iExp)
 
 bool CCharacter::CheckLevelUp()
 {
+	if (g_iLvUpTable[m_tInfo.iLevel - 1] <= m_tInfo.iExp) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -44,6 +48,24 @@ void CCharacter::FullHPMP()
 {
 	m_tInfo.iMp = m_tInfo.iMpMax;
 	m_tInfo.iHp = m_tInfo.iHpMax;
+}
+
+void CCharacter::LevelUp()
+{
+	m_tInfo.iExp -= g_iLvUpTable[m_tInfo.iLevel - 1];
+	++m_tInfo.iLevel;
+}
+
+void CCharacter::AddLevelUpStatus(const LEVELUPINFO & tInfo)
+{
+	m_tInfo.iAttackMin += tInfo.iAttackMin;
+	m_tInfo.iAttackMax += tInfo.iAttackMax;
+	m_tInfo.iArmorMin += tInfo.iArmorMin;
+	m_tInfo.iArmorMax += tInfo.iArmorMax;
+	m_tInfo.iHpMax += tInfo.iHp;
+	m_tInfo.iHp = m_tInfo.iHpMax;
+	m_tInfo.iMpMax += tInfo.iMp;
+	m_tInfo.iMp = m_tInfo.iMpMax;
 }
 
 bool CCharacter::Init()

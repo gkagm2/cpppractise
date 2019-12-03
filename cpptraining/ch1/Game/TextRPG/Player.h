@@ -13,14 +13,6 @@ private:
 	friend class CObjectManager;
 
 private:
-	enum JOB {
-		JOB_NONE,
-		JOB_KNIGHT,
-		JOB_ARCHER,
-		JOB_WIZARD,
-		JOB_END
-	};
-
 	enum EQUIP {
 		EQ_WEAPON,
 		EQ_ARMOR,
@@ -39,9 +31,21 @@ public:
 	void DropGold();
 
 public:
+	JOB GetJob() const {
+		return m_eJob;
+	}
+
 	int GetGold() const {
 		return m_iGold;
 	}
+	
+	class CItem* GetEquip(EQUIP eq) const {
+		return m_pEquip[eq];
+	}
+
+	virtual int GetDamage();
+	virtual int GetArmor();
+
 public:
 	class CItem* Equip(class CItem* pItem);
 

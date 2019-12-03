@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Core.h"
 
 CStageEasy::CStageEasy()
 {
@@ -55,7 +56,13 @@ void CStageEasy::Run()
 
 				// 레벨업 조건을 만족했다면 true를 반환한다.
 				if (pPlayer->CheckLevelUp()) {
+					pPlayer->LevelUp();
 
+
+					LEVELUPINFO _tLevelUpInfo = GET_SINGLE(CCore)->GetLevelUpInfo(pPlayer->GetJob());
+					// 능력치 상승
+					pPlayer->AddLevelUpStatus(_tLevelUpInfo);
+					cout << "Level up " << endl;
 				}
 				
 				// 몬스터를 삭제하고 다시 복사해서 생성해준다.

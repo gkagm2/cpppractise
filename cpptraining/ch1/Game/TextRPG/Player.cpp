@@ -42,6 +42,33 @@ void CPlayer::DropGold()
 	m_iGold *= 0.9f; // 10% drop
 }
 
+int CPlayer::GetDamage()
+{
+	int iMin = m_tInfo.iAttackMin;
+	int iMax = m_tInfo.iAttackMax;
+	if (m_pEquip[EQ_WEAPON]) {
+		iMin += ((CItemWeapon*)m_pEquip[EQ_WEAPON])->GetAttackMin();
+		iMax += ((CItemWeapon*)m_pEquip[EQ_WEAPON])->GetAttackMax();
+		if (rand() % 9901 / 100.f <= ((CItemWeapon*)m_pEquip[EQ_WEAPON])->GetCritical()) { // 0 ~ 99까지 나오게 하기 99.00
+			cout << "Critical" << endl;
+			iMin *= 2;
+			iMax *= 2;
+		}
+	}
+	return (rand() % (iMax - iMin + 1)) + iMin;
+}
+
+int CPlayer::GetArmor()
+{
+	int iMin = m_tInfo.iArmorMin;
+	int iMax = m_tInfo.iArmorMax;
+	if (m_pEquip[EQ_ARMOR]) {
+		iMin += ((CItemArmor*)m_pEquip[EQ_ARMOR])->GetArmorMin();
+		iMax += ((CItemArmor*)m_pEquip[EQ_ARMOR])->GetArmorMax();
+	}
+	return (rand() % (iMax - iMin + 1)) + iMin;
+}
+
 CItem* CPlayer::Equip(CItem * pItem)
 {
 	// 장착하고자 하는 아이템의 타입에 따라 장착 부위가 달라져야 한다.

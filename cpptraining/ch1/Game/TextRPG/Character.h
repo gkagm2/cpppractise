@@ -21,11 +21,11 @@ public:
 	}
 
 	void SetCharacterInfo(int iAttackMin, int iAttackMax, int iArmorMin, int iArmorMax, int iHp, int iMp, int iLevel, int iExp);
-	int GetDamage() {
+	virtual int GetDamage() {
 		return (rand() % (m_tInfo.iAttackMax - m_tInfo.iAttackMin + 1)) + m_tInfo.iAttackMin;
 	}
 
-	int GetArmor() {
+	virtual int GetArmor() {
 		return (rand() % (m_tInfo.iArmorMax - m_tInfo.iArmorMin + 1)) + m_tInfo.iArmorMin;
 	}
 
@@ -34,6 +34,8 @@ public:
 	bool CheckLevelUp();
 	void DropExp();
 	void FullHPMP();
+	void LevelUp();
+	void AddLevelUpStatus(const LEVELUPINFO& tInfo);
 
 public:
 	virtual bool Init();
