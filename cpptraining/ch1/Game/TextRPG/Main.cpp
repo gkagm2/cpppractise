@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 int main() {
 	srand((unsigned int)time(0));
 	if (!GET_SINGLE(CCore)->Init()) {
