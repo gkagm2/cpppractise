@@ -34,7 +34,7 @@ public:
 	bool Open(const char* pFileName, const char* pMode);
 	bool Close();
 	bool Read(void* pData, int iSize);
-	bool ReadLine(void* pData, int pSize);
+	bool ReadLine(void* pData, int * pSize);
 	bool Write(void* pData, int iSize);
 
 };

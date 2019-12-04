@@ -53,15 +53,53 @@ bool CFileStream::Close()
 
 bool CFileStream::Read(void * pData, int iSize)
 {
-	return false;
+	if (!m_bOpen || m_eMode != FM_READ) {
+		return false;
+	}
+	
+	fread(pData, iSize, 1, m_pFile);
+
+	m_iCurrent += iSize; // byte 수를 계산해서 넣음.
+	
+	return true;
 }
 
-bool CFileStream::ReadLine(void * pData, int pSize)
+bool CFileStream::ReadLine(void * pData, int * pSize)
 {
-	return false;
+	if (!m_bOpen || m_eMode != FM_READ) {
+		return false;
+	}
+
+	int iSize = 0;
+	char cBuffer = 0;
+	vector<int>  vec;
+	vec.reserve(128);
+
+	while (feof(m_pFile) == 0) {
+		fread(&cBuffer, 1, 1, m_pFile);
+		if (cBuffer == '\n') {
+			break;
+		}
+
+		vec.push_back(cBuffer);
+	}
+	*pSize = vec.size();
+
+	memcpy(pData, &vec[0], vec.size());
+	
+	m_iCurrent += vec.size();
+
+	return true;
 }
 
 bool CFileStream::Write(void * pData, int iSize)
 {
-	return false;
+	if (!m_bOpen || m_eMode != FM_WRITE) {
+		return false;
+	}
+
+	fwrite(pData, iSize, 1, m_pFile);
+
+
+	return true;
 }
