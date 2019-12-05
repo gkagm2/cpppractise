@@ -11,6 +11,7 @@ public:
 
 private:
 	friend class CObjectManager;
+	friend class CEditorMonster;
 private:
 	int m_iGoldMin;
 	int m_iGoldMax;
