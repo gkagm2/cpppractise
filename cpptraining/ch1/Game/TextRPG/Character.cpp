@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "FileStream.h"
 
 CCharacter::CCharacter()
 {
@@ -80,6 +81,20 @@ void CCharacter::Render()
 CCharacter * CCharacter::Clone()
 {
 	return nullptr;
+}
+
+void CCharacter::Save(CFileStream * pFile)
+{
+	CObj::Save(pFile);
+
+	pFile->Write(&m_tInfo, sizeof(m_tInfo));
+}
+
+void CCharacter::Load(CFileStream * pFile)
+{
+	CObj::Load(pFile);
+
+	pFile->Read(&m_tInfo, sizeof(m_tInfo));
 }
 
 void CCharacter::SetCharacterInfo(int iAttackMin, int iAttackMax, int iArmorMin, int iArmorMax, int iHp, int iMp, int iLevel, int iExp)

@@ -1,4 +1,5 @@
 #include "Obj.h"
+#include "FileStream.h"
 
 CObj::CObj()
 {
@@ -31,4 +32,34 @@ void CObj::Render()
 CObj * CObj::Clone()
 {
 	return nullptr;
+}
+
+void CObj::Save(CFileStream * pFile)
+{
+	pFile->Write(&m_eType, sizeof(OBJECT_TYPE)); // 4 byte
+
+	int iLength = m_strName.length();
+
+	// 이름 길이를 저장한다.
+	pFile->Write(&iLength, 4);
+
+	// 이름을 저장한다.
+	pFile->Write((void*)m_strName.c_str(), iLength); // c_str() : string -> char*
+}
+
+void CObj::Load(CFileStream * pFile)
+{
+	pFile->Read(&m_eType, sizeof(OBJECT_TYPE));
+
+	int iLength = 0;
+	pFile->Read(&iLength, 4);
+
+	char* pName = new char[iLength + 1];
+
+	memset(pName, 0, iLength);
+
+	pFile->Read(pName, iLength);
+	pName[iLength] = 0;
+
+	SAFE_DELETE_ARRAY(pName);
 }

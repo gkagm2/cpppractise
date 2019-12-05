@@ -42,10 +42,13 @@ void CEditorMonster::Run()
 		case EMM_DELETE:
 			break;
 		case EMM_OUTPUT:
+			OutputMonsterList();
 			break;
 		case EMM_SAVE:
+			Save();
 			break;
 		case EMM_LOAD:
+			Load();
 			break;
 		case EMM_BACK:
 			return;
@@ -150,15 +153,11 @@ void CEditorMonster::Save()
 	file.Write(&iMonsterCount, 4);
 
 	for (size_t i = 0; i < iMonsterCount; ++i) {
-
+		m_vecMonster[i]->Save(&file);
 	}
-
-
 
 	cout << "파일 저장 완료" << endl;
 	system("pause");
-
-
 }
 
 void CEditorMonster::Load()
@@ -166,4 +165,30 @@ void CEditorMonster::Load()
 	system("cls");
 	cout << "=============== 파일 불러오기 ==============" << endl;
 
+	CFileStream file("MonsterList.mtl", "rb");
+
+	Safe_Delete_VecList(m_vecMonster);
+
+	// 몬스터 수를 읽어온다.
+	size_t iMonsterCount = 0;
+
+	file.Read(&iMonsterCount, 4);
+
+	for (size_t i = 0; i < iMonsterCount; ++i) {
+		CMonster* pMonster = new CMonster;
+		
+		if (!pMonster->Init()) {
+			SAFE_DELETE(pMonster);
+			return;
+		}
+
+		pMonster->Load(&file);
+
+		m_vecMonster.push_back(pMonster);
+
+		m_vecMonster[i]->Save(&file);
+	}
+
+	cout << "파일 읽기 완료" << endl;
+	system("pause");
 }

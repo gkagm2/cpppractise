@@ -41,4 +41,6 @@ public:
 	virtual bool Init();
 	virtual void Render();
 	virtual CCharacter* Clone() = 0;
+	virtual void Save(CFileStream * pFile);
+	virtual void Load(CFileStream * pFile);
 };

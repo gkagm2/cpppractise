@@ -1,4 +1,5 @@
 #include "Monster.h"
+#include "FileStream.h"
 
 CMonster::CMonster()
 {
@@ -35,4 +36,21 @@ CMonster * CMonster::Clone()
 {
 	// this : 자기자신의 포인터이다. 자기 자신의 포인터를 역참조시 자기 자신 객체 자체가 됨.
 	return new CMonster(*this);
+}
+
+void CMonster::Save(CFileStream * pFile)
+{
+	CCharacter::Save(pFile);
+
+	pFile->Write(&m_iGoldMin, 4);
+	pFile->Write(&m_iGoldMax, 4);
+
+}
+
+void CMonster::Load(CFileStream * pFile)
+{
+	CCharacter::Load(pFile);
+
+	pFile->Read(&m_iGoldMin, 4);
+	pFile->Read(&m_iGoldMax, 4);
 }
