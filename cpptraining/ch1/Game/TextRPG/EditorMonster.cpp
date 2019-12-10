@@ -159,7 +159,7 @@ void CEditorMonster::Save()
 	system("cls");
 	cout << "=============== 파일 저장 ==============" << endl;
 
-	CFileStream file("MonsterList.mtl", "wb");
+	CFileStream file(g_strMonsterListFileName.c_str(), "wb");
 
 	// 몬스터 수를 저장한다.
 	size_t iMonsterCount = m_vecMonster.size();
@@ -198,19 +198,7 @@ void CEditorMonster::Load()
 
 		pMonster->Load(&file);
 
-		if (i <= 1) {
-			pMonster->SetStageType(ST_EASY);
-		}
-		else if (i <= 3) {
-			pMonster->SetStageType(ST_NORMAL);
-		}
-		else {
-			pMonster->SetStageType(ST_HARD);
-		}
-
 		m_vecMonster.push_back(pMonster);
-
-		m_vecMonster[i]->Save(&file);
 	}
 
 	cout << "파일 읽기 완료" << endl;

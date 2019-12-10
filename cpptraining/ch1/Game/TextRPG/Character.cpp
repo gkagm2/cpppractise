@@ -78,11 +78,6 @@ void CCharacter::Render()
 {
 }
 
-CCharacter * CCharacter::Clone()
-{
-	return nullptr;
-}
-
 void CCharacter::Save(CFileStream * pFile)
 {
 	CObj::Save(pFile);

@@ -29,11 +29,6 @@ void CObj::Render()
 {
 }
 
-CObj * CObj::Clone()
-{
-	return nullptr;
-}
-
 void CObj::Save(CFileStream * pFile)
 {
 	pFile->Write(&m_eType, sizeof(OBJECT_TYPE)); // 4 byte
@@ -60,6 +55,7 @@ void CObj::Load(CFileStream * pFile)
 
 	pFile->Read(pName, iLength);
 	pName[iLength] = 0;
+	m_strName = pName;
 
 	SAFE_DELETE_ARRAY(pName);
 }

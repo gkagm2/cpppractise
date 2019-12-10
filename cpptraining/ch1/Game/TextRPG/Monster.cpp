@@ -42,7 +42,7 @@ void CMonster::Render()
 		"\t방어력 : " << m_tInfo.iArmorMin << " ~ " << m_tInfo.iArmorMax << endl;
 	cout << "체력 : " << m_tInfo.iHp << " / " << m_tInfo.iHpMax << "\t마나 : " << m_tInfo.iMp << " / " << m_tInfo.iMpMax << endl;
 	cout << "획득금액 : " << m_iGoldMin << " ~ " << m_iGoldMax << " Gold" << endl;
-}
+}\
 
 CMonster * CMonster::Clone()
 {
@@ -56,7 +56,7 @@ void CMonster::Save(CFileStream * pFile)
 
 	pFile->Write(&m_iGoldMin, 4);
 	pFile->Write(&m_iGoldMax, 4);
-
+	pFile->Write(&m_eStageType, 4);
 }
 
 void CMonster::Load(CFileStream * pFile)

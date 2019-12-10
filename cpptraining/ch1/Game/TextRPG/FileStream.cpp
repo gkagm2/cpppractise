@@ -60,6 +60,7 @@ bool CFileStream::Read(void * pData, int iSize)
 	fread(pData, iSize, 1, m_pFile);
 
 	m_iCurrent += iSize; // byte 수를 계산해서 넣음.
+
 	
 	return true;
 }
@@ -99,7 +100,6 @@ bool CFileStream::Write(void * pData, int iSize)
 	}
 
 	fwrite(pData, iSize, 1, m_pFile);
-
 
 	return true;
 }

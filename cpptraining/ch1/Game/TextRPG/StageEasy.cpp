@@ -21,10 +21,20 @@ void CStageEasy::Run()
 {
 	// 플레이어를 얻어온다.
 	CPlayer* pPlayer = (CPlayer*)GET_SINGLE(CObjectManager)->FindObject("Player");
+	if (pPlayer == NULL) {
+		cout << "pPlayer가 NULL임" << endl;
+		system("pause");
+		return;
+	}
 
 	// 몬스터를 복사한다.
 	CMonster* pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject(ST_EASY);
 
+	if (pMonster == NULL) {
+		cout << "pMonster가 NULL임" << endl;
+		system("pause");
+		return;
+	}
 	while (true) {
 		system("cls");
 		OutputStageName("Easy");

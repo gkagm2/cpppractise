@@ -45,15 +45,59 @@ void CItem::Render()
 
 void CItem::Save(CFileStream * pFile)
 {
-	// 자식 먼저 저장 후 
 	CObj::Save(pFile); 
 
-	// 부모저장
-	pFile->Write(&m_tInfo, sizeof(m_tInfo));
+	// string 형식으로 되어있어서 sizeof(ITEMINFO)를 이용하지 못함.
+
+	pFile->Write(&m_tInfo.eType, 4);
+
+	int iLength = m_tInfo.strTypeName.length();
+	pFile->Write(&iLength, 4);
+	pFile->Write((void*)m_tInfo.strTypeName.c_str(), iLength);
+
+	pFile->Write(&m_tInfo.iPrice, 4);
+	pFile->Write(&m_tInfo.iSell, 4);
+	
+	iLength = m_tInfo.strDesc.length();
+	pFile->Write(&iLength, 4);
+	pFile->Write((void*)m_tInfo.strDesc.c_str(), iLength);
 }
 
 void CItem::Load(CFileStream * pFile)
 {
 	CObj::Load(pFile);
-	pFile->Read(&m_tInfo, sizeof(m_tInfo));
+
+	pFile->Read(&m_tInfo.eType, 4);
+
+	// 이름 길이 읽기
+	int iLength = 0;
+	pFile->Read(&iLength, 4);
+
+	char* pName = new char[iLength + 1];
+
+	memset(pName, 0, iLength);
+
+	pFile->Read(pName, iLength);
+	pName[iLength] = 0;
+
+	m_tInfo.strTypeName = pName;
+	SAFE_DELETE_ARRAY(pName);
+
+	pFile->Read(&m_tInfo.iPrice, 4); // price 일기
+	pFile->Read(&m_tInfo.iSell, 4); // sell 읽기
+
+	// 설명 읽어
+	iLength = 0;
+	pFile->Read(&iLength, 4);
+
+	pName = new char[iLength + 1];
+
+	memset(pName, 0, iLength);
+
+	pFile->Read(pName, iLength);
+	pName[iLength] = 0;
+
+	m_tInfo.strDesc = pName;
+	SAFE_DELETE_ARRAY(pName);
+
 }
