@@ -11,6 +11,7 @@ CMonster::CMonster(const CMonster & monster) :
 {
 	m_iGoldMin = monster.m_iGoldMin;
 	m_iGoldMax = monster.m_iGoldMax;
+	m_eStageType = monster.m_eStageType;
 }
 
 CMonster::~CMonster()

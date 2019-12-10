@@ -22,7 +22,7 @@ void CStageNormal::Run()
 	CPlayer* pPlayer = (CPlayer*)GET_SINGLE(CObjectManager)->FindObject("Player");
 
 	// 몬스터를 복사한다.
-	CMonster* pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject("Troll");
+	CMonster* pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject(ST_NORMAL);
 
 	while (true) {
 		system("cls");
@@ -60,7 +60,7 @@ void CStageNormal::Run()
 
 				// 몬스터를 삭제하고 다시 복사해서 생성해준다.
 				SAFE_DELETE(pMonster);
-				pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject("Troll");
+				pMonster = (CMonster*)GET_SINGLE(CObjectManager)->CloneObject(ST_NORMAL);
 				break;
 			}
 
