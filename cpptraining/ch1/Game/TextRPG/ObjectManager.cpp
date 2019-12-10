@@ -18,6 +18,7 @@ bool CObjectManager::Init()
 {
 	// 플레이어를 생성한다.
 	CObj* pPlayer = CreateObject("Player", OT_PLAYER);
+	CObj* pPlayer1 = pPlayer->Clone();
 
 	// 몬스터 목록 파일을 읽어온다.
 	CFileStream file(g_strMonsterListFileName.c_str(), "rb");
@@ -37,8 +38,6 @@ bool CObjectManager::Init()
 	}
 	else { // 파일이 없을 경우 
 
-		CObj* pPlayer1 = pPlayer->Clone();
-
 		// CreateObject 함수는 몬스터를 생성하고 CObj* 타입을 리턴한다.
 		// 몬스터의 기본 변수들은 몬스터 클래스나 character 클래스가 가지고 있으므로
 		// 몬스터 클래스로 형변환하여 저장해두고 기능을 사용하도록 한다.
@@ -46,6 +45,7 @@ bool CObjectManager::Init()
 		pMonster1->SetName("고블린");
 		pMonster1->SetCharacterInfo(5, 10, 3, 5, 100, 10, 1, 1000);
 		pMonster1->SetGold(1000, 2000);
+
 
 		CMonster* pMonster2 = (CMonster*)CreateObject("Troll", OT_MONSTER);
 		pMonster2->SetName("트롤");
