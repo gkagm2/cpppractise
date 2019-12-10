@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 #include "Player.h"
 #include "Monster.h"
+#include "FileStream.h"
 
 DEFINITION_SINGLE(CObjectManager)
 
@@ -17,26 +18,44 @@ bool CObjectManager::Init()
 	// 플레이어를 생성한다.
 	CObj* pPlayer = CreateObject("Player", OT_PLAYER);
 
-	CObj* pPlayer1 = pPlayer->Clone();
+	// 몬스터 목록 파일을 읽어온다.
+	CFileStream file(g_strMonsterListFileName.c_str(), "rb");
 
-	// CreateObject 함수는 몬스터를 생성하고 CObj* 타입을 리턴한다.
-	// 몬스터의 기본 변수들은 몬스터 클래스나 character 클래스가 가지고 있으므로
-	// 몬스터 클래스로 형변환하여 저장해두고 기능을 사용하도록 한다.
-	CMonster* pMonster1 = (CMonster*)CreateObject("Goblin", OT_MONSTER);
-	pMonster1->SetName("고블린");
-	pMonster1->SetCharacterInfo(5, 10, 3, 5, 100, 10, 1, 1000);
-	pMonster1->SetGold(1000, 2000);
+	if (file.GetOpen()) { // 파일이 있을 경우
+		int iMonsterCount = 0;
 
-	CMonster* pMonster2 = (CMonster*)CreateObject("Troll", OT_MONSTER);
-	pMonster2->SetName("트롤");
-	pMonster2->SetCharacterInfo(50, 80, 40, 60, 2000, 300, 5, 7000);
-	pMonster2->SetGold(5000, 10000);
+		file.Read(&iMonsterCount, 4);
 
-	CMonster* pMonster3 = (CMonster*)CreateObject("Dragon", OT_MONSTER);
-	pMonster3->SetName("드래곤");
-	pMonster3->SetCharacterInfo(150, 250, 150, 250, 10000, 10000, 10, 25000);
-	pMonster3->SetGold(30000, 50000);
+		for (int i = 0; i < iMonsterCount; ++i) {
+			CMonster* pMonster = new CMonster;
 
+			pMonster->Load(&file);
+
+			m_mapObj.insert(make_pair(pMonster->GetName(), pMonster));
+		}
+	}
+	else { // 파일이 없을 경우 
+
+		CObj* pPlayer1 = pPlayer->Clone();
+
+		// CreateObject 함수는 몬스터를 생성하고 CObj* 타입을 리턴한다.
+		// 몬스터의 기본 변수들은 몬스터 클래스나 character 클래스가 가지고 있으므로
+		// 몬스터 클래스로 형변환하여 저장해두고 기능을 사용하도록 한다.
+		CMonster* pMonster1 = (CMonster*)CreateObject("Goblin", OT_MONSTER);
+		pMonster1->SetName("고블린");
+		pMonster1->SetCharacterInfo(5, 10, 3, 5, 100, 10, 1, 1000);
+		pMonster1->SetGold(1000, 2000);
+
+		CMonster* pMonster2 = (CMonster*)CreateObject("Troll", OT_MONSTER);
+		pMonster2->SetName("트롤");
+		pMonster2->SetCharacterInfo(50, 80, 40, 60, 2000, 300, 5, 7000);
+		pMonster2->SetGold(5000, 10000);
+
+		CMonster* pMonster3 = (CMonster*)CreateObject("Dragon", OT_MONSTER);
+		pMonster3->SetName("드래곤");
+		pMonster3->SetCharacterInfo(150, 250, 150, 250, 10000, 10000, 10, 25000);
+		pMonster3->SetGold(30000, 50000);
+	}
 	return true;
 }
 

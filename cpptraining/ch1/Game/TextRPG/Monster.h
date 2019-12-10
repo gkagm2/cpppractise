@@ -15,11 +15,20 @@ private:
 private:
 	int m_iGoldMin;
 	int m_iGoldMax;
+	STAGE_TYPE m_eStageType;
 
 public:
 	void SetGold(int iMin, int iMax) {
 		m_iGoldMin = iMin;
 		m_iGoldMax = iMax;
+	}
+
+	void SetStageType(STAGE_TYPE eType) {
+		m_eStageType = eType;
+	}
+
+	STAGE_TYPE GetStageType() const {
+		return m_eStageType;
 	}
 
 public:

@@ -39,3 +39,4 @@ public:
 
 };
 
+const string g_strMonsterListFileName = "MonsterList.mtl";

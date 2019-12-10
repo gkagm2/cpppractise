@@ -122,6 +122,19 @@ void CEditorMonster::Insert()
 
 	pMonster->SetGold(iGoldMin, iGoldMax);
 
+	// 난이도를 선택.
+	int iStage = ST_NONE;
+
+	while (iStage <= ST_NONE || iStage >= ST_BACK) {
+		cout << "1. Easy" << endl;
+		cout << "2. Normal" << endl;
+		cout << "3. Hard" << endl;
+		cout << "난이도를 선택하세요 : ";
+		iStage = Input<int>();
+	}
+
+	pMonster->SetStageType((STAGE_TYPE)iStage);
+
 	m_vecMonster.push_back(pMonster);
 }
 
@@ -165,7 +178,7 @@ void CEditorMonster::Load()
 	system("cls");
 	cout << "=============== 파일 불러오기 ==============" << endl;
 
-	CFileStream file("MonsterList.mtl", "rb");
+	CFileStream file(g_strMonsterListFileName.c_str(), "rb");
 
 	Safe_Delete_VecList(m_vecMonster);
 
@@ -183,6 +196,16 @@ void CEditorMonster::Load()
 		}
 
 		pMonster->Load(&file);
+
+		if (i <= 1) {
+			pMonster->SetStageType(ST_EASY);
+		}
+		else if (i <= 3) {
+			pMonster->SetStageType(ST_NORMAL);
+		}
+		else {
+			pMonster->SetStageType(ST_HARD);
+		}
 
 		m_vecMonster.push_back(pMonster);
 
