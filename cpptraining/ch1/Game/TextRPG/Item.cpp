@@ -1,5 +1,5 @@
 #include "Item.h"
-
+#include "FileStream.h"
 
 
 CItem::CItem()
@@ -40,4 +40,20 @@ bool CItem::Init()
 
 void CItem::Render()
 {
+	
+}
+
+void CItem::Save(CFileStream * pFile)
+{
+	// 자식 먼저 저장 후 
+	CObj::Save(pFile); 
+
+	// 부모저장
+	pFile->Write(&m_tInfo, sizeof(m_tInfo));
+}
+
+void CItem::Load(CFileStream * pFile)
+{
+	CObj::Load(pFile);
+	pFile->Read(&m_tInfo, sizeof(m_tInfo));
 }

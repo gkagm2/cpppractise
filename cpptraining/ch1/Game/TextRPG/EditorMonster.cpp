@@ -89,6 +89,7 @@ void CEditorMonster::Insert()
 	cout << "============ 몬스터 추가 ==========" << endl;
 	cout << "이름 : ";
 
+	cin.ignore(1024, '\n');
 	char strName[256] = {};
 	cin >> strName;
 
@@ -96,29 +97,29 @@ void CEditorMonster::Insert()
 
 	int iAttackMin, iAttackMax, iArmorMin, iArmorMax, iHp, iMp, iLevel, iExp;
 	cout << "최소 공격력 : ";
-	cin >> iAttackMin;
+	iAttackMin = Input<int>();
 	cout << "최대 공격력 : ";
-	cin >> iAttackMax;
+	iAttackMax = Input<int>();
 	cout << "최소 방어력 : ";
-	cin >> iArmorMin;
+	iArmorMin = Input<int>();
 	cout << "최대 방어력 : ";
-	cin >> iArmorMax;
+	iArmorMax = Input<int>();
 	cout << "체력 : ";
-	cin >> iHp;
+	iHp = Input<int>();
 	cout << "마나 : ";
-	cin >> iMp;
+	iMp = Input<int>();
 	cout << "레벨 : ";
-	cin >> iLevel;
+	iLevel = Input<int>();
 	cout << "획득 경험치 : ";
-	cin >> iExp;
+	iExp = Input<int>();
 
 	pMonster->SetCharacterInfo(iAttackMin, iAttackMax, iArmorMin, iArmorMax, iHp, iMp, iLevel, iExp);
 
 	int iGoldMin, iGoldMax;
 	cout << "최소 골드 : ";
-	cin >> iGoldMin;
+	iGoldMin = Input<int>();
 	cout << "최대 골드 : ";
-	cin >> iGoldMax;
+	iGoldMax = Input<int>();
 
 	pMonster->SetGold(iGoldMin, iGoldMax);
 

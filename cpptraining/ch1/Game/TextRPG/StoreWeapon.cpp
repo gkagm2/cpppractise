@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "ObjectManager.h"
 #include "Inventory.h"
+#include "FileStream.h"
 
 CStoreWeapon::CStoreWeapon()
 {
@@ -15,15 +16,39 @@ CStoreWeapon::~CStoreWeapon()
 
 bool CStoreWeapon::Init()
 {
-	// 판매 목록을 만들어 준다.
-	CItemWeapon* pItem = (CItemWeapon*)CreateItem("목검", IT_WEAPON, 1000, 500, "나무로 만든 검");
-	pItem->SetWeaponInfo(5, 10, 10.f);
+	CFileStream file(g_strWeaponStoreItemListFileName.c_str(), "rb");
+	
+	if (file.GetOpen()) {
+		// 무기 수를 불러온다.
+		size_t iCount = 0;
 
-	pItem = (CItemWeapon*)CreateItem("철검", IT_WEAPON, 3000, 1500, "철로 만든 검");
-	pItem->SetWeaponInfo(20, 30, 20.f);
+		file.Read(&iCount, 4);
 
-	pItem = (CItemWeapon*)CreateItem("무한의 대검", IT_WEAPON, 25000, 12500, "무와 한의 대검");
-	pItem->SetWeaponInfo(70, 100, 35.f);
+		for (size_t i = 0; i < iCount; ++i) {
+			CItem* pItem = new CItemWeapon;
+			if (!pItem->Init()) {
+				SAFE_DELETE(pItem);
+				return false;
+			}
+
+			pItem->Load(&file);
+
+			m_vecItem.push_back(pItem);
+		}
+
+		file.Close();
+	}
+	else {
+		// 판매 목록을 만들어 준다.
+		CItemWeapon* pItem = (CItemWeapon*)CreateItem("목검", IT_WEAPON, 1000, 500, "나무로 만든 검");
+		pItem->SetWeaponInfo(5, 10, 10.f);
+
+		pItem = (CItemWeapon*)CreateItem("철검", IT_WEAPON, 3000, 1500, "철로 만든 검");
+		pItem->SetWeaponInfo(20, 30, 20.f);
+
+		pItem = (CItemWeapon*)CreateItem("무한의 대검", IT_WEAPON, 25000, 12500, "무와 한의 대검");
+		pItem->SetWeaponInfo(70, 100, 35.f);
+	}
 
 	return true;
 }

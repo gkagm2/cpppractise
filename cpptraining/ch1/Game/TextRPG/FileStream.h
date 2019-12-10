@@ -40,3 +40,5 @@ public:
 };
 
 const string g_strMonsterListFileName = "MonsterList.mtl";
+const string g_strWeaponStoreItemListFileName = "StoreWeapon.swp";
+const string g_strArmorStoreItemListFileName = "StoreArmor.sar";

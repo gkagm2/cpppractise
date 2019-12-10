@@ -1,5 +1,6 @@
 #include "EditorCore.h"
 #include "EditorMonster.h"
+#include "EditorItem.h"
 
 DEFINITION_SINGLE(CEditorCore)
 
@@ -16,6 +17,7 @@ CEditorCore::CEditorCore() {
 
 CEditorCore::~CEditorCore() {
 	DESTROY_SINGLE(CEditorMonster);
+	DESTROY_SINGLE(CEditorItem);
 }
 
 bool CEditorCore::Init()
@@ -23,6 +25,10 @@ bool CEditorCore::Init()
 	if (!GET_SINGLE(CEditorMonster)->Init()) {
 		return false;
 	}
+	if (!GET_SINGLE(CEditorItem)->Init()) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -35,7 +41,7 @@ void CEditorCore::Run()
 			break;
 
 		case EM_ITEM:
-
+			GET_SINGLE(CEditorItem)->Run();
 			break;
 
 		case EM_EXIT:

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "ObjectManager.h"
 #include "Inventory.h"
+#include "FileStream.h"
 
 
 CStoreArmor::CStoreArmor()
@@ -16,15 +17,39 @@ CStoreArmor::~CStoreArmor()
 
 bool CStoreArmor::Init()
 {	
-	// ÆÇ¸Å ¸ñ·ÏÀ» ¸¸µé¾î ÁØ´Ù.
-	CItemArmor* pItem = (CItemArmor*)CreateItem("Ãµ°©¿Ê", IT_ARMOR, 1000, 500, "ÃµÀ¸·Î ¸¸µç ¿Ê");
-	pItem->SetArmorInfo(3, 5);
+	CFileStream file(g_strArmorStoreItemListFileName.c_str(), "rb");
 
-	pItem = (CItemArmor*)CreateItem("°¡Á×°©¿Ê", IT_ARMOR, 3000, 1500, "°¡Á×À¸·Î ¸¸µç Áú±ä °©¿Ê");
-	pItem->SetArmorInfo(10, 20);
+	if (file.GetOpen()) {
+		// ¹æ¾î±¸ ¼ö¸¦ ºÒ·¯¿Â´Ù.
+		size_t iCount = 0;
 
-	pItem = (CItemArmor*)CreateItem("°¡½Ã °©¿Ê", IT_ARMOR, 25000, 12500, "°¡½Ã·Î ¸¸µç °©¿Ê");
-	pItem->SetArmorInfo(30, 50);
+		file.Read(&iCount, 4);
+
+		for (size_t i = 0; i < iCount; ++i) {
+			CItem* pItem = new CItemArmor;
+			if (!pItem->Init()) {
+				SAFE_DELETE(pItem);
+				return false;
+			}
+
+			pItem->Load(&file);
+
+			m_vecItem.push_back(pItem);
+		}
+
+		file.Close();
+	}
+	else {
+		// ÆÇ¸Å ¸ñ·ÏÀ» ¸¸µé¾î ÁØ´Ù.
+		CItemArmor* pItem = (CItemArmor*)CreateItem("Ãµ°©¿Ê", IT_ARMOR, 1000, 500, "ÃµÀ¸·Î ¸¸µç ¿Ê");
+		pItem->SetArmorInfo(3, 5);
+
+		pItem = (CItemArmor*)CreateItem("°¡Á×°©¿Ê", IT_ARMOR, 3000, 1500, "°¡Á×À¸·Î ¸¸µç Áú±ä °©¿Ê");
+		pItem->SetArmorInfo(10, 20);
+
+		pItem = (CItemArmor*)CreateItem("°¡½Ã °©¿Ê", IT_ARMOR, 25000, 12500, "°¡½Ã·Î ¸¸µç °©¿Ê");
+		pItem->SetArmorInfo(30, 50);
+	}
 
 	return true;
 }
