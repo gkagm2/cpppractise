@@ -10,7 +10,7 @@ public:
 private:
 	static CCore* m_pInst;
 
-private:
+public:
 	static CCore* GetInst() {
 		if (!m_pInst) { // null¿Ã∂Û∏È
 			m_pInst = new CCore();

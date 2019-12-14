@@ -2,13 +2,15 @@
 #include "Core.h"
 
 int main() {
-	
-	// TODO (장현명) : 피곤해서 못하것다 자야지
-	//if (!CCore::GetInst()->Init()) {
-	// }
 
+	if (!CCore::GetInst()->Init()) {
+		CCore::DestroyInst();
+		return 0;
+	}
 
+	CCore::GetInst()->Run();
 
+	CCore::DestroyInst();
 
 	return 0;
 }
