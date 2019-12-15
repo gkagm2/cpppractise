@@ -23,7 +23,7 @@ public:
 	}
 
 private:
-	class CStage*	;
+	class CStage* m_pCurStage;
 
 public:
 	bool Init();
