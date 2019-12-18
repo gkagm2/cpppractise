@@ -1,20 +1,29 @@
 #include "Core.h"
 #include "StageManager.h"
+#include "ShapeManager.h"
 
 CCore* CCore::m_pInst = NULL;
 
 CCore::CCore()
 {
+	srand((unsigned int)time(0));
 }
 
 
 CCore::~CCore()
 {
+	CShapeManager::DestroyInst();
 	CStageManager::DestroyInst();
 }
 
 bool CCore::Init()
 {
+	m_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (m_hConsole == INVALID_HANDLE_VALUE) {
+		return false;
+	}
+
 	// 스테이지 관리자 초기화
 	if (!CStageManager::GetInst()->Init()) {
 		return false;
@@ -23,10 +32,20 @@ bool CCore::Init()
 	return true;
 }
 
-bool CCore::Run()
+void CCore::Run()
 {
-	cout << "Tetris" << endl;
 	CStageManager::GetInst()->Run();
 
-	return true;
+	SetConsolePos(2,3);
+	cout << "Test" << endl;
+
+	SetConsolePos(0, 1);
+	cout << "Test2" << endl;
+}
+
+void CCore::SetConsolePos(int x, int y)
+{
+	// 한칸은 2byte를 사용하기 때문에 *2 를 해준다.
+	COORD pos = { x * 2, y };
+	SetConsoleCursorPosition(m_hConsole, pos);
 }

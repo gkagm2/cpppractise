@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <time.h>
+#include <Windows.h>
+#include <list>
 
 #include "Macro.h"
+#include "Flags.h"
 using namespace std;
 
 #define STAGE_WIDTH 10
