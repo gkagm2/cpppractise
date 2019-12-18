@@ -13,9 +13,70 @@ using namespace std;
 typedef struct _tagPosition {
 	int x;
 	int y;
-	
-	// TODO (장현명) : 졸려서못하겠다...
-	//_tagPosition
-		
+
+	_tagPosition() : x(0), y(0) {
+
 	}
-};
+
+	_tagPosition(const _tagPosition& pos) {
+		*this = pos;
+	}
+
+	_tagPosition(const int _x, const int _y) : x(_x), y(_y) {
+	}
+
+	// operator +
+	_tagPosition operator +(const _tagPosition& pos) {
+		_tagPosition p;
+		p.x = x + pos.x;
+		p.y = y + pos.y;
+		return p;
+	}
+
+	_tagPosition operator +(int i) {
+		_tagPosition p;
+		p.x = x + i;
+		p.y = y + i;
+		return p;
+	}
+
+	void operator +=(const _tagPosition& pos) {
+		x += pos.x;
+		y += pos.y;
+	}
+	void operator+=(int i) {
+		x += i;
+		y += i;
+	}
+
+	// operator -
+	_tagPosition operator -(const _tagPosition& pos) {
+		_tagPosition p;
+		p.x = x - pos.x;
+		p.y = y - pos.y;
+		return p;
+	}
+
+	_tagPosition operator -(int i) {
+		_tagPosition p;
+		p.x = x - i;
+		p.y = y - i;
+		return p;
+	}
+
+	void operator -=(const _tagPosition& pos) {
+		x -= pos.x;
+		y -= pos.y;
+	}
+	void operator -=(int i) {
+		x -= i;
+		y -= i;
+	}
+
+	// operator =
+	void operator =(const _tagPosition& pos) {
+		x = pos.x;
+		y = pos.y;
+	}
+	
+}POSITION, *PPOSITION;
