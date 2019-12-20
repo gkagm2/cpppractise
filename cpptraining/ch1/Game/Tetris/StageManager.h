@@ -26,6 +26,11 @@ private:
 	class CStage* m_pCurStage;
 
 public:
+	class CStage* GetCurrentStage() const {
+		return m_pCurStage;
+	}
+
+public:
 	bool Init();
 	bool Run();
 };

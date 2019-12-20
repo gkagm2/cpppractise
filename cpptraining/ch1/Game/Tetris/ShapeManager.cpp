@@ -1,12 +1,14 @@
 #include "ShapeManager.h"
 #include "Rectangle.h"
+#include "StageManager.h"
+#include "Stage.h"
 
 CShapeManager* CShapeManager::m_pInst = NULL;
 
 CShapeManager::CShapeManager() : m_pCurShape(NULL), m_pNextShape(NULL)
 {
-	m_pCurShape = CreateRandomShape();
-	
+	m_pCurShape =  CreateRandomShape();
+	m_iSpeed = 0;
 }
 
 
@@ -23,7 +25,13 @@ CShapeManager::~CShapeManager()
 
 void CShapeManager::Update()
 {
-	m_pCurShape->MoveDown();
+	CStage* pStage = CStageManager::GetInst()->GetCurrentStage();
+	++m_iSpeed;
+
+	if (pStage->GetSpeed() == m_iSpeed) {
+		m_pCurShape->MoveDown();
+		m_iSpeed = 0;
+	}
 }
 
 void CShapeManager::Render()
@@ -55,6 +63,7 @@ CShape * CShapeManager::CreateShape(SHAPE_TYPE eType)
 	}
 
 	if (!pShape->Init()) {
+		SAFE_DELETE(pShape);
 		return NULL;
 	}
 	return pShape;

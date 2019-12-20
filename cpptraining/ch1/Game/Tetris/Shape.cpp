@@ -25,10 +25,15 @@ bool CShape::Init()
 
 void CShape::Render()
 {
-	// 콘솔창에 출력할 좌표를 설정한 후 출력.
-	CCore::GetInst()->SetConsolePos(m_tPos.x, m_tPos.y);
-
 	for (int i = 0; i < 4; ++i) {
+		int iYIndex = m_tPos.y - (3 - i);
+		if (iYIndex < 0) {
+			continue;
+		}
+
+		// 콘솔창에 출력할 좌표를 설정한 후 출력.
+		CCore::GetInst()->SetConsolePos(m_tPos.x, iYIndex);
+
 		for (int j = 0; j < 4; ++j) {
 			if (m_cShape[i][j] == '0') { // 블록이면
 				cout << "□";
@@ -37,6 +42,7 @@ void CShape::Render()
 				cout << ' ';
 			}
 		}
+		cout << endl;
 	}
 }
 

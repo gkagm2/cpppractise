@@ -2,7 +2,7 @@
 
 
 
-CStage::CStage()
+CStage::CStage() : m_iSpeed(10) // 1초에 10번 반복
 {
 }
 

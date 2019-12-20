@@ -38,11 +38,6 @@ bool CRectangle::Init()
 	m_iWidthCount = 2; // 가로 개수는 2개
 	m_tPos.x = 4;
 	m_tPos.y = 0;
-
-	//// pivot setting
-	//m_tPivot.x = 1;
-	//m_tPivot.y = 3;
-	//
 	
 	return true;
 }

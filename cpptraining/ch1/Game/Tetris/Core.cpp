@@ -34,13 +34,13 @@ bool CCore::Init()
 
 void CCore::Run()
 {
-	CStageManager::GetInst()->Run();
-
-	SetConsolePos(2,3);
-	cout << "Test" << endl;
-
-	SetConsolePos(0, 1);
-	cout << "Test2" << endl;
+	while (true) {
+		system("cls");
+		CShapeManager::GetInst()->Update();
+		CStageManager::GetInst()->Run();
+		CShapeManager::GetInst()->Render();
+		Sleep(1000);
+	}
 }
 
 void CCore::SetConsolePos(int x, int y)
