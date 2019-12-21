@@ -28,6 +28,7 @@ void CShapeManager::Update()
 	CStage* pStage = CStageManager::GetInst()->GetCurrentStage();
 	++m_iSpeed;
 
+	// TODO Sagacity Jang : 메모리 에러해결 (GetSpeed())
 	if (pStage->GetSpeed() == m_iSpeed) {
 		m_pCurShape->MoveDown();
 		m_iSpeed = 0;
