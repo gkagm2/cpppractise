@@ -193,7 +193,7 @@ int main() {
 	hMidiDevice = MIDIOpen(0);
 
 	if (hMidiDevice == NULL)
-		return;
+		return 0;
 
 	// 파이노 화면 출력
 	PrintPiano();
@@ -255,7 +255,7 @@ int main() {
 		MIDIAllChannelSoundOff(hMidiDevice);
 
 		// 열린 미디 장치를 닫기
-		MIDIClose(hMidiDevice);
+		MIDIClose(hMidiDevice); 
 	}
 
 
