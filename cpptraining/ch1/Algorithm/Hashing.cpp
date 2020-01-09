@@ -112,8 +112,34 @@ void Delete() {
 
 }
 
-void Find() {
+void Find(char *name) {
+	// 이름을 찾는다.
+	int idx;
+	idx = HashFunction(name);
 
+	STUDENT *cur;
+	cur = hashTable[idx];
+	
+	// 없으면
+	if (cur == 0) {
+		cout << "데이터가 없습니다." << endl;
+		system("pause");
+		return;
+	}
+
+	
+	while (strcmp(cur->name, name) != 0) { // 같지 않으면
+		cur = cur->next;
+		if (cur == 0) {
+			cout << "데이터가 없습니다." << endl;
+			system("pause");
+			return;
+		}
+	}
+
+	// 이름에 해당하는 데이터가 있으면 출력한다.
+	cout << "학생 이름 : " << cur->name << "\t 나이 : " << cur->age << "\t 번호 : " << cur->number << endl;
+	system("pause");
 }
 
 void ShowList() {
@@ -152,12 +178,13 @@ int main() {
 			break;
 		}
 		switch (iMenu) {
-		case e_insert:
+		case e_insert: 
+			{
 			char name[NAME_SIZE];
 			int age;
 			int number;
 			cout << "이름 : ";
-			InputString(name,NAME_SIZE);
+			InputString(name, NAME_SIZE);
 			cout << "나이 : ";
 			age = Input<int>();
 			cout << "학생 번호 : ";
@@ -167,12 +194,20 @@ int main() {
 
 			cout << "삽입 완료" << endl;
 			system("pause");
+			}
+			
 			break;
 		case e_delete:
 			Delete();
 			break;
-		case e_find:
-			Find();
+		case e_find: 
+			{
+			cout << " 찾은 데이터 이름을 입력하세요 : ";
+			char name[NAME_SIZE];
+			InputString(name, NAME_SIZE);
+			Find(name);
+			}
+			
 			break;
 		case e_list:
 			ShowList();
