@@ -164,6 +164,9 @@ int main() {
 			number = Input<int>();
 
 			Insert(name, age, number);
+
+			cout << "»ğÀÔ ¿Ï·á" << end;
+			system("pause");
 			break;
 		case e_delete:
 			Delete();
