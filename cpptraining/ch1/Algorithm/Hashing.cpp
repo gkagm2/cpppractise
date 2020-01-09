@@ -165,7 +165,7 @@ int main() {
 
 			Insert(name, age, number);
 
-			cout << "»ğÀÔ ¿Ï·á" << end;
+			cout << "»ğÀÔ ¿Ï·á" << endl;
 			system("pause");
 			break;
 		case e_delete:
