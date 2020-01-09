@@ -5,7 +5,8 @@
 #include <Windows.h>
 #include <mmsystem.h>
 
-#define NKEY 127
+#define NKEY 29
+#define NINSTRUMENT 128
 
 // link : https://docs.microsoft.com/en-us/windows/win32/multimedia/midi-reference
 // winmm.lib 파일을 링크할때 추가
@@ -232,7 +233,7 @@ int main() {
 		// 키보드 키를 떼었을때
 		for (key = 0; key < NKEY; ++key) {
 			//szMusKey배열의 i번째 값에 해당하는 키가 입력된 것이 아니라면
-			if (!(GetKeyState(pianoKey[key] < 0))) {
+			if (!(GetKeyState(pianoKey[key]) < 0)) {
 				// 그 키가 입력된 적이 있는 키이면
 				if (pianoKeyOnOff[key] != 0) {
 					// 누른 적이 없는 걸로 기록
@@ -243,20 +244,23 @@ int main() {
 				}
 			}
 		}
+	}
 
-		// ESC로 나가면 현재 연주중인 소리를 모두 끔
-		for (key = 0; key < NKEY; ++key) {
+	// ESC로 나가면 현재 연주중인 소리를 모두 끔
+	for (key = 0; key < NKEY; ++key) {
+		if (!(GetKeyState(pianoKey[key]) < 0)) {
 			if (pianoKeyOnOff[key] != 0) {
 				MIDISendShortMsg(hMidiDevice, 0x80, (BYTE)(octave + key), velocity);
+
 			}
 		}
-
-		// 모든 채널 사운드 끄기
-		MIDIAllChannelSoundOff(hMidiDevice);
-
-		// 열린 미디 장치를 닫기
-		MIDIClose(hMidiDevice); 
 	}
+
+	// 모든 채널 사운드 끄기
+	MIDIAllChannelSoundOff(hMidiDevice);
+
+	// 열린 미디 장치를 닫기
+	MIDIClose(hMidiDevice);
 
 
 	return 0;
