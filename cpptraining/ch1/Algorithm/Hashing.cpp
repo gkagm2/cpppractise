@@ -47,22 +47,27 @@ using namespace std;
 //	}
 //};
 
+#define NAME_SIZE 20
+
+// hash
+#define HASHTABLE_SIZE 30
+
 typedef struct tStudent {
-	char name[20];
+	char name[NAME_SIZE];
 	int age;
 	int number;
 	tStudent *next;
 }STUDENT, *PSTUDENT;
 
-#define HASHTABLE_SIZE 30
 STUDENT *hashTable[HASHTABLE_SIZE];
 
 enum E_MENU{
-	e_exit,
+	e_none,
 	e_insert,
 	e_delete,
 	e_find,
-	e_list
+	e_list,
+	e_exit
 };
 
 int HashFunction(char *str) {
@@ -81,7 +86,7 @@ void Insert(char *name, int age, int number) {
 	int idx;
 
 	curNode = new STUDENT();
-	strcpy(curNode->name, name);
+	strcpy_s(curNode->name, name);
 	curNode->age = age;
 	curNode->number = number;
 	curNode->next = NULL;
@@ -115,13 +120,32 @@ void ShowList() {
 
 }
 
+template <typename T>
+T Input() {
+	T data;
+	cin >> data;
+	if (cin.fail()) {
+		cin.clear();
+		cin.ignore(1024, '\n');
+		return 0;
+	}
+	return data;
+}
+
+
+void InputString(char *pString, int iSize) {
+	cin.clear();
+	cin.ignore(1024, '\n');
+	cin.getline(pString, iSize - 1);
+}
+
 
 // 해싱을 이용한 학생 데이터 관리
 int main() {
 	while (true) {
 		system("cls");
 
-		cout << "1. 삽입, 2. 삭제, 3. 조회, 4. 목록, 0. 종료" << endl;
+		cout << "1. 삽입, 2. 삭제, 3. 조회, 4. 목록, 5. 종료" << endl;
 		int iMenu;
 		cin >> iMenu;
 		if (iMenu == e_exit) {
@@ -129,7 +153,17 @@ int main() {
 		}
 		switch (iMenu) {
 		case e_insert:
-			Insert();
+			char name[NAME_SIZE];
+			int age;
+			int number;
+			cout << "이름 : ";
+			InputString(name,NAME_SIZE);
+			cout << "나이 : ";
+			age = Input<int>();
+			cout << "학생 번호 : ";
+			number = Input<int>();
+
+			Insert(name, age, number);
 			break;
 		case e_delete:
 			Delete();
