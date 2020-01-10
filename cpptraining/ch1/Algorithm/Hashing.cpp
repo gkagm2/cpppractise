@@ -1,52 +1,6 @@
 #include <iostream>
 using namespace std;
 
-////Hashing
-//typedef int element;
-//
-//class Node {
-//public:
-//	element m_tData;
-//	Node *m_pNext;
-//};
-//
-//class LinkedList {
-//public:
-//	Node *m_pBegin;
-//	int m_iSize;
-//
-//	LinkedList() : m_pBegin(NULL){
-//	}
-//	~LinkedList() {
-//		delete m_pBegin;
-//	}
-//
-//	void Insert(element data) {
-//		Node *newNode = new Node();
-//		newNode->m_tData = data;
-//		newNode->m_pNext = NULL;
-//
-//		
-//		// 아무것도 없을 경우.
-//		if (m_iSize == 0) {
-//			m_pBegin = newNode;
-//			
-//		}
-//		// 한개 이상일 경우
-//		else {
-//			Node *iterNode = m_pBegin; // 맨 마지막 노드에 추가한다.
-//			while (iterNode->m_pNext != NULL) {
-//				iterNode = iterNode->m_pNext;
-//			}
-//			iterNode->m_pNext = newNode;
-//		}
-//		++m_iSize;
-//	}
-//
-//	element Delete(element data) {
-//	}
-//};
-
 #define NAME_SIZE 20
 
 // hash
@@ -126,7 +80,6 @@ void Find(char *name) {
 		system("pause");
 		return;
 	}
-
 	
 	while (strcmp(cur->name, name) != 0) { // 같지 않으면
 		cur = cur->next;
