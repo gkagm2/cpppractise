@@ -22,12 +22,24 @@ int main() {
 	MakeRightSubTree(bt2, bt5);
 
 	// bt1의 왼쪽 자식 노드의 데이터 출력
-	cout << GetData(GetLeftSubTree(bt1)) << endl;
+	//cout << GetData(GetLeftSubTree(bt1)) << endl;
+	cout << "전위 : ";
+	PreorderTraversal(bt1);
+
+	cout << endl;
+	cout << "중위 : ";
+	InorderTraversal(bt1);
+
+	cout << endl;
+	cout << "후위 : ";
+	PostorderTraversal(bt1);
+
+	DeleteTree(bt1);
 
 	return 0;
 }
 
-BTreeNode * MakeBTreeNode(BTData = NULL)
+BTreeNode * MakeBTreeNode()
 {
 	BTreeNode *newBTNode = new BTreeNode();
 	newBTNode->left = NULL;
@@ -69,4 +81,66 @@ void MakeRightSubTree(BTreeNode * main, BTreeNode * sub)
 		delete main->right;
 	}
 	main->right = sub;
+}
+
+void DeleteTree(BTreeNode * bt)
+{
+	if (bt == NULL) {
+		return;
+	}
+	// 후위로 없애기 
+
+	// left sub node traversal
+	DeleteTree(bt->left);
+	// right sub node traversal
+	DeleteTree(bt->right);
+	// middle node traversal
+	cout << bt->data << " 삭제, ";
+	delete bt;
+}
+
+// 전위 순회
+void PreorderTraversal(BTreeNode * bt)
+{
+	if (bt == NULL) {
+		return;
+	}
+
+	// middle node traversal
+	cout << bt->data << " -> ";
+	// left sub node traversal
+	PreorderTraversal(bt->left);
+	// right sub node traversal
+	PreorderTraversal(bt->right);
+
+}
+
+// 중위 순회
+void InorderTraversal(BTreeNode * bt)
+{
+	if (bt == NULL) {
+		return;
+	}
+
+	// left sub node traversal
+	InorderTraversal(bt->left);
+	// middle node traversal
+	cout << bt->data << " -> ";
+	// right sub node traversal
+	InorderTraversal(bt->right);
+}
+
+// 후위 순회
+void PostorderTraversal(BTreeNode * bt)
+{
+	if (bt == NULL) {
+		return;
+	}
+
+	// left sub node traversal
+	PostorderTraversal(bt->left);
+	// right sub node traversal
+	PostorderTraversal(bt->right);
+	// middle node traversal
+	cout << bt->data << " -> ";
 }
