@@ -28,9 +28,10 @@ void HInsert(Heap * pHeap, HData data, Priority priority)
 	newElem.priority = idx;
 	newElem.data = data;
 
-	while (idx != 1) { // heap에 데이터가 있으면
-		//if(pHeap->heapArr[GetParent])
-	}
+	// TODO (Sagacity Jang) : 여기부터
+	//while (idx != 1) { // heap에 데이터가 있으면
+	//	if(priority < pHeap->heapArr[GetParentIdx(idx)])
+	//}
 }
 
 HData HDelete(Heap * pHeap)
@@ -69,8 +70,12 @@ int GetRightChildIdx(int idx)
 // 두 개의 자식 노드를 비교하여 우선순위가 더 높은 자식 노드 인덱스 값을 반환
 int GetHighPriorityChildIdx(Heap * pHeap, int idx)
 {
-	if (GetLeftChildIdx(idx) > pHeap->numOfData) {
+	int leftPriority = GetLeftChildIdx(pHeap->heapArr[idx].priority);
+	int rightPriority = GetRightChildIdx(pHeap->heapArr[idx].priority);
 
+	if (leftPriority > rightPriority) {
+		return leftPriority;
 	}
-	return 0;
+
+	return rightPriority;
 }
