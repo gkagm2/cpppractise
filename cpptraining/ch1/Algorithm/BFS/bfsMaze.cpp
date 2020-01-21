@@ -11,7 +11,6 @@ struct Position {
 	int y;
 	
 	Position(int _x = 0, int _y  = 0) : x(_x), y(_y) {}
-public:
 	bool operator==(const Position &_pos) {
 		if (x == _pos.x && y == _pos.y) {
 			return true;
