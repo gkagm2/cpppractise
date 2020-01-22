@@ -1,8 +1,9 @@
 #include <iostream>
 #include <stack>
+#include <Windows.h>
 using namespace std;
 
-#define MAX 100
+#define MAX 8
 #define PATH 0
 #define WALL 1
 #define VISITED 2
@@ -13,13 +14,11 @@ struct Position {
 	int y;
 	Position(int _x=0, int _y=0) : x(_x), y(_y){}
 };
-Position MoveTo(Position pos, int dir) {}
-
 int offset[4][2] = { // 북 동 남 서 방향으로 한 칸 이동할 때 x좌표와 y좌표의 변화량
-	{-1, 0},
-	{0, 1},
+	{0, -1},
 	{1, 0},
-	{0, -1} };
+	{0, 1},
+	{-1, 0} };
 
 Position MoveTo(Position pos, int dir) {
 	Position next;
@@ -28,15 +27,78 @@ Position MoveTo(Position pos, int dir) {
 	return next;
 }
 
-int maze[MAX][MAX];
+// 0 : 길
+// 1 : 벽
+// 2 : 목적지
+// 3 : 출발지 플레이어
+// 4 : pathway
+// 5 : block
+int maze[MAX][MAX] = {
+	{3,0,0,0,0,0,0,1},
+	{0,1,1,0,1,1,0,1},
+	{0,0,0,1,0,0,0,1},
+	{0,1,0,0,1,1,0,0},
+	{0,1,0,0,0,0,1,1},
+	{0,1,0,0,0,1,0,1},
+	{0,0,0,0,0,0,0,1},
+	{0,1,1,1,0,1,0,2},
+};
 int n; // 미로의 크기
 
 Position destinationPos;
 
 
-int ReadMaze() {} // 파일에서 읽어오기
-int PrintMaze() {}
-bool Moveable(Position pos, int dir) {}
+int ReadMaze() {
+	return 0;
+} // 파일에서 읽어오기
+int PrintMaze() {
+
+	for (int y = 0; y < MAX; ++y) {
+		for (int x = 0; x < MAX; ++x) {
+			
+			if (maze[y][x] == 1) {
+				cout << "■";
+			}
+			else if (maze[y][x] == 3) {
+				cout << "※";
+			}
+			else if (maze[y][x] == 4) {
+				cout << "◈";
+			}
+			else if (maze[y][x] == 2) {
+				cout << "◎";
+			}
+			else if (maze[y][x] == 5) {
+				cout << "▦";
+			}
+			if (maze[y][x] == 0) {
+				cout << "□";
+			}
+			
+		}
+		cout << '\n';
+	}
+	return 0;
+}
+bool Moveable(Position pos, int dir) {
+	if (dir == 0) { // 북
+		if (pos.y == 0)
+			return false;
+	}
+	else if (dir == 1) { // 동
+		if (pos.x == MAX - 1)
+			return false;
+	}
+	else if (dir == 2) { // 남
+		if (pos.y == MAX - 1)
+			return false;
+	}
+	else if (dir == 3) { // 서
+		if (pos.x == 0)
+			return false;
+	}
+	return true;
+}
 
 // stack을 위치로 넣었을 경우.
 //int main() {
@@ -78,7 +140,7 @@ bool Moveable(Position pos, int dir) {}
 
 // stack을 방향을 넣었을 경우.
 int main() {
-	ReadMaze();
+	//ReadMaze();
 
 	stack<int> stk; // 위치를 저장 할 스택
 	Position cur(0, 0);
@@ -110,6 +172,7 @@ int main() {
 			}
 			int d = stk.top();
 			stk.pop();
+			maze[cur.x][cur.y] = 5;
 			cur = MoveTo(cur, (d + 2) % 4); // 이전 위치에서 지금 위치에 올 때 d방향으로 이동했었다면 되돌아 가려면 (d+2)%4번 방향으로 이동하면 된다.
 
 			initDir = d + 1; // 되돌아 간 위치에서는 d + 1번 방향부터 시도해보면 된다.
@@ -119,3 +182,4 @@ int main() {
 
 	return 0;
 }
+
