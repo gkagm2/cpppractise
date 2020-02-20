@@ -74,7 +74,6 @@ void BFS(int x, int y) {
 		}
 		Render(xMapSize, yMapSize);
 		Sleep(1000);
-		system("cls");
 	}
 }
 
@@ -97,10 +96,10 @@ void MapSetting(int xSize, int ySize) {
 			}
 		}
 	}
-	system("cls");
 }
 
 void Render(int xSize, int ySize) {
+	system("cls");
 	/*
 	0 : wall
 	1 : path
@@ -111,24 +110,24 @@ void Render(int xSize, int ySize) {
 		for (int x = 0; x < xSize; ++x) {
 			
 			if (map[y][x] == '0') {
-				cout << "■ ";
+				cout << "■";
 			}
 			else if (map[y][x] == '1' && check[y][x] > 0) {
 				cout << check[y][x]<<" ";
 			}
 			else if (map[y][x] == '1' && check[y][x] == 0) {
-				cout << "□ ";
+				cout << "□";
 			}
 
 			else if (map[y][x] == '2' && check[y][x] == 0) {
-				cout << "☆ ";
+				cout << "☆";
 			}
 			else if (map[y][x] == '2' && check[y][x] > 0) {
 				cout << check[y][x] << " ";
 			}
 
 			else if (map[y][x] == '3' && check[y][x] == 0) {
-				cout << "★ ";
+				cout << "★";
 			}
 			else if (map[y][x] == '3' && check[y][x] > 0) {
 				cout << check[y][x] << " ";
@@ -147,6 +146,8 @@ int main() {
 	cin >> yMapSize >> xMapSize;
 	MapSetting(xMapSize, yMapSize);
 
+	Render(xMapSize, yMapSize);
+	Sleep(1000);
 	BFS(g_startPosX, g_startPosY);
 
 	cout << "최단거리 : " << check[g_destinationPosY][g_destinationPosX];
