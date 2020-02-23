@@ -54,12 +54,11 @@ void Insert(char *name, int age, int number) {
 	}
 
 	// collision 생겼을 경우
+
 	// chaining
-	STUDENT *iter = hashTable[idx];
-	while (iter->next != NULL) { // 맨 마지막 노드를 찾음.
-		iter = iter->next;
-	}
-	iter->next = curNode; // 노드의 맨 끝에 삽입
+	STUDENT *iter = hashTable[idx]; // 첫번째 노드르 불러온다.
+	curNode->next = iter; // 새로운 노드의 next를 첫번째 노드로 연결
+	hashTable[idx] = curNode; // 노드의 맨 앞에 삽입
 }
 
 void Delete() {
