@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
 // Without STL
@@ -83,6 +84,31 @@ void UnDirectedGraphSTL() {
 		adjacency[v].push_back(u);
 	}
 }
+
+
+// BFS
+vector<int> adj[10];
+bool vis[10];
+void Bfs() {
+	queue<int> q;
+	q.push(1);
+	vis[1] = true;
+
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+		cout << cur << ' ';
+		for (int i = 0; i < adj[cur].size(); ++i) {
+			int next = adj[cur][i];
+			if (vis[next]) {
+				continue;
+			}
+			q.push(next);
+			vis[next] = true;
+		}
+	}
+}
+
 
 int main() {
 	DirectedGraph();
