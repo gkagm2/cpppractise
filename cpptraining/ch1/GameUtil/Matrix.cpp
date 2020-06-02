@@ -1,4 +1,4 @@
-// Game¿¡ µé¾î°¡´Â ¸ÅÆ®¸¯½º ¿¬»êÀ» Á÷Á¢ ±¸Çö
+// Gameì— ë“¤ì–´ê°€ëŠ” ë§¤íŠ¸ë¦­ìŠ¤ ì—°ì‚°ì„ ì§ì ‘ êµ¬í˜„
 #include<iostream>
 #include<string>
 using namespace std;
@@ -27,19 +27,20 @@ public:
 		SetZero();
 	}
 	void SetZero() {
-		_11 = _12 = _13 = _14 = _21 = _22 = _23 = _24 = _31 = _32 = _33 = _34 = _41 = _42 = _43 = _44 = 0.0f;
+		memset(this, 0, sizeof(Matrix4x4));
+		//_11 = _12 = _13 = _14 = _21 = _22 = _23 = _24 = _31 = _32 = _33 = _34 = _41 = _42 = _43 = _44 = 0.0f;
 	}
 };
 
 
-// ´ÜÀ§Çà·Ä
+// ë‹¨ìœ„í–‰ë ¬
 inline void SetIdentityMatrix4x4(Matrix4x4& m) {
 	m._12 = m._13 = m._14 = m._21 = m._23 = m._24 = 0.0f;
 	m._31 = m._32 = m._34 = m._41 = m._42 = m._43 = 0.0f;
 	m._11 = m._22 = m._33 = m._44 = 1.0f;
 }
 
-// Çà·Ä µ¡¼À
+// í–‰ë ¬ ë§ì…ˆ
 void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	float* pA = (float*)&a;
 	float* pB = (float*)&b;
@@ -55,7 +56,7 @@ void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 
 
 /*
-// Çà·Ä °ö¼À
+// í–‰ë ¬ ê³±ì…ˆ
 void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	float* pA = (float*)&b;
 	float* pB = (float*)&b;
@@ -71,13 +72,13 @@ void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 }
 */
 
-// Çà·Ä ³»Àû
+// í–‰ë ¬ ë‚´ì 
 
 
-// Çà·Ä ¿ÜÀû
+// í–‰ë ¬ ì™¸ì 
 
 
-// ¿ªÇà·Ä
+// ì—­í–‰ë ¬
 
 
 
