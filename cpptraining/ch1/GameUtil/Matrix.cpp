@@ -33,6 +33,20 @@ public:
 };
 
 
+// 매트릭스를 출력한다.
+inline void PrintMatrix(Matrix4x4& m) {
+	float* pM = (float*)&m;
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			cout << pM[4 * i + j] << '\t';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+}
+
+
+
 // 단위행렬
 inline void SetIdentityMatrix4x4(Matrix4x4& m) {
 	m._12 = m._13 = m._14 = m._21 = m._23 = m._24 = 0.0f;
@@ -45,6 +59,8 @@ void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	float* pA = (float*)&a;
 	float* pB = (float*)&b;
 	float pM[16];
+	memset(pM, 0, sizeof(Matrix4x4));
+
 	for (WORD i = 0; i < 4; ++i) {
 		for (WORD j = 0; j < 4; ++j) {
 			pM[4 * i + j] = pA[4 * i + j] + pB[4 * i + j];
@@ -53,24 +69,38 @@ void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	memcpy(&q, pM, sizeof(Matrix4x4));
 }
 
-
-
-/*
-// 행렬 곱셈
-void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
-	float* pA = (float*)&b;
+// 행렬 뺄셈
+void MatrixMinus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
+	float* pA = (float*)&a;
 	float* pB = (float*)&b;
 	float pM[16];
-
-	memset(pM, 0, sizeof(pM));
+	memset(pM, 0, sizeof(Matrix4x4));
 
 	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++i) {
-			
+		for (WORD j = 0; j < 4; ++j) {
+			pM[4 * i + j] = pA[4 * i + j] - pB[4 * i + j];
 		}
 	}
+	memcpy(&q, pM, sizeof(Matrix4x4));
 }
-*/
+
+
+// 행렬 곱셈
+void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
+	float* pA = (float*)&a;
+	float* pB = (float*)&b;
+	float pM[16];
+	memset(pM, 0, sizeof(Matrix4x4));
+
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			for (WORD k = 0; k < 4; ++k) {
+				pM[4 * i + j] += pA[4 * i + k] * pB[4 * k + j];
+			}
+		}
+	}
+	memcpy(&q, pM, sizeof(Matrix4x4));
+}
 
 // 행렬 내적
 
@@ -81,10 +111,7 @@ void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 // 역행렬
 
 
-
-
-int main() {
-
+void Sample_PlusMatrix() {
 	float pM[16];
 
 	memset(pM, 0, sizeof(pM));
@@ -98,13 +125,70 @@ int main() {
 
 	// Matrix Plus test
 	MatrixPlus(m3, m2, m1);
-	float* p3 = (float*)&m3;
-	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++j) {
-			cout << p3[4*i + j];
-		}
-		cout << '\n';
-	}
+	cout << "matrix plus" << '\n';
+	PrintMatrix(m3);
+}
 
+void Sample_MinusMatrix() {
+	float pM[16];
+
+	memset(pM, 0, sizeof(pM));
+	cout << sizeof(pM) << '\n';
+
+	Matrix4x4 m1;
+	memset(&m1, 0, sizeof(Matrix4x4));
+	Matrix4x4 m2;
+	memset(&m2, 0, sizeof(Matrix4x4));
+	Matrix4x4 m3;
+	memset(&m3, 0, sizeof(Matrix4x4));
+
+	m1._11 = 2;
+	m1._22 = 2;
+	m1._33 = 2;
+	m1._12 = 3;
+	
+	m2._11 = 10;
+	m2._22 = 10;
+	m2._33 = 10;
+	m2._12 = 1;
+
+	MatrixMinus(m3, m2, m1);
+
+	cout << "matrix minus" << '\n';
+	PrintMatrix(m3);
+}
+
+void Sample_Multiply() {
+	float pM[16];
+
+	memset(pM, 0, sizeof(pM));
+	cout << sizeof(pM) << '\n';
+
+	Matrix4x4 m1;
+	Matrix4x4 m2;
+	Matrix4x4 m3;
+
+	m1._11 = 2;
+	m1._22 = 2;
+	m1._33 = 2;
+	m1._12 = 3;
+
+	m2._11 = 10;
+	m2._22 = 10;
+	m2._33 = 10;
+	m2._12 = 1;
+
+	MatrixMultiply(m3, m2, m1);
+
+	cout << "matrix multply" << '\n';
+	PrintMatrix(m3);
+}
+
+int main() {
+	Sample_PlusMatrix();
+	cout << '\n';
+	Sample_MinusMatrix();
+	cout << '\n';
+	Sample_Multiply();
 	return 0;
 }
