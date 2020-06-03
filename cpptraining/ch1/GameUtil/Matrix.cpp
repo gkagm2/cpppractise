@@ -102,13 +102,54 @@ void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	memcpy(&q, pM, sizeof(Matrix4x4));
 }
 
+// 이동 행렬
+inline void SetTranslateMatrix(Matrix4x4& m, float tx, float ty, float tz) {
+	SetIdentityMatrix4x4(m);
+	m._41 = tx, m._42 = ty, m._43 = tz;
+}
+
+// 확대,축소 행렬
+inline void SetScaleMatrix(Matrix4x4& m, float sx, float sy, float sz) {
+	SetIdentityMatrix4x4(m);
+	m._11 = sx, m._22 = sy, m._33 = sz;
+}
+
+// 회전 행렬 X
+void SetRotateXMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m._22 = cos(fRads);
+	m._23 = sin(fRads);
+	m._32 = -sin(fRads);
+	m._33 = cos(fRads);
+}
+
+// 회전 행렬 Y
+void SetRotateYMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m._11 = cosf(fRads);
+	m._13 = -sinf(fRads);
+	m._31 = sinf(fRads);
+	m._33 = cos(fRads);
+}
+
+// 회전 행렬 Z
+void SetRotateZMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m._11 = cosf(fRads);
+	m._12 = sinf(fRads);
+	m._21 = -sinf(fRads);
+	m._22 = cos(fRads);
+}
+
+// 역행렬
+
 // 행렬 내적
 
 
 // 행렬 외적
 
 
-// 역행렬
+
 
 
 void Sample_PlusMatrix() {
