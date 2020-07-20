@@ -71,8 +71,8 @@ int main() {
 		endMarginPos.x = (distance - length) * cosf(th) + posStart.x;
 		endMarginPos.y = (distance - length) * sinf(th) + posStart.y;
 
-		startMarginPos.x = (distance + length) * cosf(th) - posEnd.x;
-		startMarginPos.y = (distance + length) * sinf(th) - posEnd.y;
+		startMarginPos.x = length * cosf(th) + posStart.x;
+		startMarginPos.y = length * sinf(th) + posStart.y;
 		
 	}
 	cout << "endMarginPos : " << endMarginPos.x << ", " << endMarginPos.y << "\n";
