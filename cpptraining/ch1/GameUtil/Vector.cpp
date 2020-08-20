@@ -2,6 +2,8 @@
 #include <math.h>
 using namespace std;
 
+const float PI= 3.1415926f;
+
 struct Vector3 {
 	float x;
 	float y;
@@ -64,10 +66,23 @@ float GetDotVector3(Vector3 v1, Vector3 v2)
 	return scala;
 }
 
+
 float GetDistance(Vector3 v1, Vector3 v2) {
 	Vector3 v = v1 - v2;
 	return v.GetMagnitude();
 }
+
+// --------- Math -----------
+// 각도를 호도법으로 변환
+float Degree2Radians(float _degree) {
+	return _degree * PI / 180; // 1 rad = 180deg / pi ~= 57.2958deg
+}
+
+// 호도법을 각도로 변환
+float Radians2Degree(float _radians) {
+	return _radians * 180 / PI; // 1deg = pi / 180 ~= 0.0175 rad
+}
+
 
 
 int main()
@@ -89,7 +104,7 @@ int main()
 	/*
 	// 평면의 법선벡터 구하기
 	Vector3 v5(3, 5, 3);
-	Vector3 v6(21, 1, 0);
+	Vector3 v6(21, 1, 0);o
 	v5 = v5.GetNormalized();
 	v5.PrintPosition();
 	v6 = v6.GetNormalized();
@@ -118,4 +133,11 @@ int main()
 	}
 
 	// 평면에서 특정 포인트와 가장 가까운 포인트
+
+
+	// 각도를 라디안으로 변경하기.
+	cout << "각도를 라디안으로 : " << Degree2Radians(2.0f) << "\n";
+
+	// 라디안을 각도로 변경하기.
+	cout << "라디안을 각도로 : " << Radians2Degree(2.0f) << "\n";
 }
