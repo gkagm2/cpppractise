@@ -16,18 +16,18 @@ struct Vector3 {
 		z = _z;
 	}
 
-	// º¤ÅÍÀÇ Å©±â
+	// ë²¡í„°ì˜ í¬ê¸°
 	float GetLength() {
 		return GetMagnitude();
 	}
 
-	// º¤ÅÍÀÇ Å©±â
+	// ë²¡í„°ì˜ í¬ê¸°
 	float GetMagnitude() {
 		float u = sqrtf(x * x + y * y + z * z);
 		return u;
 	}
 
-	// Á¤±ÔÈ­ (´ÜÀ§º¤ÅÍ ¸¸µé±â)
+	// ì •ê·œí™” (ë‹¨ìœ„ë²¡í„° ë§Œë“¤ê¸°)
 	Vector3 GetNormalized() {
 		float u = GetLength();
 		Vector3 normalizedVec(x / u, y / u, z / u);
@@ -49,7 +49,7 @@ struct Vector3 {
 	}
 };
 
-// ¿ÜÀû
+// ì™¸ì 
 Vector3 GetCross(Vector3 v1, Vector3 v2) {
 	Vector3 p;
 	p.x = (v1.y * v2.z - v1.z * v2.y);
@@ -58,7 +58,7 @@ Vector3 GetCross(Vector3 v1, Vector3 v2) {
 	return p;
 }
 
-// ³»Àû
+// ë‚´ì 
 float GetDotVector3(Vector3 v1, Vector3 v2)
 {
 	float scala = 0;
@@ -73,12 +73,12 @@ float GetDistance(Vector3 v1, Vector3 v2) {
 }
 
 // --------- Math -----------
-// °¢µµ¸¦ È£µµ¹ıÀ¸·Î º¯È¯
+// ê°ë„ë¥¼ í˜¸ë„ë²•ìœ¼ë¡œ ë³€í™˜
 float Degree2Radians(float _degree) {
 	return _degree * PI / 180; // 1 rad = 180deg / pi ~= 57.2958deg
 }
 
-// È£µµ¹ıÀ» °¢µµ·Î º¯È¯
+// í˜¸ë„ë²•ì„ ê°ë„ë¡œ ë³€í™˜
 float Radians2Degree(float _radians) {
 	return _radians * 180 / PI; // 1deg = pi / 180 ~= 0.0175 rad
 }
@@ -102,7 +102,7 @@ int main()
 	*/
 
 	/*
-	// Æò¸éÀÇ ¹ı¼±º¤ÅÍ ±¸ÇÏ±â
+	// í‰ë©´ì˜ ë²•ì„ ë²¡í„° êµ¬í•˜ê¸°
 	Vector3 v5(3, 5, 3);
 	Vector3 v6(21, 1, 0);o
 	v5 = v5.GetNormalized();
@@ -113,31 +113,4 @@ int main()
 	cout << "cross : ";
 	resultV.PrintPosition();
 	*/
-
-	// Æò¸é
-	Vector3 p0(1, 0, 0);
-	Vector3 p(10, 0, 3);
-	Vector3 n(1, -6, 1);
-
-	// n dot p + d = 0 ¹ı¼± º¤ÅÍ¿Í Á÷°¢.
-	// n dot (p - p0) = 0 ´Â ¹ı¼± º¤ÅÍ¿Í Á÷°¢ÀÌ´Ù.
-	float value = GetDotVector3(n, (p - p0).GetNormalized());
-	if (value == 0) { // (p - p0)À¸·Î ±¸¼ºÇÑ º¤ÅÍ°¡ Æò¸éÀÇ ¹ı¼± º¤ÅÍ¿Í Á÷°¢ÀÏ °æ¿ì
-		cout << value << "´Â Á÷°¢ÀÓ" << "\n";
-	}
-	else if (value > 0) {
-		cout << value << "´Â ¾çÀÇ Àı¹İ¿µ¿ª¿¡ ÀÖÀ½\n";
-	}
-	else {
-		cout << value << "´Â À½ÀÇ Àı¹İ¿µ¿ª¿¡ ÀÖÀ½\n";
-	}
-
-	// Æò¸é¿¡¼­ Æ¯Á¤ Æ÷ÀÎÆ®¿Í °¡Àå °¡±î¿î Æ÷ÀÎÆ®
-
-
-	// °¢µµ¸¦ ¶óµğ¾ÈÀ¸·Î º¯°æÇÏ±â.
-	cout << "°¢µµ¸¦ ¶óµğ¾ÈÀ¸·Î : " << Degree2Radians(2.0f) << "\n";
-
-	// ¶óµğ¾ÈÀ» °¢µµ·Î º¯°æÇÏ±â.
-	cout << "¶óµğ¾ÈÀ» °¢µµ·Î : " << Radians2Degree(2.0f) << "\n";
 }
