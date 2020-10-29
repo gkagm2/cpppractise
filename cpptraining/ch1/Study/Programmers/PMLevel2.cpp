@@ -29,7 +29,7 @@ public:
 	int Size() const {
 		return length;
 	}
-	
+
 	void Push(const char _str) {
 		if (isFull()) {
 			IncreaseSize(5);
@@ -37,7 +37,7 @@ public:
 		this->elements[length];
 		elements[length++] = _str;
 	}
-	
+
 	char Pop() {
 		if (length == 0) {
 			return NULL; // error 발생 조심
@@ -72,10 +72,10 @@ private:
 int pipe(const string& str) {
 	int result = 0;
 	Stack st;
-	
+
 	char cBefore;
 	for (int loopi = 0; loopi < str.size(); ++loopi) {
-		
+
 		if (str[loopi] == '(') {
 			st.Push(str[loopi]);
 		}
@@ -86,7 +86,7 @@ int pipe(const string& str) {
 		//else if()str[loopi] == ''
 		cBefore = str[loopi];
 
-		
+
 
 		st.Push(cBefore);
 
