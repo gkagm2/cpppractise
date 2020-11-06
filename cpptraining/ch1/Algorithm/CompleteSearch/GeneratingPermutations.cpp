@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 vector<int> permutation;
@@ -31,6 +32,17 @@ int main() {
 	cin.tie(nullptr);
 	ios::sync_with_stdio(false);
 
-	Search1(v.size());
+	// Type 1
+	// Search1(v.size());
+
+
+	// Type 2
+	// need to include algorithm header 
+	do {
+		for (int i = 0; i < v.size(); ++i) {
+			cout << v[i] << " ";
+		}
+		cout << "\n";
+	} while (next_permutation(v.begin(), v.end()));
 	return 0;
 }
