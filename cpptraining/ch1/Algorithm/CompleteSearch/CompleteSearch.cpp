@@ -22,7 +22,6 @@ void CompleteSearch1(int k, const int n) {
 
 }
 
-
 // Exploit the bit representation integer
 void CompleteSearch2(int m) {
 	cout << (1 << m);
@@ -37,8 +36,6 @@ void CompleteSearch2(int m) {
 		cout << "\n";
 	}
 }
-
-
 
 int main() {
 	cin.tie(nullptr);
