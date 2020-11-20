@@ -14,10 +14,9 @@ int main() {
 	std::unique_ptr<Student> uniq; // 포인팅하고 있는 객체에 대해 단독으로 오너쉽을 가진다.  예외상황이 발생했을 때 메모리 해제를 단순하게 할 수 있다.
 
 	/* 다른 방법의 선언 방법 */
-	auto u = make_unique<Student>();
-	std::unique_ptr<Student> d = make_unique<Student>();
+	Student *pStudent = new Student();
+	auto u = make_unique<Student>(); // C++14 버전부터 지원
 	std::unique_ptr<Student> student(new Student);
-
 
 	// 2. shared_ptr
 	std::shared_ptr<int> shar; // 데이터에 대한 오너십이 여기 저기 분산될 수 있게 해준다. shar 변수가 다른 변수에 대입될 때마다 레퍼런스 카운터가 증가되어 데이터의 오너가 하나 더 늘었다는 것을 표시한다.
