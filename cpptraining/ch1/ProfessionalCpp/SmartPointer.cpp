@@ -16,14 +16,17 @@ int main() {
 	/* 다른 방법의 선언 방법 */
 	Student *pStudent = new Student();
 	auto u = make_unique<Student>(); // C++14 버전부터 지원
-	std::unique_ptr<Student> student(new Student);
+	std::unique_ptr<Student> pu(new Student);
 
 	// 2. shared_ptr
-	std::shared_ptr<int> shar; // 데이터에 대한 오너십이 여기 저기 분산될 수 있게 해준다. shar 변수가 다른 변수에 대입될 때마다 레퍼런스 카운터가 증가되어 데이터의 오너가 하나 더 늘었다는 것을 표시한다.
+	std::shared_ptr<Student> shar; // 데이터에 대한 오너십이 여기 저기 분산될 수 있게 해준다. shar 변수가 다른 변수에 대입될 때마다 레퍼런스 카운터가 증가되어 데이터의 오너가 하나 더 늘었다는 것을 표시한다.
 	// 모든 스코프를 벗어날 때는 레퍼런스 카운터가 0이되므로 이는 오너가 더 이상 없다는 뜻이므로 포인터에 의해 참조되고 있는 객체의 메모리가 해제된다. 배열지원X
+	
+	auto s = make_shared<Student>();
+	std::shared_ptr<Student> ps(new Student);
 
 	// 3. weak_ptr
-	std::weak_ptr<int> weak; // shared_ptr에 대입된 객체를 참조하되 레퍼런스 카운터에 영향을 주고 싶지 않을 때 사용한다.
+	std::weak_ptr<Student> weak; // shared_ptr에 대입된 객체를 참조하되 레퍼런스 카운터에 영향을 주고 싶지 않을 때 사용한다.
 
 	return 0;
 }
