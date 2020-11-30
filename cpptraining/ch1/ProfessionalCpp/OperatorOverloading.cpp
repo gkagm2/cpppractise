@@ -46,6 +46,7 @@ public:
 	}
 	friend MyClass operator+(const MyClass& lhs, const MyClass& rhs);
 	friend MyClass operator+(const int n, const MyClass& rhs);
+	friend bool operator==(const MyClass& lhs, const MyClass& rhs);
 };
 
 // 덧셈을 할 때 인자의 좌 우 위치 관계없이 + 연산자가 동작되게 하려면 전역으로 만들고 friend를 이용해야 한다.
@@ -66,6 +67,11 @@ MyClass operator+(const int n, const MyClass& rhs) {
 MyClass& MyClass::operator+=(const MyClass& rhs) {
 	setValue(mValue + rhs.mValue);
 	return *this;
+}
+
+// 비교 연산자 오버로딩
+bool operator==(const MyClass &lhs, const MyClass&rhs) {
+	return lhs.getValue() == rhs.getValue() ? true : false;
 }
 
 int main() {
@@ -89,5 +95,9 @@ int main() {
 	cout << n.getValue();
 	cout << "\n";
 
+	if (n == m)
+		cout << "true";
+	else
+		cout << "false";
 	return 0;
 }
