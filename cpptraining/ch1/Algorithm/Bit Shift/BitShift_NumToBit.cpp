@@ -2,7 +2,7 @@
 using namespace std;
 
 void PrintBit(const int &num, const int &bitSize) {
-	cout << "number : " << num << " -> bit : ";
+	cout << "number : " << num << " -> \tbit : ";
 	for (int i = bitSize - 1; i >= 0; --i) {
 		if (num & (1 << i))  cout << "1";
 		else cout << "0";
@@ -87,6 +87,39 @@ int GetZeroCountFromBit(const int &num) {
 	return zeroCnt;
 }
 
+
+// Iterating through subsets
+
+// The following code goes through the subsets of {0,1,...,n¢®1}
+void Iterating1(const int &n) {
+	for (int b = 0; b < (1 << n); ++b) {
+		PrintBit(b, n);
+	}
+	cout << "\n";
+}
+
+// The following code goes through the subsets with exactly k elements
+void Iterating2(const int &n, const int &k) {
+	for (int b = 0; b < (1 << n); ++b) {
+		if (GetOneCountFromBit(b) == k) {
+			PrintBit(b, n);
+		}
+	}
+	cout << "\n";
+}
+
+// The following code goes through the subsets of a set x
+void Iterating3(const int &x) {
+	int b = 0;
+	do {
+		PrintBit(b, x);
+	} while (b = (b - x) & x);
+	cout << "\n";
+}
+
+
+
+
 int main() {
 	int num = 9;
 	
@@ -126,6 +159,16 @@ int main() {
 
 	cout << "Counts the number of bits set to one.\n";
 	cout << GetOneCountFromBit(num) << "\n";
+
+	/////////////// Iterating
+	cout << "The following code goes through the subsets of {0,1,...,n¢®1}\n";
+	Iterating1(4);
+
+	cout << "The following code goes through the subsets with exactly k elements\n";
+	Iterating2(4, 3);
+
+	cout << "The following code goes through the subsets of a set x\n";
+	Iterating3(60);
 
 	return 0;
 }
