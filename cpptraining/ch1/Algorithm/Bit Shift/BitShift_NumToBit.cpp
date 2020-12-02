@@ -54,11 +54,37 @@ int InvertsAllTheBitsAfterLastOneBit(const int &num) {
 
 // A positive number x is a power of two exactly when x & (x - 1) ==  0
 // ¾ç¼ö x´Â x & (x - 1) == 0 ÀÏ ¶§ 2ÀÇ °Åµì Á¦°ö
-void CheckPowerOfTwo(int num) {
+void CheckPowerOfTwo(const int &num) {
 	int checkNum = num & (num - 1);
 	if (checkNum == 0) cout << num << "is power of two\n";
 	else cout << num << "isn't power of two\n";
 	PrintBit(num & (num - 1), 32);
+}
+
+// Prints all elements that belong to the set
+void PrintsAllElements(const int &num) {
+	for (int i = 0; i < 32; ++i) {
+		if (num & (1 << i))
+			cout << i << "|";
+	}
+	cout << "\n";
+}
+
+int GetOneCountFromBit(const int &num) {
+	int oneCnt = 0;
+	for (int i = 0; i < 32; ++i) {
+		if ((num & (1 << i)))
+			++oneCnt;
+	}
+	return oneCnt;
+}
+int GetZeroCountFromBit(const int &num) {
+	int zeroCnt = 0;
+	for (int i = 0; i < 32; ++i) {
+		if (!(num & (1 << i)))
+			++zeroCnt;
+	}
+	return zeroCnt;
 }
 
 int main() {
@@ -91,5 +117,15 @@ int main() {
 
 	cout << "~~~~~~\n";
 	CheckPowerOfTwo(num);
+
+	cout << "Prints all elements that belong to to set\n";
+	PrintsAllElements(num);
+
+	cout << "Counts the number of bits set to zero.\n";
+	cout << GetZeroCountFromBit(num) << "\n";
+
+	cout << "Counts the number of bits set to one.\n";
+	cout << GetOneCountFromBit(num) << "\n";
+
 	return 0;
 }
