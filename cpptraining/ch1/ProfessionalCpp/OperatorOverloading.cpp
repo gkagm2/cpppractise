@@ -1,15 +1,22 @@
 #include <iostream>
 using namespace std;
-static int a = 0;
+
 class MyClass {
 private:
-	int myCode;
+	static int myCode;
+private:
 	int mValue = 0;
 public:
-	MyClass() {
-		myCode = a++;
+	explicit MyClass() {
+		myCode++;
 	}
-	explicit MyClass(int n) : mValue(n) {};
+	explicit MyClass(int n) : mValue(n) {
+		MyClass();
+	};
+
+	int GetCode() {
+		return myCode;
+	}
 
 	MyClass operator+(const MyClass& op) const {
 		MyClass newClass;
@@ -39,8 +46,6 @@ public:
 		return mValue;
 	}
 
-	
-
 	int getCode() const {
 		return myCode;
 	}
@@ -48,6 +53,8 @@ public:
 	friend MyClass operator+(const int n, const MyClass& rhs);
 	friend bool operator==(const MyClass& lhs, const MyClass& rhs);
 };
+
+int MyClass::myCode = 0;
 
 // 덧셈을 할 때 인자의 좌 우 위치 관계없이 + 연산자가 동작되게 하려면 전역으로 만들고 friend를 이용해야 한다.
 MyClass operator+(const MyClass& lhs, const MyClass& rhs) {
