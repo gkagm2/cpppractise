@@ -118,7 +118,7 @@ int main() {
 	cout << "~~~~~~\n";
 	CheckPowerOfTwo(num);
 
-	cout << "Prints all elements that belong to to set\n";
+	cout << "Prints all elements that belong to set\n";
 	PrintsAllElements(num);
 
 	cout << "Counts the number of bits set to zero.\n";
