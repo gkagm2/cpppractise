@@ -25,6 +25,40 @@ int Div(int a, int b) {
 
 int main() {
 	void(*ffp)();
+	int(*fp[4])(int, int) = { Plus, Minus, Mul, Div }; // 함수 포인터 배열
+
+	int select;
+	int a, b;
+	while (true) {
+		system("cls");
+
+		cout << "1.Plus 2.Minus, 3.Mul 4.Div 5.Exit\n";
+		cin >> select;
+
+		ffp = Intro;
+		ffp();
+
+		if (select == 5)
+			return 0;
+		if(select < 1 || select > 4)
+			continue;
+
+
+		cout << "input a : ";
+		cin >> a;
+		cout << "input b : ";
+		cin >> b;
+
+		int value = fp[select - 1](a, b); // 함수 포인터 배열을 이용한 호출
+		cout << "result : " << value << "\n";
+		system("pause");
+	}
+
+	return 0;
+}
+/*
+int main() {
+	void(*ffp)();
 	int(*fp)(int, int); // 함수 포인터 변수 // 
 
 	int select;
@@ -69,3 +103,4 @@ int main() {
 
 	return 0;
 }
+*/
