@@ -27,7 +27,7 @@ int IsPrime_slow(int n) {
 int IsPrime_Eratosthenes(int n) {
 	// 동적 배열 생성
 	int *pArr = new int[n + 1](); // 0이면 소수 1이면 소수 아님
-	memset(pArr, 0, sizeof(pArr));// 메모리 초기화
+	memset(pArr, 0, sizeof(int) * (n + 1));// 메모리 초기화
 
 	// 에라토스테네스의 체를 이용하여 각 인덱스값이 소수인지 세팅
 	int j = 0;
