@@ -51,10 +51,28 @@ void CNewVector<T>::Set(T tx, T ty, T tz) {
 	z = tz;
 }
 
+//////////////////////
+
+// 타입이 T가 아닐 경우
+class CNewVector1 : public std::CVector<int> {
+	int z;
+public:
+	void Set(int tx, int ty, int tz) {
+		std::CVector<int>::Set(tx, ty);
+		z = tz;
+	}
+
+	int GetZ() { return z; }
+};
+
 int main() {
 	CNewVector<int> v;
 	v.Set(3, 4, 5);
 	printf("%d, %d ,%d\n", v.GetX(), v.GetY(), v.GetZ());
+
+	CNewVector1 vec;
+	vec.Set(3, 4, 5);
+	printf("%d, %d, %d\n", vec.GetX(), vec.GetY(), vec.GetZ());
 
 	return 0;
 }
