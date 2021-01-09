@@ -45,9 +45,8 @@ void Sort(int arr[], int left, int right) {
 }
 
 void InitArr(int arr[]) {
-	for (int i = 0; i < MAX_ARR_SIZE; ++i) {
+	for (int i = 0; i < MAX_ARR_SIZE; ++i)
 		arr[i] = i + 1;
-	}
 }
 
 void Lotto() {
@@ -61,9 +60,8 @@ void Lotto() {
 		Sort(arr, 0, MAX_SELECT_SIZE - 1);
 		cout << "============================================================\n";
 		cout << cnt << " È¸Â÷ : ";
-		for (int i = 0; i < MAX_SELECT_SIZE; ++i) {
+		for (int i = 0; i < MAX_SELECT_SIZE; ++i)
 			cout << arr[i] << "\t";
-		}
 		cout << "\n";
 	}
 	cout << "============================================================\n";
