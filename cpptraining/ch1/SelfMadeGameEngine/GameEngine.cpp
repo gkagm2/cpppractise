@@ -379,18 +379,62 @@ public:
 	}
 };
 
+class WireBoxObject : public CObject {
+public:
+	virtual void Draw(HDC &hdc) override {
+		// TODO (Jang) : 라인그려서 wire box 그리기
+		Vec3 min = GetMin();
+		Vec3 max = GetMax();
+
+		SetROP2(hdc, R2_NOT); // color setting 어떻게하나?
+		MoveToEx(hdc, min.x, min.y, NULL);
+		LineTo(hdc, min.x, max.y);
+		LineTo(hdc, max.x, max.y);
+		LineTo(hdc, max.x, min.y);
+	}
+};
+
+
+
+
+
 // TODO (Sagacity Jang) : 프레임 워크로 만들기
 void Render() {
 	HWND myConsole = GetConsoleWindow();
-	HDC mdc = GetDC(myConsole);
+	HDC hdc = GetDC(myConsole);
+	PAINTSTRUCT ps;
 
 	for (int i = 0; i < 2; ++i) {
-		gObjects[i]->Draw(mdc);
+		gObjects[i]->Draw(hdc);
 	}
+
+	// TODO (Jang) : 라인그리기 테스트중
+	SetROP2(hdc, R2_NOT);
+	
+	hdc = BeginPaint(myConsole, &ps);
+	MoveToEx(hdc, 10, 50, NULL);
+	LineTo(hdc, 300, 50);
+	EndPaint(myConsole, &ps);
+
+	hdc = BeginPaint(myConsole, &ps);
+
+	MoveToEx(hdc, 0, 0, NULL);
+	LineTo(hdc, 0, 100);
+	LineTo(hdc, 100, 100);
+	LineTo(hdc, 100, 0);
+	EndPaint(myConsole, &ps);
+	MoveToEx(hdc, 0, 0, NULL);
+
+	MoveToEx(hdc, 0, 0, NULL);
+	LineTo(hdc, 0, 200);
+	LineTo(hdc, 200, 200);
+	LineTo(hdc, 200, 0);
+
+	EndPaint(myConsole, &ps);
 
 	cin.ignore();
 	system("cls");
-	ReleaseDC(myConsole, mdc);
+	ReleaseDC(myConsole, hdc);
 }
 
 // Testing
@@ -407,10 +451,16 @@ int main() {
 
 	BoxObject boxObj;
 	boxObj.SetScale(Vec3(0.2f, 0.2f, 0.2f));
-	boxObj2.SetColor(COLOR_RED);
+	boxObj.SetColor(COLOR_RED);
+	boxObj.SetPosition(Vec3(20, 20, 0));
 	gObjects.push_back(&boxObj);
 
-	Vec3 boxPos;
+	WireBoxObject wireBoxObj;
+	wireBoxObj.SetScale(Vec3(0.2f, 0.2f, 0.2f));
+	wireBoxObj.SetColor(COLOR_RED);
+	wireBoxObj.SetPosition(Vec3(150, 150, 0));
+	gObjects.push_back(&wireBoxObj);
+
 	while (true) {
 		Render();
 	}
