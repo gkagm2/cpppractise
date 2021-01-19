@@ -273,6 +273,61 @@ float Radians2Degree(float _radians) {
 	return _radians * 180 / PI; // 1deg = pi / 180 ~= 0.0175 rad
 }
 
+// TODO (Jang) : Æú¸®°ï Á¦ÀÛ
+class CPolygon : public CObject{
+public:
+	CPolygon() {
+		m_sizeIndex = 0;
+		m_sizeVertex = 0;
+	}
+	virtual ~CPolygon() {}
+
+	int m_indexBuffer[100];
+	int m_sizeIndex;
+	Vec3 m_vertexBuffer[100];
+	int m_sizeVertex;
+
+	virtual void Draw(HDC &hdc) override {
+		DrawIndexedPrimitive(hdc, m_indexBuffer, 6, m_vertexBuffer);
+	}
+	void SetIndexBuffer() {
+		int buffer[] = {
+			0,1,
+			1,3,
+			3,0,
+			1,2,
+			2,3,
+			3,1
+		};
+		for (int i = 0; i < 12; ++i) {
+			m_indexBuffer[i] = buffer[i];
+		}
+		m_sizeIndex = 12;
+	}
+	void SetVertexBuffer() {
+		m_vertexBuffer[0] = Vec3(0.0f, 100.0f, 0.0f);
+		m_vertexBuffer[1] = Vec3(0.0f, 0.0f, 0.0f);
+		m_vertexBuffer[2] = Vec3(100.0f, 0.0f, 0.0f);
+		m_vertexBuffer[3] = Vec3(100.0f, 100.0f, 0.0f);
+		m_sizeVertex = 4;
+	}
+};
+
+void DrawIndexedPrimitive(HDC hdc, int * _indexBuffer, int _primitiveCounter, Vec3* _vertexBuffer) {
+	int i1, i2;
+	int counter = 0;
+
+	for (int i = 0; i < _primitiveCounter; ++i) {
+		// get index
+		i1 = _indexBuffer[counter];
+		i2 = _indexBuffer[counter + 1];
+
+		// draw line
+		MoveToEx(hdc, (int)_vertexBuffer[i1].x, (int)_vertexBuffer[i1].y, nullptr);
+		LineTo(hdc, _vertexBuffer[i2].x, _vertexBuffer[i2].y);
+		counter += 2;
+	}
+}
 
 //********************* Using Consle Graphics *******************//
 //************************** Object *****************************//
@@ -404,6 +459,12 @@ void Render() {
 	HDC hdc = GetDC(myConsole);
 	PAINTSTRUCT ps;
 
+	/*
+	CPolygon poly;
+	poly.SetIndexBuffer();
+	poly.SetVertexBuffer();
+	poly.Draw(hdc);
+	*/
 	for (int i = 0; i < 2; ++i) {
 		gObjects[i]->Draw(hdc);
 	}
@@ -412,25 +473,7 @@ void Render() {
 	SetROP2(hdc, R2_NOT);
 	
 	hdc = BeginPaint(myConsole, &ps);
-	MoveToEx(hdc, 10, 50, NULL);
-	LineTo(hdc, 300, 50);
-	EndPaint(myConsole, &ps);
 
-	hdc = BeginPaint(myConsole, &ps);
-
-	MoveToEx(hdc, 0, 0, NULL);
-	LineTo(hdc, 0, 100);
-	LineTo(hdc, 100, 100);
-	LineTo(hdc, 100, 0);
-	EndPaint(myConsole, &ps);
-	MoveToEx(hdc, 0, 0, NULL);
-
-	MoveToEx(hdc, 0, 0, NULL);
-	LineTo(hdc, 0, 200);
-	LineTo(hdc, 200, 200);
-	LineTo(hdc, 200, 0);
-
-	EndPaint(myConsole, &ps);
 
 	cin.ignore();
 	system("cls");
