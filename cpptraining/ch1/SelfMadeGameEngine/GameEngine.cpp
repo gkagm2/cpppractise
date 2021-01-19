@@ -27,6 +27,9 @@ class CObject;
 // all object
 vector<CObject *> gObjects;
 
+// Functions
+void DrawIndexedPrimitive(HDC hdc, int * _indexBuffer, int _primitiveCounter, Vec3* _vertexBuffer);
+
 
 //******************* Matrix ******************//
 struct Matrix4x4 {
@@ -224,6 +227,35 @@ public:
 		return normalizedVec;
 	}
 
+	void RotateX(TYPE _theta) {
+		TYPE tx, ty, tz;
+		tx = x;
+		ty = y * cosf(_theta) - z * sinf(_theta);
+		tz = y * sinf(_theta) + z * cosf(_theta);
+		y = ty;
+		z = tz;
+	}
+	void RotateY(TYPE _theta) {
+		TYPE tx, ty, tz;
+		tx = x * cosf(_theta) + z * sinf(_theta);
+		tz = x * sinf(_theta) + z * cosf(_theta);
+		x = tx;
+		z = tz;
+	}
+	void RotateZ(TYPE _theta) {
+		TYPE tx, ty, tz;
+		tx = x * cosf(_theta) - y * sinf(_theta);
+		ty = x * sinf(_theta) + y * cosf(_theta);
+		x = tx;
+		y = ty;
+	}
+
+	void Translate(TYPE _tx, TYPE _ty, TYPE _tz) {
+		x += _tx;
+		y += _ty;
+		z += _tz;
+	}
+
 	Vector3 operator-(const Vector3& v) {
 
 		Vector3 resultVec(x - v.x, y - v.y, z - v.z);
@@ -274,7 +306,8 @@ float Radians2Degree(float _radians) {
 }
 
 // TODO (Jang) : 폴리곤 제작
-class CPolygon : public CObject{
+
+class CPolygon {
 public:
 	CPolygon() {
 		m_sizeIndex = 0;
@@ -287,7 +320,7 @@ public:
 	Vec3 m_vertexBuffer[100];
 	int m_sizeVertex;
 
-	virtual void Draw(HDC &hdc) override {
+	void Draw(HDC &hdc) {
 		DrawIndexedPrimitive(hdc, m_indexBuffer, 6, m_vertexBuffer);
 	}
 	void SetIndexBuffer() {
@@ -310,6 +343,27 @@ public:
 		m_vertexBuffer[2] = Vec3(100.0f, 0.0f, 0.0f);
 		m_vertexBuffer[3] = Vec3(100.0f, 100.0f, 0.0f);
 		m_sizeVertex = 4;
+	}
+
+	void RotateX(float _theta) {
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			m_vertexBuffer[i].RotateX(_theta);
+		}
+	}
+	void RotateY(float _theta) {
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			m_vertexBuffer[i].RotateY(_theta);
+		}
+	}
+	void RotateZ(float _theta) {
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			m_vertexBuffer[i].RotateZ(_theta);
+		}
+	}
+	void Translate(float tx, float ty, float tz) {
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			m_vertexBuffer[i].Translate(tx, ty, tz);
+		}
 	}
 };
 
@@ -418,10 +472,24 @@ public:
 		UpdateProperty();
 	}
 
+
 	virtual void Draw(HDC &hdc) { cout << "CObject draw\n"; }
 };
 
-class BoxObject : public CObject {
+class Box2DObject : public CObject {
+public:
+	virtual void Draw(HDC &hdc) override {
+		Vec3 min = GetMin();
+		Vec3 max = GetMax();
+		for (int y = min.y; y < max.y; ++y) {
+			for (int x = min.x; x < max.x; ++x) {
+				SetPixel(hdc, x, y, mColor);
+			}
+		}
+	}
+};
+
+class Box3DObject : public CObject {
 public:
 	virtual void Draw(HDC &hdc) override {
 		Vec3 min = GetMin();
@@ -442,37 +510,51 @@ public:
 		Vec3 max = GetMax();
 
 		SetROP2(hdc, R2_NOT); // color setting 어떻게하나?
+		PAINTSTRUCT ps;
+		// hdc = BeginPaint(myConsole, &ps); //TODO Jang) : 이걸 어떻게 가져와야되나..
 		MoveToEx(hdc, min.x, min.y, NULL);
 		LineTo(hdc, min.x, max.y);
 		LineTo(hdc, max.x, max.y);
 		LineTo(hdc, max.x, min.y);
+		// EndPaint(myConsole, &ps);
 	}
 };
 
-
-
-
+float g_fTheta = 0.f;
 
 // TODO (Sagacity Jang) : 프레임 워크로 만들기
 void Render() {
 	HWND myConsole = GetConsoleWindow();
 	HDC hdc = GetDC(myConsole);
-	PAINTSTRUCT ps;
 
-	/*
+	
 	CPolygon poly;
+	SetROP2(hdc, R2_NOT);
 	poly.SetIndexBuffer();
 	poly.SetVertexBuffer();
+	poly.RotateX(PI / 4.0f);
+	poly.RotateZ(g_fTheta);
+	g_fTheta += 0.1f;
+	poly.Translate(150.0f, 100.0f, 0.f);
 	poly.Draw(hdc);
-	*/
+
+	CPolygon poly1;
+	SetROP2(hdc, R2_NOT);
+	poly1.SetIndexBuffer();
+	poly1.SetVertexBuffer();
+	poly1.RotateX(PI / 4.0f);
+	poly1.RotateY(g_fTheta);
+	g_fTheta += 0.1f;
+	poly1.Translate(150.0f, 100.0f, 0.f);
+	poly1.Draw(hdc);
+
+	
 	for (int i = 0; i < 2; ++i) {
 		gObjects[i]->Draw(hdc);
 	}
 
 	// TODO (Jang) : 라인그리기 테스트중
-	SetROP2(hdc, R2_NOT);
 	
-	hdc = BeginPaint(myConsole, &ps);
 
 
 	cin.ignore();
@@ -487,12 +569,12 @@ int main() {
 	ios::sync_with_stdio(false);
 
 	// Create objects
-	BoxObject boxObj2;
+	Box2DObject boxObj2;
 	boxObj2.SetScale(Vec3(0.5f, 0.5f, 0.5f));
 	boxObj2.SetColor(COLOR_GREEN);
 	gObjects.push_back(&boxObj2);
 
-	BoxObject boxObj;
+	Box2DObject boxObj;
 	boxObj.SetScale(Vec3(0.2f, 0.2f, 0.2f));
 	boxObj.SetColor(COLOR_RED);
 	boxObj.SetPosition(Vec3(20, 20, 0));
