@@ -30,139 +30,6 @@ vector<CObject *> gObjects;
 // Functions
 void DrawIndexedPrimitive(HDC hdc, int * _indexBuffer, int _primitiveCounter, Vec3* _vertexBuffer);
 
-
-//******************* Matrix ******************//
-struct Matrix4x4 {
-public:
-	float _11, _12, _13, _14;
-	float _21, _22, _23, _24;
-	float _31, _32, _33, _34;
-	float _41, _42, _43, _44;
-
-	Matrix4x4() {
-		SetZero();
-	}
-	void SetZero() {
-		memset(this, 0, sizeof(Matrix4x4));
-		//_11 = _12 = _13 = _14 = _21 = _22 = _23 = _24 = _31 = _32 = _33 = _34 = _41 = _42 = _43 = _44 = 0.0f;
-	}
-};
-
-// 매트릭스를 출력한다.
-inline void PrintMatrix(Matrix4x4& m) {
-	float* pM = (float*)&m;
-	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++j) {
-			cout << pM[4 * i + j] << '\t';
-		}
-		cout << '\n';
-	}
-	cout << '\n';
-}
-
-// 단위행렬
-inline void SetIdentityMatrix4x4(Matrix4x4& m) {
-	m._12 = m._13 = m._14 = m._21 = m._23 = m._24 = 0.0f;
-	m._31 = m._32 = m._34 = m._41 = m._42 = m._43 = 0.0f;
-	m._11 = m._22 = m._33 = m._44 = 1.0f;
-}
-
-// 행렬 덧셈
-void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
-	float* pA = (float*)&a;
-	float* pB = (float*)&b;
-	float pM[16];
-	memset(pM, 0, sizeof(Matrix4x4));
-
-	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++j) {
-			pM[4 * i + j] = pA[4 * i + j] + pB[4 * i + j];
-		}
-	}
-	memcpy(&q, pM, sizeof(Matrix4x4));
-}
-
-// 행렬 뺄셈
-void MatrixMinus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
-	float* pA = (float*)&a;
-	float* pB = (float*)&b;
-	float pM[16];
-	memset(pM, 0, sizeof(Matrix4x4));
-
-	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++j) {
-			pM[4 * i + j] = pA[4 * i + j] - pB[4 * i + j];
-		}
-	}
-	memcpy(&q, pM, sizeof(Matrix4x4));
-}
-
-// 행렬 곱셈
-void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
-	float* pA = (float*)&a;
-	float* pB = (float*)&b;
-	float pM[16];
-	memset(pM, 0, sizeof(Matrix4x4));
-
-	for (WORD i = 0; i < 4; ++i) {
-		for (WORD j = 0; j < 4; ++j) {
-			for (WORD k = 0; k < 4; ++k) {
-				pM[4 * i + j] += pA[4 * i + k] * pB[4 * k + j];
-			}
-		}
-	}
-	memcpy(&q, pM, sizeof(Matrix4x4));
-}
-
-// 이동 행렬
-inline void SetTranslateMatrix(Matrix4x4& m, float tx, float ty, float tz) {
-	SetIdentityMatrix4x4(m);
-	m._41 = tx, m._42 = ty, m._43 = tz;
-}
-
-// 확대,축소 행렬
-inline void SetScaleMatrix(Matrix4x4& m, float sx, float sy, float sz) {
-	SetIdentityMatrix4x4(m);
-	m._11 = sx, m._22 = sy, m._33 = sz;
-}
-
-// 회전 행렬 X
-void SetRotateXMatrix(Matrix4x4& m, float fRads) {
-	SetIdentityMatrix4x4(m);
-	m._22 = cos(fRads);
-	m._23 = sin(fRads);
-	m._32 = -sin(fRads);
-	m._33 = cos(fRads);
-}
-
-// 회전 행렬 Y
-void SetRotateYMatrix(Matrix4x4& m, float fRads) {
-	SetIdentityMatrix4x4(m);
-	m._11 = cosf(fRads);
-	m._13 = -sinf(fRads);
-	m._31 = sinf(fRads);
-	m._33 = cos(fRads);
-}
-
-// 회전 행렬 Z
-void SetRotateZMatrix(Matrix4x4& m, float fRads) {
-	SetIdentityMatrix4x4(m);
-	m._11 = cosf(fRads);
-	m._12 = sinf(fRads);
-	m._21 = -sinf(fRads);
-	m._22 = cos(fRads);
-}
-
-// TODO (Sagacity Jang)
-// 역행렬
-
-// 행렬 내적
-
-
-// 행렬 외적
-
-
-
 //*************** Vector *************//
 
 template<typename TYPE>
@@ -294,6 +161,196 @@ float GetDistance(Vec3 v1, Vec3 v2) {
 	return v.GetMagnitude();
 }
 
+
+
+//******************* Matrix ******************//
+class Matrix4x4 {
+public:
+	float m_afElements[4][4];
+
+	Matrix4x4() {
+		SetZero();
+	}
+	Matrix4x4 SetZero() {
+		memset(m_afElements, 0, sizeof(m_afElements));
+		return *this;
+	}
+
+	Matrix4x4 SetIdentityMatrix4x4() {
+		SetZero();
+		m_afElements[0][0] = m_afElements[1][1] = m_afElements[2][2] = m_afElements[3][3] = 1.f;
+		return *this;
+	}
+
+	float& operator() (int iRow, int iCol) {
+		return m_afElements[iRow][iCol];
+	}
+
+	Matrix4x4 operator* (Matrix4x4& mRight) {
+		Matrix4x4 mRet;
+		mRet.SetZero();
+
+		for (WORD i = 0; i < 4; ++i) {
+			for (WORD j = 0; j < 4; ++j) {
+				for (WORD k = 0; k < 4; ++k) {
+					mRet(i,j) += m_afElements[i][k] * mRight(k, j);
+				}
+			}
+		}
+		return mRet;
+	}
+
+	Vec3 operator*(Vec3& vLeft) {
+		Vec3 vRet;
+		vRet.x =
+			vLeft.x * m_afElements[0][0] +
+			vLeft.y * m_afElements[0][1] +
+			vLeft.z * m_afElements[0][2] +
+			m_afElements[0][3];
+		vRet.y =
+			vLeft.x * m_afElements[1][0] +
+			vLeft.y * m_afElements[1][1] +
+			vLeft.z * m_afElements[1][2] +
+			m_afElements[1][3];
+		vRet.z =
+			vLeft.x * m_afElements[2][0] +
+			vLeft.y * m_afElements[2][1] +
+			vLeft.z * m_afElements[2][2] +
+			m_afElements[2][3];
+		return vRet;
+	}
+
+	Matrix4x4 operator+(Matrix4x4& mRight) {
+		Matrix4x4 mRet;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				mRet(i, j) = m_afElements[i][j] + mRight(i, j);
+			}
+		}
+	}
+
+	Matrix4x4 operator=(Matrix4x4& mRight) {
+		memcpy(m_afElements, mRight.m_afElements, sizeof(m_afElements));
+		return *this;
+	}
+
+	Matrix4x4 SetProjection(float d) {
+		SetZero();
+		m_afElements[0][0] = d;
+		m_afElements[1][1] = d;
+		m_afElements[2][2] = 1;
+		m_afElements[3][3] = d;
+
+		return *this;
+	}
+};
+
+// 매트릭스를 출력한다.
+inline void PrintMatrix(Matrix4x4& m) {
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			cout << m(i,j) << '\t';
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+}
+
+// 단위행렬
+inline void SetIdentityMatrix4x4(Matrix4x4& m) {
+	memset(m.m_afElements, 0, sizeof(m.m_afElements));
+	m(0, 0) = m(1, 1) = m(2, 2) = m(3, 3) = 1.0f;
+}
+
+// 행렬 덧셈
+void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			q.m_afElements[i][j] = a(i, j) + b(i, j);
+		}
+	}
+}
+
+// 행렬 뺄셈
+void MatrixMinus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			q.m_afElements[i][j] = a(i, j) - b(i, j);
+		}
+	}
+}
+
+// 행렬 곱셈
+void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
+	for (WORD i = 0; i < 4; ++i) {
+		for (WORD j = 0; j < 4; ++j) {
+			for (WORD k = 0; k < 4; ++k) {
+				q.m_afElements[i][j] += a(i, k) * b(k, j);
+			}
+		}
+	}
+}
+
+// 이동 행렬
+inline void SetTranslateMatrix(Matrix4x4& m, float tx, float ty, float tz) {
+	SetIdentityMatrix4x4(m);
+	m.m_afElements[3][0] = tx;
+	m.m_afElements[3][1] = ty;
+	m.m_afElements[3][2] = tz;
+}
+
+// 확대,축소 행렬
+inline void SetScaleMatrix(Matrix4x4& m, float sx, float sy, float sz) {
+	SetIdentityMatrix4x4(m);
+	m.m_afElements[0][0] = sx;
+	m.m_afElements[1][1] = sy;
+	m.m_afElements[2][2] = sz;
+}
+
+// 회전 행렬 X
+void SetRotateXMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m.m_afElements[1][1] = cos(fRads);
+	m.m_afElements[1][2] = sin(fRads);
+	m.m_afElements[2][1] = -sin(fRads);
+	m.m_afElements[2][2] = cos(fRads);
+}
+
+// 회전 행렬 Y
+void SetRotateYMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m.m_afElements[0][0] = cosf(fRads);
+	m.m_afElements[0][2] = -sinf(fRads);
+	m.m_afElements[2][0] = sinf(fRads);
+	m.m_afElements[2][2] = cos(fRads);
+}
+
+// 회전 행렬 Z
+void SetRotateZMatrix(Matrix4x4& m, float fRads) {
+	SetIdentityMatrix4x4(m);
+	m.m_afElements[0][0] = cosf(fRads);
+	m.m_afElements[0][1] = sinf(fRads);
+	m.m_afElements[1][0] = -sinf(fRads);
+	m.m_afElements[1][1] = cos(fRads);
+}
+
+// 프로젝션
+void SetProjection(Matrix4x4& m, float d) {
+	m.SetZero();
+	m.m_afElements[0][0] = d;
+	m.m_afElements[1][1] = d;
+	m.m_afElements[2][2] = 1;
+	m.m_afElements[3][3] = d;
+}
+
+// TODO (Sagacity Jang)
+// 역행렬
+
+// 행렬 내적
+
+
+// 행렬 외적
+
 // --------- Math -----------
 // 각도를 호도법으로 변환
 float Degree2Radians(float _degree) {
@@ -320,10 +377,10 @@ public:
 	Vec3 m_vertexBuffer[100];
 	int m_sizeVertex;
 
-	void Draw(HDC &hdc) {
+	virtual void Draw(HDC &hdc) {
 		DrawIndexedPrimitive(hdc, m_indexBuffer, 6, m_vertexBuffer);
 	}
-	void SetIndexBuffer() {
+	virtual void SetIndexBuffer() {
 		int buffer[] = {
 			0,1,
 			1,3,
@@ -337,7 +394,7 @@ public:
 		}
 		m_sizeIndex = 12;
 	}
-	void SetVertexBuffer() {
+	virtual void SetVertexBuffer() {
 		m_vertexBuffer[0] = Vec3(0.0f, 100.0f, 0.0f);
 		m_vertexBuffer[1] = Vec3(0.0f, 0.0f, 0.0f);
 		m_vertexBuffer[2] = Vec3(100.0f, 0.0f, 0.0f);
@@ -364,6 +421,81 @@ public:
 		for (int i = 0; i < m_sizeVertex; ++i) {
 			m_vertexBuffer[i].Translate(tx, ty, tz);
 		}
+	}
+
+	void Transform(Matrix4x4& _mat) {
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			m_vertexBuffer[i] = _mat * m_vertexBuffer[i];
+		}
+	}
+
+	void Projection(Matrix4x4& _mat) {
+		// TODO (Jang) : 프로젝션 매트릭스를 구현
+		float d = _mat(0,0);
+		float z;
+
+		for (int i = 0; i < m_sizeVertex; ++i) {
+			z = m_vertexBuffer[i].z;
+			m_vertexBuffer[i] = _mat * m_vertexBuffer[i];
+			m_vertexBuffer[i].x /= (z + d);
+			m_vertexBuffer[i].y /= (z + d);
+		}
+	}
+};
+
+class CCubeObject : public CPolygon {
+public:
+	Vec3 mid;
+	CCubeObject() {
+		mid = Vec3(200.f, 200.f, 0.f);
+	}
+	virtual void SetIndexBuffer() {
+		//		// Cube Index
+		//		5-------6	 +z
+		//	1-------2	|	/
+		//	|	|	|	|  /----+x
+		//	|	4---|---7  |
+		//	0-------3	   |
+		//				   +y
+
+		int buffer[] = {
+			0,1,
+			1,2,
+			2,3,
+			3,0,
+			4,5,
+			5,6,
+			6,7,
+			7,4,
+			0,4,
+			1,5,
+			2,6,
+			3,7
+		};
+		for (int i = 0; i < 24; ++i) {
+			m_indexBuffer[i] = buffer[i];
+		}
+		m_sizeIndex = 24;
+	}
+
+	virtual void SetVertexBuffer() {
+		m_vertexBuffer[0] = Vec3(-50.0f, 50.0f, -50.0f) + mid;
+		m_vertexBuffer[1] = Vec3(-50.0f, -50.0f, -50.0f) + mid;
+		m_vertexBuffer[2] = Vec3(50.0f, -50.0f, -50.0f) + mid;
+		m_vertexBuffer[3] = Vec3(50.0f, 50.0f, -50.0f) + mid;
+		m_vertexBuffer[4] = Vec3(-50.0f, 50.0f, 50.0f) + mid;
+		m_vertexBuffer[5] = Vec3(-50.0f, -50.0f, 50.0f) + mid;
+		m_vertexBuffer[6] = Vec3(50.0f, -50.0f, 50.0f) + mid;
+		m_vertexBuffer[7] = Vec3(50.0f, 50.0f, 50.0f) + mid;
+		m_sizeVertex = 8;
+	}
+
+	virtual void Draw(HDC &hdc) {
+		DrawIndexedPrimitive(
+			hdc, 
+			m_indexBuffer,	// index buffer
+			12,				// primitive counter  
+			m_vertexBuffer);// vertex buffer
 	}
 };
 
@@ -520,14 +652,12 @@ public:
 	}
 };
 
-float g_fTheta = 0.f;
-
 // TODO (Sagacity Jang) : 프레임 워크로 만들기
 void Render() {
 	HWND myConsole = GetConsoleWindow();
 	HDC hdc = GetDC(myConsole);
-
-	
+	//InvalidateRect(myConsole, NULL, TRUE);
+	/*
 	CPolygon poly;
 	SetROP2(hdc, R2_NOT);
 	poly.SetIndexBuffer();
@@ -539,7 +669,6 @@ void Render() {
 	poly.Draw(hdc);
 
 	CPolygon poly1;
-	SetROP2(hdc, R2_NOT);
 	poly1.SetIndexBuffer();
 	poly1.SetVertexBuffer();
 	poly1.RotateX(PI / 4.0f);
@@ -547,17 +676,37 @@ void Render() {
 	g_fTheta += 0.1f;
 	poly1.Translate(150.0f, 100.0f, 0.f);
 	poly1.Draw(hdc);
-
+	*/
 	
-	for (int i = 0; i < 2; ++i) {
+
+	Matrix4x4 matRotX;
+	Matrix4x4 matRotY;
+	Matrix4x4 matTrans;
+	Matrix4x4 matTransform;
+	Matrix4x4 matProjection;
+	static float s_fTheta = 0.0f;
+	s_fTheta += 0.1f;
+	CCubeObject cube;
+	SetROP2(hdc, R2_NOT);
+	SetRotateXMatrix(matRotX, 0.5f);
+	SetRotateYMatrix(matRotY, s_fTheta);
+	SetTranslateMatrix(matTrans, 100.f, 100.f, 0);
+	SetProjection(matProjection, 500.f);
+
+	matTransform = matTrans * matRotY * matRotX;
+
+	cube.SetIndexBuffer();
+	cube.SetVertexBuffer();
+	cube.Projection(matProjection);
+	cube.Draw(hdc);
+	
+	for (int i = 0; i < gObjects.size(); ++i) {
 		gObjects[i]->Draw(hdc);
 	}
 
 	// TODO (Jang) : 라인그리기 테스트중
-	
 
-
-	cin.ignore();
+	//cin.ignore();
 	system("cls");
 	ReleaseDC(myConsole, hdc);
 }
@@ -567,7 +716,7 @@ int main() {
 	cin.tie(nullptr);
 	cout.tie(nullptr);
 	ios::sync_with_stdio(false);
-
+	
 	// Create objects
 	Box2DObject boxObj2;
 	boxObj2.SetScale(Vec3(0.5f, 0.5f, 0.5f));
@@ -586,6 +735,9 @@ int main() {
 	wireBoxObj.SetPosition(Vec3(150, 150, 0));
 	gObjects.push_back(&wireBoxObj);
 
+	CCubeObject cube;
+	
+	
 	while (true) {
 		Render();
 	}
