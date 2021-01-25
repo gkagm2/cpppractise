@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 // 포인터로부터의 참조 하기
@@ -47,6 +48,25 @@ void separateOddsAndEvens2(const int arr[], int size, int** odds, int* numOdds, 
 	}
 }
 
+// 벡터로 할 경우
+void separateOddsAndEvens3(const vector<int>& arr, vector<int>& odds, vector<int>& evens) {
+	int numOdds = 0, numEvens = 0;
+	for (auto& i : arr) {
+		if (i % 2 == 1)
+			++numOdds;
+		else
+			++numEvens;
+	}
+	odds.reserve(numOdds);
+	evens.reserve(numEvens);
+	for (auto& i : arr) {
+		if (i % 2 == 1)
+			odds.push_back(i);
+		else
+			evens.push_back(i);
+	}
+}
+
 int main() {
 
 	int *odds = nullptr;
@@ -68,6 +88,10 @@ int main() {
 
 	delete odds;
 	delete evens;
+
+	vector<int> vec{ 1,2,3,4,5,6,7,8,9,10 };
+	vector<int> oddsVec, evensVec;
+	separateOddsAndEvens3(vec, oddsVec, evensVec);
 
 	return 0;
 }
