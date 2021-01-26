@@ -55,6 +55,13 @@ void MyPrint2(char *types, ...) {
 	cout << "\n";
 }
 
+bool debug = false;
+void debugOut(char* c, ...) {
+	va_list ap;
+	va_start(ap, c);
+	vfprintf(stderr, c, ap);
+	va_end(ap);
+}
 
 int main() {
 	MyPrint(0);
@@ -68,6 +75,12 @@ int main() {
 	MyPrint2("ci", 'a', 10);
 	MyPrint2("dci", 3.46, 'a', 10);
 	MyPrint2("sdci", "Hello world", 3.46, 'a', 10); // "Hello world"는 리터럴이기 때문에 문자열 그대로 들어가는게 아니라 문자열의 주소가 들어간다.
+
+	debug = true;
+	debugOut("hello", 78);
+	debugOut("String %s and int %d\n", "hello", 5);
+	debugOut("Many ints : %d %d %d %d %d\n", 1, 2, 3, 4, 5);
+
 
 	return 0;
 }
