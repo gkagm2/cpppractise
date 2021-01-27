@@ -48,7 +48,12 @@ const T & Grid<T, WIDTH, HEIGHT>::getElementAt(size_t x, size_t y) const
 }
 
 int main() {
-
+	// cosnt나 literal로 값을 넣어줘야된다는 점
+	Grid<int, 10, 10> myGrid;
+	Grid<int, 10, 10> anotherGrid;
+	myGrid.setElementAt(2, 3, 45);
+	anotherGrid = myGrid;
+	cout << anotherGrid.getElementAt(2, 3);
 
 	return 0;
 }
