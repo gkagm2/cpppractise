@@ -30,6 +30,7 @@ int main() {
 	dList.PushBack(12);
 	dList.PushBack(13);
 	dList.PushBack(14);
+	dList[2] = 333;
 	dList.Print();
 	return 0;
 }

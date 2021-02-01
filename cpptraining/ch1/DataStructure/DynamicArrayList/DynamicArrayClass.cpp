@@ -97,7 +97,7 @@ const Data & DynamicArrList::At(int _idx)
 	return mArr[_idx];
 }
 
-const Data & DynamicArrList::operator[](int _idx)
+Data & DynamicArrList::operator[](int _idx)
 {
 	if (_idx < 0 || _idx >= mCount)
 		throw;

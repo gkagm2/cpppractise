@@ -28,5 +28,5 @@ public:
 	const int Size();
 	void Print();
 	const Data& At(int _idx);
-	const Data& operator[] (int _idx);
+	Data& operator[] (int _idx);
 };

@@ -41,10 +41,13 @@ int main() {
 	list.Print();
 	cout << "\n";
 
+	list[1] = 88;
+	list.Print();
 	// iterator ? 
 	/*for(auto c : list) {
 
 	}*/
+	
 
 	return 0;
 }

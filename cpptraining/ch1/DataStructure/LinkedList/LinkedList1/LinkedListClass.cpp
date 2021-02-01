@@ -126,7 +126,7 @@ catch (...) {
 	std::cout << "ERROR - file : " __FILE__ << "\n" << __FUNCTION__ << "\n";
 }
 
-const Data & LinkedList::operator[](int _idx)
+Data & LinkedList::operator[](int _idx)
 try {
 	if (_idx < 0 || _idx >= mCount || mCount == 0)
 		throw __LINE__;
