@@ -52,6 +52,9 @@ public:
 	friend MyClass operator+(const MyClass& lhs, const MyClass& rhs);
 	friend MyClass operator+(const int n, const MyClass& rhs);
 	friend bool operator==(const MyClass& lhs, const MyClass& rhs);
+
+	friend std::ostream& operator<<(std::ostream& oStr, const MyClass& mclass);
+	friend std::istream& operator>>(std::istream& iStr, MyClass& mclass);
 };
 
 int MyClass::myCode = 0;
@@ -81,6 +84,20 @@ bool operator==(const MyClass &lhs, const MyClass&rhs) {
 	return lhs.getValue() == rhs.getValue() ? true : false;
 }
 
+// std::cout 오버로딩
+std::ostream& operator<<(std::ostream& oStr, const MyClass& mclass) {
+	oStr << mclass.mValue;
+	return oStr;
+}
+
+// std::cin 오버로딩
+std::istream& operator>>(std::istream & iStr, MyClass& mclass)
+{
+	iStr >> mclass.mValue;
+	return iStr;
+}
+
+
 int main() {
 
 	MyClass m;
@@ -106,5 +123,11 @@ int main() {
 		cout << "true";
 	else
 		cout << "false";
+
+	// cin >>, cout <<에 대해 오버로딩함.
+	MyClass c, d;
+	cin >> c >> d;
+	cout << c << " " << d;
+
 	return 0;
 }
