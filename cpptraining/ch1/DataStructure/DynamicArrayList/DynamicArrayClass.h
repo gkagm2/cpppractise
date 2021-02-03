@@ -31,7 +31,7 @@ public:
 
 	// iterator
 private:
-	enum IterIdxType { END = -1, BEGIN = 0 };
+	enum IterIdxType { END = -2, BEGIN = 0 };
 public:
 	class iterator {
 	public:
@@ -55,5 +55,5 @@ public:
 	iterator end() { return iterator(this, IterIdxType::END); }
 
 public:
-	void Erase(iterator& _iter);
+	iterator Erase(iterator& _iter);
 };

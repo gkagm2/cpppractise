@@ -107,15 +107,18 @@ Data & DynamicArrList::operator[](int _idx)
 	return mArr[_idx];
 }
 
-void DynamicArrList::Erase(iterator & _iter)
+DynamicArrList::iterator DynamicArrList::Erase(iterator & _iter)
 {
 	if (_iter.mIdx < IterIdxType::BEGIN)
 		throw::std::out_of_range("");
 
+	iterator copyIter(_iter.mDynamicArr, _iter.mIdx - 1);
 	DeleteAt(_iter.mIdx);
 	if (_iter.mIdx > mCount)
 		_iter.mIdx = IterIdxType::END;
+	return copyIter;
 }
+
 
 //////////// Iterator /////////////
 DynamicArrList::iterator::iterator(DynamicArrList* _other, int _idx) :

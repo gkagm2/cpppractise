@@ -94,9 +94,15 @@ int main() {
 	cout << "\n";
 	iter = dList.end();
 	--iter;
-	dList.Erase(iter);
+	iter = dList.Erase(iter);
+
 	cout << "\n";
 	dList.Print();
+
+	iter = dList.begin();
+	iter = dList.Erase(iter);
+	cout << "\n";
+	cout << *iter;
 
 	return 0;
 }
