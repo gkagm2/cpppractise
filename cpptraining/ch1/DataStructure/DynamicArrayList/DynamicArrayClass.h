@@ -1,10 +1,6 @@
 #pragma once
 
 typedef int Data;
-struct Node {
-	Data data;
-	Node* link;
-};
 
 class DynamicArrList {
 private:
@@ -31,4 +27,30 @@ public:
 	void Print();
 	const Data& At(int _idx);
 	Data& operator[] (int _idx);
+
+
+	// iterator
+private:
+	enum IterIdxType { END = -1, BEGIN = 0 };
+public:
+	class iterator {
+	public:
+		DynamicArrList *mDynamicArr;
+		int mIdx;
+	public:
+		iterator(DynamicArrList* _dArr, int _idx);
+		iterator(const iterator& _iter);
+		virtual ~iterator();
+
+		int& operator*();
+		iterator& operator++(); // 전위
+		iterator operator++(int); // 후위
+		iterator& operator--();
+		iterator operator--(int);
+		bool operator!=(const iterator& _iter);
+		bool operator==(const iterator& _iter);
+	};
+	
+	iterator begin() { return iterator(this, IterIdxType::BEGIN); }
+	iterator end() { return iterator(this, IterIdxType::END); }
 };

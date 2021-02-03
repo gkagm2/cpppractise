@@ -14,7 +14,8 @@ void DynamicArrList::IncreaseCapacity()
 	for (int i = 0; i < mCount; ++i)
 		newArr[i] = mArr[i];
 
-	delete[] mArr;
+	if(mArr != nullptr)
+		delete[] mArr;
 	mArr = newArr;
 }
 
@@ -27,14 +28,16 @@ DynamicArrList::DynamicArrList() :
 
 DynamicArrList::~DynamicArrList()
 {
-	delete[] mArr;
+	if (mArr != nullptr)
+		delete[] mArr;
 	mCount = 0;
 	mArrMaxCount = mIncreaseCapacity;
 }
 
 void DynamicArrList::DeleteAll()
 {
-	delete[] mArr;
+	if (mArr != nullptr)
+		delete[] mArr;
 	mCount = 0;
 	mArrMaxCount = mIncreaseCapacity;
 	mArr = new int[mArrMaxCount];
@@ -93,13 +96,79 @@ void DynamicArrList::Print()
 const Data & DynamicArrList::At(int _idx)
 {
 	if (_idx < 0 || _idx >= mCount)
-		throw;
+		throw::std::out_of_range("");
 	return mArr[_idx];
 }
 
 Data & DynamicArrList::operator[](int _idx)
 {
 	if (_idx < 0 || _idx >= mCount)
-		throw;
+		throw::std::out_of_range("");
 	return mArr[_idx];
+}
+
+//////////// Iterator /////////////
+DynamicArrList::iterator::iterator(DynamicArrList* _other, int _idx) :
+	mDynamicArr(_other),
+	mIdx(_idx)
+{
+}
+
+DynamicArrList::iterator::iterator(const iterator & _iter) :
+	mDynamicArr(_iter.mDynamicArr),
+	mIdx(_iter.mIdx)
+{
+}
+
+DynamicArrList::iterator::~iterator()
+{
+}
+
+int & DynamicArrList::iterator::operator*()
+{
+	if (mIdx == IterIdxType::END)
+		throw::std::out_of_range("");
+	return (*mDynamicArr)[mIdx];
+}
+
+DynamicArrList::iterator & DynamicArrList::iterator::operator++()
+{
+	if (mIdx == IterIdxType::END)
+		throw::std::out_of_range("");
+
+	mIdx = (mIdx + 1) >= mDynamicArr->mCount ? IterIdxType::END : (mIdx + 1);
+	return *this;
+}
+
+DynamicArrList::iterator DynamicArrList::iterator::operator++(int)
+{
+	iterator copyIter(mDynamicArr, mIdx);
+	++(*this);
+	return copyIter;
+}
+
+DynamicArrList::iterator & DynamicArrList::iterator::operator--()
+{
+	if (mIdx == IterIdxType::BEGIN)
+		throw::std::out_of_range("");
+
+	mIdx = mIdx == IterIdxType::END ? (mDynamicArr->mCount - 1) : (mIdx - 1);
+	return *this;
+}
+
+DynamicArrList::iterator DynamicArrList::iterator::operator--(int)
+{
+	iterator copyIter(mDynamicArr, mIdx);
+	--(*this);
+	return copyIter;
+}
+
+bool DynamicArrList::iterator::operator!=(const iterator & _iter)
+{
+	return mIdx != _iter.mIdx;
+}
+
+bool DynamicArrList::iterator::operator==(const iterator & _iter)
+{
+	return mIdx == _iter.mIdx;
 }
