@@ -107,6 +107,16 @@ Data & DynamicArrList::operator[](int _idx)
 	return mArr[_idx];
 }
 
+void DynamicArrList::Erase(iterator & _iter)
+{
+	if (_iter.mIdx < IterIdxType::BEGIN)
+		throw::std::out_of_range("");
+
+	DeleteAt(_iter.mIdx);
+	if (_iter.mIdx > mCount)
+		_iter.mIdx = IterIdxType::END;
+}
+
 //////////// Iterator /////////////
 DynamicArrList::iterator::iterator(DynamicArrList* _other, int _idx) :
 	mDynamicArr(_other),
@@ -122,6 +132,8 @@ DynamicArrList::iterator::iterator(const iterator & _iter) :
 
 DynamicArrList::iterator::~iterator()
 {
+	mDynamicArr = nullptr;
+	mIdx = IterIdxType::END;
 }
 
 int & DynamicArrList::iterator::operator*()

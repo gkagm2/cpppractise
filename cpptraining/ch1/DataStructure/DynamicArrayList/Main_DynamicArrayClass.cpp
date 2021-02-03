@@ -88,5 +88,15 @@ int main() {
 		cout << *iter << "-";
 	cout << "\n";
 
+	// Erase Å×½ºÆ®
+	iter = dList.begin();
+	dList.Print();
+	cout << "\n";
+	iter = dList.end();
+	--iter;
+	dList.Erase(iter);
+	cout << "\n";
+	dList.Print();
+
 	return 0;
 }

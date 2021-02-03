@@ -13,12 +13,12 @@ private:
 protected:
 	bool IsFull();
 	void IncreaseCapacity();
+
 public:
 	DynamicArrList();
 	virtual ~DynamicArrList();
-
-	void DeleteAll();
-	void DeleteAt(int _idx);
+	void DeleteAt(int _idx); // private으로 빼진 않을것임
+	void DeleteAll(); // private으로 빼진 않을것임
 	void PushBack(const Data& _data);
 	void PushFront(const Data& _data);
 	bool Search(const Data& _data);
@@ -53,4 +53,7 @@ public:
 	
 	iterator begin() { return iterator(this, IterIdxType::BEGIN); }
 	iterator end() { return iterator(this, IterIdxType::END); }
+
+public:
+	void Erase(iterator& _iter);
 };
