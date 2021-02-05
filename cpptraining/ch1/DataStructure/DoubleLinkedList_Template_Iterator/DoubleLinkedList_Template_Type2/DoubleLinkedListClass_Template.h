@@ -277,7 +277,7 @@ typename int& CDoubleLinkedList<T>::iterator::operator*() {
 
 template<typename T>
 typename CDoubleLinkedList<T>::iterator& CDoubleLinkedList<T>::iterator::operator++() {
-	if (mTargetNode == nullptr)
+	if ( mTargetNode == nullptr || mOwner->m_Count == 0 )
 		throw::std::out_of_range("");
 	mTargetNode = mTargetNode->nextLink;
 	return *this;
@@ -293,9 +293,9 @@ typename CDoubleLinkedList<T>::iterator CDoubleLinkedList<T>::iterator::operator
 template<typename T>
 typename CDoubleLinkedList<T>::iterator & CDoubleLinkedList<T>::iterator::operator--()
 {
-	if (mTargetNode == mOwner->m_pNodeHead)
+	if ( mTargetNode == mOwner->m_pNodeHead || mOwner->m_Count == 0)
 		throw::std::out_of_range("");
-	mTargetNode = mTargetNode == nullptr ? mOwner->m_pNodeTail ? mTargetNode->prevLink;
+	mTargetNode = mTargetNode == nullptr ? mOwner->m_pNodeTail : mTargetNode->prevLink;
 
 	return *this;
 }

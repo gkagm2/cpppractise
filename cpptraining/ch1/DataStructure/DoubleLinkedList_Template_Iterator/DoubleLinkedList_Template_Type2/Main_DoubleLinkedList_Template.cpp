@@ -58,6 +58,10 @@ int main() {
 	cout << "\n";
 	mylist.Print();
 	cout << "\n";
+
+	CDoubleLinkedList<int> t;
+	auto tIter = t.begin();
+	--tIter;
 	
 	return 0;
 }
