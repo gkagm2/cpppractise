@@ -295,7 +295,8 @@ typename CDoubleLinkedList<T>::iterator & CDoubleLinkedList<T>::iterator::operat
 {
 	if (mTargetNode == mOwner->m_pNodeHead)
 		throw::std::out_of_range("");
-	mTargetNode = mTargetNode->prevLink;
+	mTargetNode = mTargetNode == nullptr ? mOwner->m_pNodeTail ? mTargetNode->prevLink;
+
 	return *this;
 }
 
