@@ -36,6 +36,13 @@ public:
 	T& operator[] (int _idx);
 
 public:
+	class iterator;
+	iterator begin() { return iterator(this, m_pNodeHead); }
+	iterator end() { return iterator(this, m_pNodeTail->nextLink); }
+	iterator Erase(iterator& _iter);
+	iterator Insert(const iterator& _iter, T _value);
+
+public:
 	class iterator {
 	private:
 		CDoubleLinkedList* mOwner;
@@ -58,10 +65,7 @@ public:
 		friend class CDoubleLinkedList;
 	};
 
-public:
-	iterator begin() { return iterator(this, m_pNodeHead); }
-	iterator end() { return iterator(this, m_pNodeTail->nextLink); }
-	iterator Erase(iterator& _iter);
+
 };
 
 template<typename T>
@@ -247,6 +251,39 @@ typename CDoubleLinkedList<T>::iterator CDoubleLinkedList<T>::Erase(iterator& _i
 	return iterator(_iter.mOwner, pPrevNode);
 }
 
+template<typename T>
+typename CDoubleLinkedList<T>::iterator CDoubleLinkedList<T>::Insert(const iterator& _iter, T _value)
+{
+	assert(this == _iter.mOwner);
+	
+	Node<T>* pNewNode = CreateNode(_value);
+	if (_iter.mTargetNode == nullptr) { // end iter
+		if (m_Count == 0)
+			m_pNodeHead = pNewNode;
+		else {
+			pNewNode->prevLink = m_pNodeTail;
+			m_pNodeTail->nextLink = pNewNode;
+		}
+		m_pNodeTail = pNewNode;
+	}
+	else {
+		Node<T>* pNextNode = _iter.mTargetNode;
+		Node<T>* pPrevNode = _iter.mTargetNode->prevLink;
+
+		if (pPrevNode == nullptr)
+			m_pNodeHead = pNewNode;
+		if (pPrevNode != nullptr)
+			pPrevNode->nextLink = pNewNode;
+		pNewNode->prevLink = pPrevNode;
+
+		pNextNode->prevLink = pNewNode; 
+		pNewNode->nextLink = pNextNode;
+	}
+
+	++m_Count;
+	return iterator(_iter.mOwner, pNewNode);
+}
+
 ////////// Iterator //////////
 template<typename T>
 inline CDoubleLinkedList<T>::iterator::iterator(const iterator& _iter) :
@@ -287,7 +324,7 @@ template<typename T>
 typename CDoubleLinkedList<T>::iterator CDoubleLinkedList<T>::iterator::operator++(int) {
 	iterator copyIter(mOwner, mTargetNode);
 	++(*this);
-	return nullptr;
+	return copyIter;
 }
 
 template<typename T>
@@ -305,7 +342,7 @@ typename CDoubleLinkedList<T>::iterator CDoubleLinkedList<T>::iterator::operator
 {
 	iterator copyIter(mOwner, mTargetNode);
 	--(*this);
-	return iterator();
+	return copyIter;
 }
 
 template<typename T>

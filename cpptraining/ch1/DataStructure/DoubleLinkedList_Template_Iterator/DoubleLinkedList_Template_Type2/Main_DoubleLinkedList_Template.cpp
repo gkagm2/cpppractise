@@ -1,5 +1,6 @@
 #include <iostream>
 #include "DoubleLinkedListClass_Template.h"
+#include <list>
 using namespace std;
 
 int main() {
@@ -59,9 +60,14 @@ int main() {
 	mylist.Print();
 	cout << "\n";
 
+	//Insert Å×½ºÆ®
 	CDoubleLinkedList<int> t;
 	auto tIter = t.begin();
-	--tIter;
+	t.Insert(tIter, 4);
+	t.Insert(tIter, 3);
+	t.Print();
+	tIter--;
+	cout << *tIter;
 	
 	return 0;
 }
