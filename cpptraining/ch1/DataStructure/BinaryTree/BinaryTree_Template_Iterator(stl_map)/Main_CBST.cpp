@@ -61,6 +61,7 @@ int main() {
 	iter = bstInt.find(100);
 	iter = bstInt.erase(iter);
 
+
 	//cout << "key : " << iter->first << " value : " << iter->second << "\n";
 	//++iter;
 	//cout << "key : " << iter->first << " value : " << iter->second << "\n";
@@ -77,15 +78,14 @@ int main() {
 		cout << "key : " << iter->first << " value : " << iter->second << "\n";
 	}
 
+	bstInt.clear();
 
 	map<int, int> m;
 	m.insert(make_pair(10,2300));
 	m.insert(make_pair(12, 2300)); 
 	m.insert(make_pair(11, 2300));
 	m.insert(make_pair(9, 2300));
-	
 	auto i = m.begin();
-	++i;
 	++i;
 	++i;
 	++i;
@@ -99,10 +99,7 @@ int main() {
 	for (; i != m.end(); ++i) {
 		cout << i->first << " " << i->second << "\n";
 	}
-	
-
 	cout << "\n";
-
 
 	return 0;
 }

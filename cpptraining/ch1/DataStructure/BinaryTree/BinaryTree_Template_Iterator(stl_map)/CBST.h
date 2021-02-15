@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include <memory>
+using std::cout;
 
 template<typename T1, typename T2>
 struct tBSTPair {
@@ -105,6 +106,7 @@ public:
 	iterator end();
 	iterator find(const T_Key& _key);
 	iterator erase(const iterator& _where);
+	void clear();
 
 	class iterator {
 	public:
@@ -133,10 +135,7 @@ public:
 template<typename T_Key, typename T_Value>
 inline CBST<T_Key, T_Value>::~CBST()
 {
-	// TODO : Search and delete all
-	// postorder로 죠지자
-
-
+	clear();
 }
 
 template<typename T_Key, typename T_Value>
@@ -364,6 +363,15 @@ typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::erase(const iterat
 {
 	tBSTNode<T_Key, T_Value>* pSuccessor = deleteNode(_where.m_pTargetNode);
 	return iterator(this, pSuccessor);
+}
+
+template<typename T_Key, typename T_Value>
+inline void CBST<T_Key, T_Value>::clear()
+{
+	while (m_iCount) {
+		std::cout << "삭제되는 노드 : " << m_pRoot->data.first << "\n";
+		deleteNode(m_pRoot);
+	}
 }
 
 
