@@ -30,12 +30,27 @@ int main() {
 	CBST<int, int> bstInt;
 	// bstInt.Insert(Make_pair<int, int>(100, 10)); // 원래라면 이렇게 해야 함. stl에 구현되어있는 make_pair도 template임
 	bstInt.Insert(Make_pair(100, 11));  // 문자열쪽에서 문제가 생긴다.?
-	bstInt.Insert(Make_pair(50, 12));  // 문자열쪽에서 문제가 생긴다.?
-	bstInt.Insert(Make_pair(20, 13));  // 문자열쪽에서 문제가 생긴다.?
-	bstInt.Insert(Make_pair(55, 13));  // 문자열쪽에서 문제가 생긴다.?s
+	bstInt.Insert(Make_pair(98, 12));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(97, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(99, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(106, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(105, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(101, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(103, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(102, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(104, 13));  // 문자열쪽에서 문제가 생긴다.?
 
 
-	CBST<int, int>::iterator iter = bstInt.begin();
+	CBST<int, int>::iterator iter = bstInt.end();
+
+	--iter;
+	--iter;
+	--iter;
+	++iter;
+	++iter;
+	++iter;
+
+
 
 	for (; iter != bstInt.end(); ++iter) {
 		cout << iter->first << " ";
@@ -44,6 +59,16 @@ int main() {
 
 
 	iter = bstInt.find(100);
+	iter = bstInt.erase(iter);
+
+	//cout << "key : " << iter->first << " value : " << iter->second << "\n";
+	//++iter;
+	//cout << "key : " << iter->first << " value : " << iter->second << "\n";
+	//++iter;
+	for (auto i : bstInt) {
+		cout << "key : " << i.first << " value : " << i.second << "\n";
+	}
+
 	if (iter == bstInt.end()) {
 		cout << "end";
 	}
@@ -65,10 +90,14 @@ int main() {
 	++i;
 	++i;
 
-
-
 	for (auto t : m) {
 		cout << t.first << " " << t.second << "\n";
+	}
+	i = m.find(10);
+	i =m.erase(i);
+
+	for (; i != m.end(); ++i) {
+		cout << i->first << " " << i->second << "\n";
 	}
 	
 

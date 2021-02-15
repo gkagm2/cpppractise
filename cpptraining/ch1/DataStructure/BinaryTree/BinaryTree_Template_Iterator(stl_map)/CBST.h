@@ -92,15 +92,19 @@ public:
 	~CBST();
 	void Insert(const tBSTPair<T_Key, T_Value>& _pair);
 	
-public:
+private:
 	tBSTNode<T_Key, T_Value>* inorderSuccessor(tBSTNode<T_Key, T_Value>* _pNode); // 노드보다 크며 가장 가까운 값 (중위 후속자)
 	tBSTNode<T_Key, T_Value>* inorderPredecessor(tBSTNode<T_Key, T_Value>* _pNode); // 노드보다 작으면 가장 가까운 값 (중위 선행자)
+	tBSTNode<T_Key, T_Value>* deleteNode(tBSTNode<T_Key, T_Value>* _pNode);
 
+	tBSTNode<T_Key, T_Value>* GetLeftmostNode(tBSTNode<T_Key, T_Value>* _pNode);
+	tBSTNode<T_Key, T_Value>* GetRightmostNode(tBSTNode<T_Key, T_Value>* _pNode);
+public:
 	class iterator;
 	iterator begin();
 	iterator end();
 	iterator find(const T_Key& _key);
-	//iterator erase() {} // todo
+	iterator erase(const iterator& _where);
 
 	class iterator {
 	public:
@@ -118,8 +122,9 @@ public:
 		bool operator!=(const iterator& _iter);
 		iterator& operator++(); // 전입
 		iterator operator++(int); // 후입
-		
-		
+		iterator& operator--();
+		iterator operator--(int);
+
 	public:
 		friend class CBST;
 	};
@@ -129,6 +134,9 @@ template<typename T_Key, typename T_Value>
 inline CBST<T_Key, T_Value>::~CBST()
 {
 	// TODO : Search and delete all
+	// postorder로 죠지자
+
+
 }
 
 template<typename T_Key, typename T_Value>
@@ -205,8 +213,7 @@ inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::inorderSuccessor(tBSTNode
 				pSuccessor = pCurNode->pParent;
 				break;
 			}
-			else
-				pCurNode = pCurNode->pParent;
+			pCurNode = pCurNode->pParent;
 		}
 	}
 	return pSuccessor;
@@ -215,8 +222,100 @@ inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::inorderSuccessor(tBSTNode
 template<typename T_Key, typename T_Value>
 inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::inorderPredecessor(tBSTNode<T_Key, T_Value>* _pNode)
 {
-	// TODO
-	return NULL;
+	tBSTNode<T_Key, T_Value>* pPredecessor = nullptr;
+
+	if (_pNode->HasLeftChild()) {
+		pPredecessor = _pNode->pLeftChild;
+		while (nullptr != pPredecessor->pRightChild)
+			pPredecessor = pPredecessor->pRightChild;
+	}
+	else {
+		tBSTNode<T_Key, T_Value>* pCurNode = _pNode;
+		
+		while (pCurNode->HasParent()) {
+			if (pCurNode->IsRightChildFromParent()) {
+				pPredecessor = pCurNode->pParent;
+				break;
+			}
+			pCurNode = pCurNode->pParent;
+		}
+	}
+	return pPredecessor;
+}
+
+template<typename T_Key, typename T_Value>
+inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::deleteNode(tBSTNode<T_Key, T_Value>* _pNode)
+{
+	assert(_pNode);
+
+	tBSTNode<T_Key, T_Value>* pSuccessor = inorderSuccessor(_pNode);
+
+	if (_pNode->IsLeaf()) { // Leap Node일 경우
+		if (_pNode->IsRoot())
+			m_pRoot = nullptr;
+		else { // 부모 노드가 존재하는 경우
+			if (_pNode->IsLeftChildFromParent())
+				_pNode->pParent->pLeftChild = nullptr;
+			else
+				_pNode->pParent->pRightChild = nullptr;
+		}
+		--m_iCount;
+		delete _pNode;
+	}
+	else if (_pNode->HasLeftChild() && _pNode->HasRightChild()) { // 왼쪽자식과 오른쪽 자식 둘다 가지고 있는 경우
+		_pNode->data = pSuccessor->data;
+		deleteNode(pSuccessor);
+		pSuccessor = _pNode;
+	}
+	else { // 자식이 1개인 경우
+		if (_pNode->HasLeftChild()) { // 왼쪽 자식만 있는 노드일 경우
+			if (_pNode->IsRoot()) {
+				m_pRoot = _pNode->pLeftChild;
+				m_pRoot->pParent = nullptr;
+			}
+			else { // root가 아니면
+				if (_pNode->IsLeftChildFromParent())
+					_pNode->pParent->pLeftChild = _pNode->pLeftChild;
+				else
+					_pNode->pParent->pRightChild = _pNode->pLeftChild;
+				_pNode->pLeftChild->pParent = _pNode->pParent;
+			}
+		}
+		else // 오른쪽 자식만 있는 노드일 경우
+			if (_pNode->IsRoot()) {
+				m_pRoot = _pNode->pRightChild;
+				m_pRoot->pParent = nullptr;
+			}
+			else {
+				if (_pNode->IsLeftChildFromParent())
+					_pNode->pParent->pLeftChild = _pNode->pRightChild;
+				else
+					_pNode->pParent->pRightChild = _pNode->pRightChild;
+				_pNode->pRightChild->pParent = _pNode->pParent;
+			}
+		--m_iCount;
+		delete _pNode;
+	}
+
+	return pSuccessor;
+}
+
+template<typename T_Key, typename T_Value>
+inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::GetLeftmostNode(tBSTNode<T_Key, T_Value>* _pNode)
+{
+	tBSTNode<T_Key, T_Value>* pLeftmostNode = _pNode;
+	while (pLeftmostNode->HasLeftChild())
+		pLeftmostNode = pLeftmostNode->pLeftChild;
+	return pLeftmostNode;
+}
+
+template<typename T_Key, typename T_Value>
+inline tBSTNode<T_Key, T_Value>* CBST<T_Key, T_Value>::GetRightmostNode(tBSTNode<T_Key, T_Value>* _pNode)
+{
+	tBSTNode<T_Key, T_Value>* pRightmostNode = _pNode;
+	while (pRightmostNode->HasRightChild())
+		pRightmostNode = pRightmostNode->pRightChild;
+	return pRightmostNode;
 }
 
 
@@ -228,11 +327,9 @@ typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::begin()
 	if (nullptr == m_pRoot)
 		return end();
 
-	tBSTNode<T_Key, T_Value>* pBeginNode = m_pRoot;
-	while (pBeginNode->HasLeftChild())
-		pBeginNode = pBeginNode->pLeftChild;
-
-	return iterator(this, pBeginNode);
+	tBSTNode<T_Key, T_Value>* pLeftmostNode = GetLeftmostNode(m_pRoot);
+	
+	return iterator(this, pLeftmostNode);
 }
 
 template<typename T_Key, typename T_Value>
@@ -260,6 +357,13 @@ typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::find(const T_Key& 
 	}
 
 	return iterator(this, pFindNode);
+}
+
+template<typename T_Key, typename T_Value>
+typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::erase(const iterator & _where)
+{
+	tBSTNode<T_Key, T_Value>* pSuccessor = deleteNode(_where.m_pTargetNode);
+	return iterator(this, pSuccessor);
 }
 
 
@@ -322,10 +426,30 @@ typename CBST<T_Key, T_Value>::iterator & CBST<T_Key, T_Value>::iterator::operat
 template<typename T_Key, typename T_Value>
 typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::iterator::operator++(int)
 {
-	assert(m_pTargetNode); // end node일 경우.
 	iterator iter(m_pBST, m_pTargetNode);
 	++(*this);
 	
-	// 맨 마지막 노드일 경우.
+	return iter;
+}
+
+template<typename T_Key, typename T_Value>
+typename CBST<T_Key, T_Value>::iterator & CBST<T_Key, T_Value>::iterator::operator--()
+{
+	if (m_pBST->m_iCount == 0 || m_pTargetNode == m_pBST->GetLeftmostNode(m_pBST->m_pRoot))
+		throw::out_of_range("");
+
+	if (m_pTargetNode == nullptr) // end일 경우
+		m_pTargetNode = m_pBST->GetRightmostNode(m_pBST->m_pRoot);
+	else
+		m_pTargetNode = m_pBST->inorderPredecessor(m_pTargetNode);
+
+	return *this;
+}
+
+template<typename T_Key, typename T_Value>
+typename CBST<T_Key, T_Value>::iterator CBST<T_Key, T_Value>::iterator::operator--(int)
+{
+	iterator iter(m_pBST, m_pTargetNode);
+	--(*this);
 	return iter;
 }
