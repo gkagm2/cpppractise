@@ -3,7 +3,7 @@
 // Date : 2021.02.08
 #include <iostream>
 #include "CBST.h"
-#include <set>
+#include <map>
 using namespace std;
 
 int main() {
@@ -30,11 +30,18 @@ int main() {
 	CBST<int, int> bstInt;
 	// bstInt.Insert(Make_pair<int, int>(100, 10)); // 원래라면 이렇게 해야 함. stl에 구현되어있는 make_pair도 template임
 	bstInt.Insert(Make_pair(100, 11));  // 문자열쪽에서 문제가 생긴다.?
-	bstInt.Insert(Make_pair(200, 12));  // 문자열쪽에서 문제가 생긴다.?
-	bstInt.Insert(Make_pair(300, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(50, 12));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(20, 13));  // 문자열쪽에서 문제가 생긴다.?
+	bstInt.Insert(Make_pair(55, 13));  // 문자열쪽에서 문제가 생긴다.?s
 
 
 	CBST<int, int>::iterator iter = bstInt.begin();
+
+	for (; iter != bstInt.end(); ++iter) {
+		cout << iter->first << " ";
+	}
+
+
 
 	iter = bstInt.find(100);
 	if (iter == bstInt.end()) {
@@ -46,9 +53,26 @@ int main() {
 	}
 
 
-	//set<int, int> s;
-	//s.insert(12, 1);
-	//auto i = s.begin();
+	map<int, int> m;
+	m.insert(make_pair(10,2300));
+	m.insert(make_pair(12, 2300)); 
+	m.insert(make_pair(11, 2300));
+	m.insert(make_pair(9, 2300));
+	
+	auto i = m.begin();
+	++i;
+	++i;
+	++i;
+	++i;
+
+
+
+	for (auto t : m) {
+		cout << t.first << " " << t.second << "\n";
+	}
+	
+
+	cout << "\n";
 
 
 	return 0;
