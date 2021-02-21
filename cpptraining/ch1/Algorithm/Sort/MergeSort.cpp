@@ -42,15 +42,13 @@ void Merge(int elements[], int left, int mid, int right) {
 	}
 
 	// 나머지 처리
-	if (l > mid) {
-		for (int i = m; i <= right; ++i) {
+	if (l <= mid) {
+		for (int i = l; i <= mid; ++i)
 			sorted[k++] = elements[i];
-		}
 	}
 	else {
-		for (int i = l; i <= mid; ++i) {
+		for (int i = m; i <= right; ++i)
 			sorted[k++] = elements[i];
-		}
 	}
 
 	// 복사
