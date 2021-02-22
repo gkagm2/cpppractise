@@ -1,4 +1,9 @@
 // 분포수 세기 정렬
+
+// 중복된 키가 많고, 키의 범위가 적을 때 유리 (양의 정수만 정렬할 수 있음)
+// 시간 복잡도 O(N)
+// 공간 복잡도 O(N+M)
+
 #include <iostream>
 using namespace std;
 
