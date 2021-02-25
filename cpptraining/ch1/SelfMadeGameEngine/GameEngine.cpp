@@ -30,6 +30,23 @@ vector<CObject *> gObjects;
 // Functions
 void DrawIndexedPrimitive(HDC hdc, int * _indexBuffer, int _primitiveCounter, Vec3* _vertexBuffer);
 
+//*************** DRAW *************//
+static HANDLE g_hConsole;
+
+//screen dimensions
+#define WIDTH 1280
+#define HEIGHT 720
+const int dW = 4, dH = 8; //각 픽셀들의 width과 height
+
+// 커서 위치 이동
+void GotoXY(int x = 0, int y = 0) {
+	COORD coord{ x,y };
+	g_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(g_hConsole, coord);
+}
+
+char g_palette[] = ".,-~:;=!*#OB8%&"; // 아스키 코들르 이용한 Draw를 위해 팔레트 준비
+
 //*************** Vector *************//
 
 template<typename TYPE>
@@ -266,7 +283,7 @@ inline void SetIdentityMatrix4x4(Matrix4x4& m) {
 void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	for (WORD i = 0; i < 4; ++i) {
 		for (WORD j = 0; j < 4; ++j) {
-			q.m_afElements[i][j] = a(i, j) + b(i, j);
+			q(i,j) = a(i, j) + b(i, j);
 		}
 	}
 }
@@ -275,7 +292,7 @@ void MatrixPlus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 void MatrixMinus(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	for (WORD i = 0; i < 4; ++i) {
 		for (WORD j = 0; j < 4; ++j) {
-			q.m_afElements[i][j] = a(i, j) - b(i, j);
+			q(i,j) = a(i, j) - b(i, j);
 		}
 	}
 }
@@ -285,7 +302,7 @@ void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 	for (WORD i = 0; i < 4; ++i) {
 		for (WORD j = 0; j < 4; ++j) {
 			for (WORD k = 0; k < 4; ++k) {
-				q.m_afElements[i][j] += a(i, k) * b(k, j);
+				q(i,j) += a(i, k) * b(k, j);
 			}
 		}
 	}
@@ -294,53 +311,68 @@ void MatrixMultiply(Matrix4x4& q, Matrix4x4& a, Matrix4x4& b) {
 // 이동 행렬
 inline void SetTranslateMatrix(Matrix4x4& m, float tx, float ty, float tz) {
 	SetIdentityMatrix4x4(m);
-	m.m_afElements[3][0] = tx;
-	m.m_afElements[3][1] = ty;
-	m.m_afElements[3][2] = tz;
+	m(3,0) = tx;
+	m(3,1) = ty;
+	m(3,2) = tz;
 }
 
 // 확대,축소 행렬
 inline void SetScaleMatrix(Matrix4x4& m, float sx, float sy, float sz) {
 	SetIdentityMatrix4x4(m);
-	m.m_afElements[0][0] = sx;
-	m.m_afElements[1][1] = sy;
-	m.m_afElements[2][2] = sz;
+	m(0,0) = sx;
+	m(1,1) = sy;
+	m(2,2) = sz;
 }
 
 // 회전 행렬 X
 void SetRotateXMatrix(Matrix4x4& m, float fRads) {
 	SetIdentityMatrix4x4(m);
-	m.m_afElements[1][1] = cos(fRads);
-	m.m_afElements[1][2] = sin(fRads);
-	m.m_afElements[2][1] = -sin(fRads);
-	m.m_afElements[2][2] = cos(fRads);
+	m(1,1) = cos(fRads);
+	m(1,2) = sin(fRads);
+	m(2,1) = -sin(fRads);
+	m(2,2) = cos(fRads);
 }
 
 // 회전 행렬 Y
 void SetRotateYMatrix(Matrix4x4& m, float fRads) {
 	SetIdentityMatrix4x4(m);
-	m.m_afElements[0][0] = cosf(fRads);
-	m.m_afElements[0][2] = -sinf(fRads);
-	m.m_afElements[2][0] = sinf(fRads);
-	m.m_afElements[2][2] = cos(fRads);
+	m(0,0) = cosf(fRads);
+	m(0,2) = -sinf(fRads);
+	m(2,0) = sinf(fRads);
+	m(2,2) = cos(fRads);
 }
 
 // 회전 행렬 Z
 void SetRotateZMatrix(Matrix4x4& m, float fRads) {
 	SetIdentityMatrix4x4(m);
-	m.m_afElements[0][0] = cosf(fRads);
-	m.m_afElements[0][1] = sinf(fRads);
-	m.m_afElements[1][0] = -sinf(fRads);
-	m.m_afElements[1][1] = cos(fRads);
+	m(0,0) = cosf(fRads);
+	m(0,1) = sinf(fRads);
+	m(1,0) = -sinf(fRads);
+	m(1,1) = cos(fRads);
 }
 
 // 프로젝션
 void SetProjection(Matrix4x4& m, float d) {
 	m.SetZero();
-	m.m_afElements[0][0] = d;
-	m.m_afElements[1][1] = d;
-	m.m_afElements[2][2] = 1;
-	m.m_afElements[3][3] = d;
+	m(0,0) = d;
+	m(1,1) = d;
+	m(2,2) = 1;
+	m(3,3) = d;
+}
+
+// 전치 행렬
+void TransposedMatrix(Matrix4x4&m) {
+	float t;
+	t = m(0,1);
+	m(0,1) = m(1,0);
+	m(1,0) = t;
+	for (int y = 0; y < 4; ++y) {
+		for (int x = 0; x < 4; ++x) {
+			t = m(y,x);
+			m(y,x) = m(x,y);
+			m(x,y) = t;
+		}
+	}
 }
 
 // TODO (Sagacity Jang)
@@ -652,10 +684,26 @@ public:
 	}
 };
 
+
+HDC hdc, backMemDC, memDC;
+HWND myConsole;
+
+HBITMAP backBitmap = nullptr;
+HBITMAP myBitmap, prevBitmap;
+
+RECT backWindowRT;
+
+
+
 // TODO (Sagacity Jang) : 프레임 워크로 만들기
 void Render() {
-	HWND myConsole = GetConsoleWindow();
-	HDC hdc = GetDC(myConsole);
+	// TODO : 윈도우핸들로 받아서 해버리니까 콘솔 더블버퍼링이 안먹힘.
+	myConsole = GetConsoleWindow();
+	hdc = GetDC(myConsole);
+
+	backMemDC = CreateCompatibleDC(hdc);
+	prevBitmap = (HBITMAP)SelectObject(backMemDC, backBitmap);
+
 	//InvalidateRect(myConsole, NULL, TRUE);
 	/*
 	CPolygon poly;
@@ -705,10 +753,11 @@ void Render() {
 	}
 
 	// TODO (Jang) : 라인그리기 테스트중
-
-	//cin.ignore();
-	system("cls");
 	ReleaseDC(myConsole, hdc);
+	
+
+	// HDC로 해서 그런가 더블버퍼링을 다른 방식으로 해야될듯
+	// GotoXY(0, 0); // 깜빡임 현상을 없애기 위하여 system("cls")대신에 사용 함.
 }
 
 // Testing
@@ -716,7 +765,7 @@ int main() {
 	cin.tie(nullptr);
 	cout.tie(nullptr);
 	ios::sync_with_stdio(false);
-	
+
 	// Create objects
 	Box2DObject boxObj2;
 	boxObj2.SetScale(Vec3(0.5f, 0.5f, 0.5f));
