@@ -61,13 +61,13 @@ struct tBSTNode {
 	{}
 
 public:
-	inline bool IsRoot() { return nullptr == pParent; }
-	inline bool IsLeaf() { return nullptr == pLeftChild && nullptr == pRightChild; }
-	inline bool HasParent() { return nullptr != pParent; }
-	inline bool HasLeftChild() { return nullptr != pLeftChild; }
-	inline bool HasRightChild() { return nullptr != pRightChild; }
-	inline bool IsLeftChildFromParent() { if (!HasParent()) return false; return pParent->pLeftChild == this; }
-	inline bool IsRightChildFromParent() { if (!HasParent()) return false; return pParent->pRightChild == this; }
+	bool IsRoot() { return nullptr == pParent; }
+	bool IsLeaf() { return nullptr == pLeftChild && nullptr == pRightChild; }
+	bool HasParent() { return nullptr != pParent; }
+	bool HasLeftChild() { return nullptr != pLeftChild; }
+	bool HasRightChild() { return nullptr != pRightChild; }
+	bool IsLeftChildFromParent() { if (!HasParent()) return false; return pParent->pLeftChild == this; }
+	bool IsRightChildFromParent() { if (!HasParent()) return false; return pParent->pRightChild == this; }
 
 public:
 	tBSTNode& operator=(const tBSTNode& _node) {
