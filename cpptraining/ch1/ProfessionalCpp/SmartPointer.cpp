@@ -10,7 +10,7 @@ struct Student {
 int main() {
 	// 스마트 포인터의 종류는 3개가지가 있다.
 
-	// 1. uniqye_ptr
+	// 1. unique_ptr
 	std::unique_ptr<Student> uniq; // 포인팅하고 있는 객체에 대해 단독으로 오너쉽을 가진다.  예외상황이 발생했을 때 메모리 해제를 단순하게 할 수 있다.
 
 	/* 다른 방법의 선언 방법 */
@@ -27,6 +27,15 @@ int main() {
 
 	// 3. weak_ptr
 	std::weak_ptr<Student> weak; // shared_ptr에 대입된 객체를 참조하되 레퍼런스 카운터에 영향을 주고 싶지 않을 때 사용한다.
+
+
+	// 배열을 동적으로 생성 (array나 vector와 같은 STL 컨테이너를 이용하는게 더 좋음)
+	auto myVariableSizedArray = make_unique<int[]>(10);
+	for (int i = 0; i < 10; ++i) {
+		myVariableSizedArray[i] = i;
+		cout << myVariableSizedArray[i] << "\n";
+	}
+
 
 	return 0;
 }
