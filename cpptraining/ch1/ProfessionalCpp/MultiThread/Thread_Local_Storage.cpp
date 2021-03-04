@@ -22,12 +22,34 @@ void DoWork(int id) {
 	}
 }
 
+// thread_local 변수가 함수 안에서 선언되면, static으로 선언된 것처럼 동작한다.
+// 단 스레드마다 고유하게 복제본을 가진다는 것만 다르다.
+// 이 때문에 해당 함수가 몇 번 호출되는 thread_local 변수의 초기화는 각 스레드당 단 한 번만 수행된다.
+
+void DoWork2(int id) {
+	thread_local int m;
+	k = 0;
+	m = 0;
+	for (; m < 20; ++m) {
+		cout << id << "스레드의 고유 번호 m : " << m << "\n";
+	}
+	for (; k < 20; ++k) {
+		cout << id << "스레드의 공유 변수 k : " << k << "\n";
+	}
+}
+
+
 int main() {
 
 	thread t1(DoWork, 1);
 	thread t2(DoWork, 2);
 	t1.join();
 	t2.join();
+
+	thread t3(DoWork, 3);
+	thread t4(DoWork, 4);
+	t3.join();
+	t4.join();
 
 	return 0;
 }
