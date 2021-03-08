@@ -30,7 +30,7 @@ public:
 			// lock은 bool 변환 연산자를 오버로딩하고 있기 때문에 loc 변수를  if 문으로 검사하여 락 점유에 성공했는지 알 수 있다.
 			// Timeout은  크로노 라이브러리 이용
 
-			unique_lock<timed_mutex> lock(mTimedMutex, 200ms); // unique_lock의 생성자에는 200밀리초의 상대 시간이 인자로 주어짐. (c++14 표준의 사용자 정의 리터럴을 지원하지 않는다면 200ms 대신 200  사용
+			unique_lock<timed_mutex> lock(mTimedMutex, 200ms); // unique_lock의 생성자에는 200밀리초의 상대 시간이 인자로 주어짐. (c++14 표준의 사용자 정의 리터럴을 지원하지 않는다면 200ms 대신 chrono::milliseconds(200) 사용
 			if (lock) {
 				cout << "Counter " << mId << " has value";
 				cout << i << "\n";
