@@ -61,15 +61,15 @@ bool IsUnBlocked(int x, int y) {
 }
 
 bool IsDestination(int x, int y, Pair dest) {
-	if (x == dest.second&& y == dest.first)
+	if (x == dest.first && y == dest.second)
 		return true;
 	return false;
 }
 
 // 시작위치에서부터 목적지까지의 경로를 추적한다.
 void TracePath(Cell cellDetails[g_maxY][g_maxX], Pair dest) {
-	int x = dest.second;
-	int y = dest.first;
+	int x = dest.first;
+	int y = dest.second;
 
 	stack<Pair> path;
 
@@ -83,7 +83,7 @@ void TracePath(Cell cellDetails[g_maxY][g_maxX], Pair dest) {
 	}
 
 	path.push(make_pair(y, x));
-	while (!path.empty()) {
+	while (!path.empty()) { 
 		pair<int, int> p = path.top();
 		path.pop();
 		cout << "->(" << p.first << "," << p.second << ")" << "\n";
@@ -125,18 +125,18 @@ void AStar(Pair start, Pair dest) {
 	}
 
 	// 시작 노드를 초기화 한다.
-	int i = start.first, j = start.second; // i = y, j = x
-	cellDetails[i][j].f = 0.f;
-	cellDetails[i][j].g = 0.f;
-	cellDetails[i][j].h = 0.f;
-	cellDetails[i][j].parentX = j;
-	cellDetails[i][j].parentY = i;
+	int yy = start.first, xx = start.second; // i = y, j = x
+	cellDetails[yy][xx].f = 0.f;
+	cellDetails[yy][xx].g = 0.f;
+	cellDetails[yy][xx].h = 0.f;
+	cellDetails[yy][xx].parentX = xx;
+	cellDetails[yy][xx].parentY = yy;
 
 	// open list를 만든다.
 	set<pPair> openList;
 
 	// 시작 지점의 f를 0으로 둔다.
-	openList.insert(make_pair(0.f, make_pair(j, i)));
+	openList.insert(make_pair(0.f, make_pair(xx, yy)));
 
 	bool foundDest = false;
 
@@ -145,29 +145,29 @@ void AStar(Pair start, Pair dest) {
 
 		openList.erase(openList.begin()); // openList에 있는 vertex를 삭제.
 
-		i = p.second.first;  // y
-		j = p.second.second; // x
-		closedList[i][j] = true;
+		xx = p.second.first; // x
+		yy = p.second.second;// y
+		closedList[yy][xx] = true;
 
 		// 8방향의 successor를 생성한다.
 		for (int d = 0; d < 8; ++d) {
-			int y = i + dirY[d];
-			int x = j + dirX[d];
+			int y = yy + dirY[d];
+			int x = xx + dirX[d];
 
 			if (false == IsValid(x, y))
 				continue;
 
 			if (true == IsDestination(x, y, dest)) {
 				// 목적지 Cell의 부모를 설정한다.
-				cellDetails[y][x].parentX = j;
-				cellDetails[y][x].parentY = i;
+				cellDetails[y][x].parentX = xx;
+				cellDetails[y][x].parentY = yy;
 				cout << "목적지를 찾음\n";
 				TracePath(cellDetails, dest);
 				foundDest = true;
 				return;
 			}
 			else if (false == closedList[y][x] && true == IsUnBlocked(x, y)) {
-				float gNew = cellDetails[i][j].g + 1.0f;
+				float gNew = cellDetails[yy][xx].g + 1.0f;
 				float hNew = GetDistance(x, y, dest.second, dest.first);
 				float fNew = gNew + hNew;
 
@@ -180,8 +180,8 @@ void AStar(Pair start, Pair dest) {
 					cellDetails[y][x].f = fNew;
 					cellDetails[y][x].g = gNew;
 					cellDetails[y][x].h = hNew;
-					cellDetails[y][x].parentX = j;
-					cellDetails[y][x].parentY = i;
+					cellDetails[y][x].parentX = xx;
+					cellDetails[y][x].parentY = yy;
 				}
 			}
 		}
@@ -223,23 +223,23 @@ int main() {
 
 	Pair start;
 	Pair dest;
-	start.first = 0; // y
-	start.second = 0;// x
-	dest.first = g_maxY -4;  
-	dest.second = g_maxX - 2;
+	start.first = 0; // x
+	start.second = 0;// y
+	dest.first = g_maxX - 2;
+	dest.second = g_maxY - 4;  
 
 	for (int i = 0; i < g_maxY; ++i) {
 		for (int j = 0; j < g_maxX; ++j) {
-			if (i == start.first && j == start.second || 
-				i == dest.first && j == dest.second) {
+			if (i == start.second && j == start.first || 
+				i == dest.second && j == dest.first) {
 				continue;
 			}
 			grid[i][j] = rand() % 2;
 		}
 	}
 
-	grid[start.first][start.second] = Start;
-	grid[dest.first][dest.second] = Dest;
+	grid[start.second][start.first] = Start;
+	grid[dest.second][dest.first] = Dest;
 
 	AStar(start, dest);
 
