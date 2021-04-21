@@ -136,7 +136,7 @@ void AStar(Pair start, Pair dest) {
 	set<pPair> openList;
 
 	// 시작 지점의 f를 0으로 둔다.
-	openList.insert(make_pair(0.f, make_pair(i, j)));
+	openList.insert(make_pair(0.f, make_pair(j, i)));
 
 	bool foundDest = false;
 
@@ -168,14 +168,14 @@ void AStar(Pair start, Pair dest) {
 			}
 			else if (false == closedList[y][x] && true == IsUnBlocked(x, y)) {
 				float gNew = cellDetails[i][j].g + 1.0f;
-				float hNew = GetDistance(x, y, dest.first, dest.second);
+				float hNew = GetDistance(x, y, dest.second, dest.first);
 				float fNew = gNew + hNew;
 
 				// openList가 아니면 openList에 추가한다.
 				// 이미 openList면 
 				if (cellDetails[y][x].f == (numeric_limits<float>::max)() ||
 					cellDetails[y][x].f > fNew) {
-					openList.insert(make_pair(fNew, make_pair(y, x)));
+					openList.insert(make_pair(fNew, make_pair(x, y)));
 
 					cellDetails[y][x].f = fNew;
 					cellDetails[y][x].g = gNew;
