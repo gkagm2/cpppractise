@@ -1,5 +1,3 @@
-// String을 Read하게되면 글자 깨짐현상.
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -36,7 +34,7 @@ size_t FRead(T& _data, FILE* _pFile, UINT _iElementCount = 1) {
 void SaveStringToFile(const wstring& _str, FILE* _pFile)
 {
 	size_t iLen = _str.length();
-	fwrite(&iLen, sizeof(size_t), iLen, _pFile);
+	fwrite(&iLen, sizeof(size_t), 1, _pFile);
 	fwrite(_str.data(), sizeof(wchar_t), iLen, _pFile);
 }
 
