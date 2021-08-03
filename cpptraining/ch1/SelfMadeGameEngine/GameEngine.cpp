@@ -183,7 +183,16 @@ float GetDistance(Vec3 v1, Vec3 v2) {
 //******************* Matrix ******************//
 class Matrix4x4 {
 public:
-	float m_afElements[4][4];
+	union {
+		struct {
+			float _11, _12, _13, _14;
+			float _21, _22, _23, _24;
+			float _31, _32, _33, _34;
+			float _41, _42, _43, _44;
+		};
+		float m_afElements[4][4];
+		float f[16];
+	};
 
 	Matrix4x4() {
 		SetZero();
@@ -361,7 +370,7 @@ void SetProjection(Matrix4x4& m, float d) {
 }
 
 // 전치 행렬
-void TransposedMatrix(Matrix4x4&m) {
+void TransposedMatrix(Matrix4x4& m) {
 	float t;
 	t = m(0,1);
 	m(0,1) = m(1,0);
@@ -377,6 +386,16 @@ void TransposedMatrix(Matrix4x4&m) {
 
 // TODO (Sagacity Jang)
 // 역행렬
+void InverseMatrix(Matrix4x4& m) {
+	// Determinant (행렬식 이용)
+
+}
+
+// 가역행렬
+void Determinant(Matrix4x4& m) {
+
+}
+
 
 // 행렬 내적
 
@@ -786,10 +805,8 @@ int main() {
 
 	CCubeObject cube;
 	
-	
 	while (true) {
 		Render();
 	}
-	
 	return 0;
 }
