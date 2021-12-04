@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
 void Intro() {
@@ -101,6 +103,36 @@ int main() {
 		system("pause");
 	}
 
+	return 0;
+}
+*/
+
+void Add() {
+	cout << "add";
+}
+void Plus() {
+	cout << "plus";
+}
+
+/*
+// 함수 이용해서 동작하기
+void ContextMenu(vector<pair<string,void(*)()>>& _vecList , string strOrder) {
+	for (int i = 0; i < _vecList.size(); ++i) {
+		if (strOrder == _vecList[i].first) {
+			_vecList[i].second();
+		}
+	}
+}
+
+int main() {
+	void (*fp[3])() = { Add, Plus };
+
+	vector< pair<string, void(*)()>> vecfuncList;
+	vecfuncList.push_back(make_pair("add", Add));
+	vecfuncList.push_back(make_pair("plus",Plus));
+
+	// context 함수 설정과 add 명령어 실행
+	ContextMenu(vecfuncList, "add");
 	return 0;
 }
 */
