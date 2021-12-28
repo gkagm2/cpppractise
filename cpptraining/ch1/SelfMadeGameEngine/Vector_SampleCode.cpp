@@ -27,5 +27,6 @@ int main()
 	Vec3 resultV = GetCross(v5, v6);
 	cout << "cross : ";
 	resultV.PrintPosition();
-	
+
+	return 0;
 }
