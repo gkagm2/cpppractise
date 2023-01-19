@@ -3,6 +3,11 @@
 using namespace std;
 typedef int Data;
 
+template<typename T>
+T max(T _a, T _b) {
+	return _a > _b ? _a : _b;
+}
+
 struct Node {
 	Node* pLeft;
 	Node* pRight;
@@ -15,8 +20,9 @@ struct Node {
 class BinaryTree {
 private:
 	Node* m_pRoot;
+	int m_iSize;
 public:
-	BinaryTree() {
+	BinaryTree() : m_iSize(0) {
 		m_pRoot = nullptr;
 	}
 	~BinaryTree() {
@@ -61,6 +67,7 @@ public:
 				}
 			}
 		}
+		++m_iSize;
 	}
 	void Delete(Data _data) {
 
@@ -111,8 +118,16 @@ private:
 	}
 public:
 	int GetTreeHeight() {
-		return 0;
+		return _GetHeight(m_pRoot);
 	}
+private:
+	int _GetHeight(Node* _pNode) {
+		if (nullptr == _pNode)
+			return 0;
+
+		return 1 + ::max(_GetHeight(_pNode->pLeft), _GetHeight(_pNode->pRight));
+	}
+public:
 	int GetTreeLevel() {
 		return 0;
 	}
@@ -123,15 +138,16 @@ public:
 
 int main() {
 	BinaryTree tree;
-	tree.AddNode(50);
-	tree.AddNode(25);
-	tree.AddNode(75);
-	tree.AddNode(12);
-	tree.AddNode(37);
-	tree.AddNode(43);
-	tree.AddNode(30);
+	tree.AddNode(5);
+	tree.AddNode(0);
+	tree.AddNode(8);
+	tree.AddNode(2);
+	tree.AddNode(7);
+	tree.AddNode(3);
+	tree.AddNode(1);
 
 	tree.PreorderTraversal();
 
+	cout << "\n Tree Height : " << tree.GetTreeHeight() << "\n";
 	return 0;
 }
