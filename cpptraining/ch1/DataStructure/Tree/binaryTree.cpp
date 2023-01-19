@@ -101,8 +101,10 @@ public:
 			Data data = pTempNode->data;
 			_DeleteDeeprestNode(pTempNode);
 			pDataNode->data = data;
+			--m_iSize;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 private:
@@ -241,7 +243,7 @@ int main() {
 
 	cout << "\n Tree Diameter : " << tree.GetDiameter() << "\n";
 
-	int delData = 0;
+	int delData = 3;
 	if (tree.Delete(delData)) {
 		cout << "delete successed : " << delData << "\n";
 	}
