@@ -3,10 +3,7 @@
 using namespace std;
 typedef int Data;
 
-template<typename T>
-T max(T _a, T _b) {
-	return _a > _b ? _a : _b;
-}
+template<typename T> T max(T _a, T _b);
 
 struct Node {
 	Node* pLeft;
@@ -47,8 +44,8 @@ public:
 
 		if (nullptr == m_pRoot) {
 			m_pRoot = pNewNode;
-		} 
-		else{
+		}
+		else {
 			Node* pFocusNode = m_pRoot;
 			while (true) {
 				if (pNewNode->data < pFocusNode->data) {
@@ -117,7 +114,7 @@ private:
 		cout << _pNode->data << "->";
 	}
 public:
-	int GetTreeHeight() {
+	int GetHeight() {
 		return _GetHeight(m_pRoot);
 	}
 private:
@@ -128,11 +125,29 @@ private:
 		return 1 + ::max(_GetHeight(_pNode->pLeft), _GetHeight(_pNode->pRight));
 	}
 public:
-	int GetTreeLevel() {
+	int GetDiameter() {
+		return _GetDiameter(m_pRoot);
+	}
+private:
+	int _GetDiameter(Node* _pNode) {
+		if (nullptr == _pNode)
+			return 0;
+
+		int leftHeight = _GetHeight(_pNode->pLeft);
+		int rightHeight = _GetHeight(_pNode->pRight);
+		
+		int leftDiameter = _GetDiameter(_pNode->pLeft);
+		int rightDiameter = _GetDiameter(_pNode->pRight);
+
+		return ::max(leftHeight + rightHeight + 1, ::max(leftDiameter, rightDiameter));
+	}
+public:
+
+	int GetLevel() {
 		return 0;
 	}
-	int GetTreeSize() {
-		return 0;
+	int GetSize() {
+		return m_iSize;
 	}
 };
 
@@ -148,6 +163,13 @@ int main() {
 
 	tree.PreorderTraversal();
 
-	cout << "\n Tree Height : " << tree.GetTreeHeight() << "\n";
+	cout << "\n Tree Height : " << tree.GetHeight() << "\n";
+
+	cout << "\n Tree Diameter : " << tree.GetDiameter() << "\n";
 	return 0;
+}
+
+template<typename T>
+T max(T _a, T _b) {
+	return _a > _b ? _a : _b;
 }
