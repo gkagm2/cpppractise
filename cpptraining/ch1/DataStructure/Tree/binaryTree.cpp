@@ -143,10 +143,6 @@ private:
 		}
 	}
 public:
-	Node* Search(Data _data) {
-		return nullptr;
-	}
-public:
 	// current-left-right
 	void PreorderTraversal() {
 		_Preorder(m_pRoot);
