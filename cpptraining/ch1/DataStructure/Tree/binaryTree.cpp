@@ -189,6 +189,27 @@ private:
 	}
 
 public:
+	void BreadthFirstTraversal() {
+		queue<Node*> q;
+		q.push(m_pRoot);
+
+		while (!q.empty()) {
+			Node* pTempNode = q.front();
+			q.pop();
+
+			if (nullptr == pTempNode)
+				continue;
+			cout << pTempNode->data << "->";
+			
+			if (pTempNode->pLeft)
+				q.push(pTempNode->pLeft);
+			if (pTempNode->pRight)
+				q.push(pTempNode->pRight);
+		}
+	}
+
+
+public:
 	int GetHeight() {
 		return _GetHeight(m_pRoot);
 	}
@@ -218,10 +239,6 @@ private:
 		return ::max(leftHeight + rightHeight + 1, ::max(leftDiameter, rightDiameter));
 	}
 public:
-
-	int GetLevel() {
-		return 0;
-	}
 	int GetSize() {
 		return m_iSize;
 	}
@@ -237,6 +254,7 @@ int main() {
 	tree.AddNode(3);
 	tree.AddNode(1);
 
+	cout << "before preorder : ";
 	tree.PreorderTraversal();
 
 	cout << "\n Tree Height : " << tree.GetHeight() << "\n";
@@ -250,7 +268,14 @@ int main() {
 	else
 		cout << "delete failed : " << delData << "\n";
 
+	cout << "after preorder : ";
 	tree.PreorderTraversal();
+
+	cout << "\n";
+
+	cout << "bfs : ";
+	tree.BreadthFirstTraversal();
+	cout << "\n tree size : " << tree.GetSize() << "\n";
 	return 0;
 }
 
