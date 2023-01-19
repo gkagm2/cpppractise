@@ -66,9 +66,81 @@ public:
 		}
 		++m_iSize;
 	}
-	void Delete(Data _data) {
+	bool Delete(Data _data) {
+		if (nullptr == m_pRoot)
+			return false;
+		if (nullptr == m_pRoot->pLeft && nullptr == m_pRoot->pRight) {
+			if (m_pRoot->data == _data) {
+				delete m_pRoot;
+				m_pRoot = nullptr;
+				return true;
+			}
+			else
+				return false;
+		}
 
+		queue<Node*> q;
+		q.push(m_pRoot);
+
+		Node* pDataNode = nullptr;
+		Node* pTempNode = nullptr;
+
+		while (!q.empty()) {
+			pTempNode = q.front();
+			q.pop();
+			
+			if (pTempNode->data == _data)
+				pDataNode = pTempNode;
+			if (pTempNode->pLeft)
+				q.push(pTempNode->pLeft);
+			if (pTempNode->pRight)
+				q.push(pTempNode->pRight);
+		}
+
+		if (nullptr != pDataNode) {
+			Data data = pTempNode->data;
+			_DeleteDeeprestNode(pTempNode);
+			pDataNode->data = data;
+		}
+		return true;
 	}
+
+private:
+	void _DeleteDeeprestNode(Node* _pDelNode) {
+		queue<Node*> q;
+		q.push(m_pRoot);
+
+		Node* pTempNode = nullptr;
+		while (!q.empty()) {
+			pTempNode = q.front();
+			q.pop();
+
+			if (pTempNode == _pDelNode) {
+				pTempNode = nullptr;
+				delete _pDelNode;
+				return;
+			}
+			if (pTempNode->pRight) {
+				if (pTempNode->pRight == _pDelNode) {
+					pTempNode->pRight = nullptr;
+					delete _pDelNode;
+					return;
+				}
+				else
+					q.push(pTempNode->pRight);
+			}
+			if (pTempNode->pLeft) {
+				if (pTempNode->pLeft == _pDelNode) {
+					pTempNode->pLeft = nullptr;
+					delete _pDelNode;
+					return;
+				}
+				else
+					q.push(pTempNode->pLeft);
+			}
+		}
+	}
+public:
 	Node* Search(Data _data) {
 		return nullptr;
 	}
@@ -113,6 +185,7 @@ private:
 		_Postorder(_pNode->pRight);
 		cout << _pNode->data << "->";
 	}
+
 public:
 	int GetHeight() {
 		return _GetHeight(m_pRoot);
@@ -126,11 +199,12 @@ private:
 	}
 public:
 	int GetDiameter() {
+		// O(n^2)
 		return _GetDiameter(m_pRoot);
 	}
 private:
 	int _GetDiameter(Node* _pNode) {
-		if (nullptr == _pNode)
+		if (nullptr == _pNode)	
 			return 0;
 
 		int leftHeight = _GetHeight(_pNode->pLeft);
@@ -166,6 +240,15 @@ int main() {
 	cout << "\n Tree Height : " << tree.GetHeight() << "\n";
 
 	cout << "\n Tree Diameter : " << tree.GetDiameter() << "\n";
+
+	int delData = 0;
+	if (tree.Delete(delData)) {
+		cout << "delete successed : " << delData << "\n";
+	}
+	else
+		cout << "delete failed : " << delData << "\n";
+
+	tree.PreorderTraversal();
 	return 0;
 }
 
